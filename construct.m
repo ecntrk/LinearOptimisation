@@ -22,7 +22,8 @@ init();
 %eq12();
 %eq13();
 %eq14();
-vec_ = eq15();
+%vec_ = eq15();
+vec_ = eq16();
 end
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%
@@ -326,6 +327,59 @@ function [vec_] = eq15()
                 temp(pos) = -2;
             end
         end
+
+        vec_(iter,:) = temp;
+
+    end
+end
+
+
+function [vec_] = eq16()
+%constructign equation 16
+%y_0 (il, t) - d_0 (l,t)  = 0
+
+%generate indices combinations for l,s,t
+%although l depends on s, it'll be dealt in generateindices()
+%it  will generate the correct number of l for each s! Don't worry!
+%
+%il is a constant depnding on l so don't need to iterate i.
+
+
+    global maxV_; global vecLen; global whatIL;
+
+    indArr = generateIndices([0,0,maxV_(3),0,maxV_(5),maxV_(6)], 1); 
+
+    %making the coeff vector
+    vec_ = zeros(length(indArr),vecLen);
+
+    %disp(indArr);
+    for iter = 1:length(indArr)
+        temp = zeros(1,vecLen);
+        
+        %fill it with il wrt l
+        ind = indArr(iter,:);
+        ind(1) = whatIL(ind(3));
+        ind(3) = 0;
+        
+        %calculating position for y_0 (il,s,t)
+        pos = resolvePos(8, ind);
+        if (pos == -1)
+            display(strcat(sprintf('Error: position not found for dVar:%d and indices:',dVar), sprintf(' %d',indices(:)) ));
+            return;
+        end
+        temp(pos) = 1;
+        
+        %lets deal with the d (l,t)
+        ind(1) = 0;
+        ind(3) = indArr(iter,3);
+        %calculating position for y_0 (il,s,t)
+        pos = resolvePos(12, ind);
+        if (pos == -1)
+            display(strcat(sprintf('Error: position not found for dVar:%d and indices:',dVar), sprintf(' %d',indices(:)) ));
+            return;
+        end
+        temp(pos) = -1;
+
 
         vec_(iter,:) = temp;
 

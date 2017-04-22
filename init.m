@@ -6,7 +6,7 @@ function init ()
 %Initialisation of the various variables.
 %User needs to change the numbers manually in case of any changes
 %Var Order: i, j, l, r, s, t
-%Decision Var Order: u, v, w, wbar, x0, x, xbar, y0, y, ybar, z
+%Decision Var Order: u, v, w, wbar, x0, x, xbar, y0, y, ybar, z, d_0, d
 
 
 %Define all the maximum values of the variables. For now, only 3!
@@ -15,7 +15,7 @@ j_ = 3; %change to dependant later
 l_ = 3;
 r_ = 3;
 s_ = 3; %change to dependant later
-t_ = 5;
+t_ = 3;
 
 global varLen; %The number of variables i,j,l,r,s,t
 varLen = 6;
@@ -24,19 +24,27 @@ global maxV_;
 maxV_ = zeros(6);
 maxV_(1) = i_;maxV_(2) = j_;maxV_(3) = l_;maxV_(4) = r_;maxV_(5) = s_;maxV_(6) = t_;
 
-%this here maps the i to a corresponding j value
+%this here maps the j to a corresponding i value
 global whatJ;
 whatJ = zeros(1,maxV_(1));
 whatJ(:) = maxV_(2);
 %here is a potential bug. if you don't update the j_ and only whatJ, the
 %indexes the resolver finds will be wrong.
 
-%this here maps the s to a corresponding l value
+%this here maps the l to a corresponding s value
 global whatL;
 whatL = zeros(1,maxV_(5));
 whatL(:) = maxV_(5);
 %here is a potential bug. if you don't update the j_ and only whatJ, the
 %indexes the resolver finds will be wrong.
+
+%this here maps the il to a corresponding l value
+global whatIL;
+whatIL = zeros(1,maxV_(3));
+whatIL(:) = 1;
+%here is a potential bug. if you don't update the j_ and only whatJ, the
+%indexes the resolver finds will be wrong.
+
 
 global sr ; global tij;
 sr = 0; tij = 0;
@@ -49,12 +57,12 @@ alphaR(:) = 5; %change this with actual data
 
 global vecLen;
 vecLen = l_*r_*s_*t_ + i_*r_*s_*t_ + 2*i_*r_ + i_*j_*s_*t_ ...
-    + 2*i_*j_*r_*s_*t_ + i_*s_*t_ + 3*i_*r_*s_*t_;
+    + 2*i_*j_*r_*s_*t_ + i_*s_*t_ + 3*i_*r_*s_*t_ + l_*t_ + l_*r_*t_;
 
 %Ranges for decisionvariables in the vector. 11 element for 11 variables in
 %the predetermined order: u, v, w, wbar, x0, x, xbar, y0, y, ybar, z
 global dVarRanges;
-dVarRanges = zeros(11);
+dVarRanges = zeros(13);
 dVarRanges(1) = l_*r_*s_*t_;                    % for u
 dVarRanges(2) = dVarRanges(1)+i_*r_*s_*t_ ;     % for v
 dVarRanges(3) = dVarRanges(2)+i_*r_;            % for w
@@ -66,6 +74,8 @@ dVarRanges(8) = dVarRanges(7)+i_*s_*t_;         % for y0
 dVarRanges(9) = dVarRanges(8)+i_*r_*s_*t_;      % for y
 dVarRanges(10) = dVarRanges(9)+i_*r_*s_*t_;     % for ybar
 dVarRanges(11) = dVarRanges(10)+i_*r_*s_*t_;    % for z
+dVarRanges(12) = dVarRanges(11)+l_*t_;          % for d_0
+dVarRanges(13) = dVarRanges(12)+l_*r_*t_;       % for d
 
 %i, j, l, r, s, t
 % resolvePos(1, [0,0,1,2,1,2])
