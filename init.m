@@ -15,7 +15,7 @@ j_ = 3; %change to dependant later
 l_ = 3;
 r_ = 3;
 s_ = 3; %change to dependant later
-t_ = 3;
+t_ = 5;
 
 global varLen; %The number of variables i,j,l,r,s,t
 varLen = 6;
