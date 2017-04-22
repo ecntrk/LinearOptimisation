@@ -25,7 +25,7 @@ for iter = 1:totalRange
 end
 end
 
-%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%%%%%%%%%%%%%%%%%%%%%%%
 function [vec_] = singleVarCoeff(dVar, indices, coeff)
 %Finds the coefficient vectors for a given DVar and a given indices 
 

@@ -24,6 +24,10 @@ global maxV_;
 maxV_ = zeros(6);
 maxV_(1) = i_;maxV_(2) = j_;maxV_(3) = l_;maxV_(4) = r_;maxV_(5) = s_;maxV_(6) = t_;
 
+global whatJ;
+whatJ = zeros(1,maxV_(1));
+whatJ(:) = 10;
+
 global vecLen;
 vecLen = l_*r_*s_*t_ + i_*r_*s_*t_ + 2*i_*r_ + i_*j_*s_*t_ ...
     + 2*i_*j_*r_*s_*t_ + i_*s_*t_ + 3*i_*r_*s_*t_;

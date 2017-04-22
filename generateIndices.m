@@ -29,7 +29,7 @@ end
 
 %This many combinations to produce
 nzi(end) = nzi(end)-tSt+1;
-tot = prod(nzi)
+tot = prod(nzi);
 %initialising the output array of indices combinations
 indArr = zeros(tot,length(iR)); 
 
