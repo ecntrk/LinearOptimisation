@@ -24,9 +24,26 @@ global maxV_;
 maxV_ = zeros(6);
 maxV_(1) = i_;maxV_(2) = j_;maxV_(3) = l_;maxV_(4) = r_;maxV_(5) = s_;maxV_(6) = t_;
 
+%this here maps the i to a corresponding j value
 global whatJ;
 whatJ = zeros(1,maxV_(1));
-whatJ(:) = 10;
+whatJ(:) = maxV_(2);
+%here is a potential bug. if you don't update the j_ and only whatJ, the
+%indexes the resolver finds will be wrong.
+
+%this here maps the s to a corresponding l value
+global whatL;
+whatL = zeros(1,maxV_(5));
+whatL(:) = maxV_(5);
+%here is a potential bug. if you don't update the j_ and only whatJ, the
+%indexes the resolver finds will be wrong.
+
+global sr ; global tij;
+sr = 0; tij = 0;
+
+global betaR;
+betaR = zeros(1,maxV_(4)); 
+betaR(:) = 5; %change this with actual data
 
 global vecLen;
 vecLen = l_*r_*s_*t_ + i_*r_*s_*t_ + 2*i_*r_ + i_*j_*s_*t_ ...
