@@ -370,10 +370,11 @@ function [vec_] = eq16()
         temp(pos) = 1;
         
         %lets deal with the d (l,t)
-        ind(1) = 0;
+        ind(1) = 0; ind(5) = 0;
         ind(3) = indArr(iter,3);
         %calculating position for y_0 (il,s,t)
-        pos = resolvePos(12, ind);
+        disp(ind);
+        pos = resolvePos(12, ind)
         if (pos == -1)
             display(strcat(sprintf('Error: position not found for dVar:%d and indices:',dVar), sprintf(' %d',indices(:)) ));
             return;
