@@ -25,7 +25,9 @@ init();
 %vec_ = eq15();
 %vec_ = eq16();
 %vec_ = eq17();
-vec_ = eq18();
+%vec_ = eq18();
+%vec_ = eq19();
+vec_ = eq20();
 end
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%
@@ -498,6 +500,110 @@ function [vec_] = eq18()
             return;
         end
         temp(pos) = -1;
+
+        vec_(iter,:) = temp;
+
+    end
+end
+
+
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+function [vec_] = eq19()
+%constructign equation 19
+%u (l,r,s,t) - 1/t *d(l,r,t) + sum y (il,r,s,t)  = 0
+
+%generate indices combinations for l,r,s,t
+%The upper bounds like Rkl is dependent and can be dealt easily.
+% We also need to iterate l because il depends on l.
+%il is a constant depnding on l so don't need to iterate i.
+
+
+    global maxV_; global vecLen; global whatIL;
+
+    indArr = generateIndices([0,0,maxV_(3),maxV_(4),maxV_(5),maxV_(6)], 1); 
+
+    %making the coeff vector
+    vec_ = zeros(length(indArr),vecLen);
+
+    %disp(indArr);
+    for iter = 1:length(indArr)
+        temp = zeros(1,vecLen);
+
+        %pos for u
+        pos = resolvePos(1, indArr(iter,:));
+        if (pos == -1)
+            display(strcat(sprintf('Error: position not found for dVar:%d and indices:',dVar), sprintf(' %d',indices(:)) ));
+            return;
+        end
+        temp(pos) = 1;
+        
+        %y sum (il,r,s,t)
+        %fill it with il wrt l
+        ind = indArr(iter,:);
+        ind(1) = whatIL(ind(3));
+        ind(3) = 0;
+        
+        %calculating position for y (il,r,s,t)
+        %fix sum over tau.
+        pos = resolvePos(9, ind);
+        if (pos == -1)
+            display(strcat(sprintf('Error: position not found for dVar:%d and indices:',dVar), sprintf(' %d',indices(:)) ));
+            return;
+        end
+        temp(pos) = 1/ind(6); %1/t
+        
+        %d(l, r,t)        
+         %fill it with il wrt l
+        ind = indArr(iter,:);
+        ind(5) = 0;
+                
+        pos = resolvePos(13, ind);
+        if (pos == -1)
+            display(strcat(sprintf('Error: position not found for dVar:%d and indices:',dVar), sprintf(' %d',indices(:)) ));
+            return;
+        end
+        temp(pos) = -1/ind(6); % - 1/t
+
+        vec_(iter,:) = temp;
+
+    end
+end
+
+
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+function [vec_] = eq20()
+%constructign equation 20
+%u (l,r,s,t)  = 0
+
+%generate indices combinations for l,r,s,t
+%The upper bounds like Rkl is dependent and can be dealt easily.
+% We also need to iterate l because il depends on l.
+%il is a constant depnding on l so don't need to iterate i.
+
+
+    global maxV_; global vecLen; global whatIL;
+
+    indArr = generateIndices([0,0,maxV_(3),maxV_(4),maxV_(5),maxV_(6)], 1); 
+
+    %making the coeff vector
+    vec_ = zeros(length(indArr),vecLen);
+
+    %disp(indArr);
+    for iter = 1:length(indArr)
+        temp = zeros(1,vecLen);
+
+        %pos for u (l,r,s,t)
+        pos = resolvePos(1, indArr(iter,:));
+        if (pos == -1)
+            display(strcat(sprintf('Error: position not found for dVar:%d and indices:',dVar), sprintf(' %d',indices(:)) ));
+            return;
+        end
+        temp(pos) = 1;
+        
 
         vec_(iter,:) = temp;
 
