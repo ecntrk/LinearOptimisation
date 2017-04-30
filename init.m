@@ -46,14 +46,7 @@ whatIL(:) = 1;
 %indexes the resolver finds will be wrong.
 
 
-global sr ; global tij;
-sr = 0; tij = 0;
 
-global betaR; global alphaR;
-betaR = zeros(1,maxV_(4)); 
-betaR(:) = 5; %change this with actual data
-alphaR = zeros(1,maxV_(4)); 
-alphaR(:) = 5; %change this with actual data
 
 global vecLen;
 vecLen = l_*r_*s_*t_ + i_*r_*s_*t_ + 2*i_*r_ + i_*j_*s_*t_ ...
