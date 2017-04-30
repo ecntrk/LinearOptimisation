@@ -9,6 +9,27 @@ function init ()
 %Decision Var Order: u, v, w, wbar, x0, x, xbar, y0, y, ybar, z, d_0, d
 
 
+%%%
+% globals from input
+%%%
+global N; 
+global epsilon_i; 
+global p_ij; 
+global r_ij; 
+global R; 
+global alphaR; 
+global betaR; 
+global sr ;  
+global tij;
+global K; 
+global R_k; 
+global T_k; 
+global S;
+global whatL;
+global whatIL;
+global whatKL;
+global C_r;
+
 %Define all the maximum values of the variables. For now, only 3!
 i_ = 3;
 j_ = 3; %change to dependant later
@@ -28,20 +49,6 @@ maxV_(1) = i_;maxV_(2) = j_;maxV_(3) = l_;maxV_(4) = r_;maxV_(5) = s_;maxV_(6) =
 global whatJ;
 whatJ = zeros(1,maxV_(1));
 whatJ(:) = maxV_(2);
-%here is a potential bug. if you don't update the j_ and only whatJ, the
-%indexes the resolver finds will be wrong.
-
-%this here maps the l to a corresponding s value
-global whatL;
-whatL = zeros(1,maxV_(5));
-whatL(:) = maxV_(5);
-%here is a potential bug. if you don't update the j_ and only whatJ, the
-%indexes the resolver finds will be wrong.
-
-%this here maps the il to a corresponding l value
-global whatIL;
-whatIL = zeros(1,maxV_(3));
-whatIL(:) = 1;
 %here is a potential bug. if you don't update the j_ and only whatJ, the
 %indexes the resolver finds will be wrong.
 

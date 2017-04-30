@@ -22,7 +22,7 @@ p_ij(5,:) = [4,3,6,2,7,8,4,5];
 p_ij(6,:) = [4,1,3,2,5,8,6,7];
 p_ij(7,:) = [4,3,6,2,7,8,4,5];
 p_ij(8,:) = [4,3,6,2,7,8,4,5];
-        
+
 
 %%%%%%%%%%%%%%%%%%%%%
 %%%%%%%%% type of equipments
@@ -30,21 +30,61 @@ p_ij(8,:) = [4,3,6,2,7,8,4,5];
 global R; %set of equipment types
 global betaR; %number of supporting generalist
 global alphaR; %number of specialists
+global C_r; % current capacity of type r equipment
 
 R = 5;
-betaR = zeros(1,maxV_(4)); 
+
+betaR = zeros(1,R); 
 betaR(:) = 5; %change this with actual data
-alphaR = zeros(1,maxV_(4)); 
+
+alphaR = zeros(1,R); 
 alphaR(:) = 5; %change this with actual data
+
+C_r = zeros(1,R);
 
 
 %%%%%%%%%%%%%%%%%%%%%
-%%%%%%%%%% Time
+%%%%%%%%%% setup Time
 %%%%%%%%%%%%%%%%%%%%%
 global sr ;  %setup time for all r.
 global tij;
 sr = zeros(1,R); 
 tij = 0;
+
+
+%%%%%%%%%%%%%%%%%%%%%
+%%%%%%%%%% Disaster types
+%%%%%%%%%%%%%%%%%%%%%
+global K; %disaster types
+global R_k; %equipments needed in case of k.
+global T_k; %time points for k where next resource is necessary
+
+
+%%%%%%%%%%%%%%%%%%%%%
+%%%%%%%%%% Scenarios
+%%%%%%%%%%%%%%%%%%%%%
+global S; %set of scenarios
+
+%this here maps the l to a corresponding s value
+global whatL; %simultaneous disasters l's are happening in each s from S.
+whatL = zeros(1,maxV_(5));
+whatL(:) = maxV_(5);
+%here is a potential bug. if you don't update the j_ and only whatJ, the
+%indexes the resolver finds will be wrong.
+
+%this here maps the il to a corresponding l value
+global whatIL; %il is the location of disaster l.
+global whatKL; %kl is disaster type of disaster l.
+whatIL = zeros(1,maxV_(3));
+whatIL(:) = 1;
+
+whatKL = zeros(1,maxV_(3));
+whatKL(:) = 1;
+%here is a potential bug. if you don't update the j_ and only whatJ, the
+%indexes the resolver finds will be wrong.
+
+%R_k_l is the set of type r equipment. this is basically R_k where k = k_l
+%T_k_l is the set of time points. this is basically T_k where k = k_l
 
 
 
