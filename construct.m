@@ -7,7 +7,7 @@ function [vec_] = construct()
 %Var Order: i, j, l, r, s, t
 %Decision Var Order: u, v, w, wbar, x0, x, xbar, y0, y, ybar, z
 
-
+%inputScene();
 %initialising all global vars
 init();
 
@@ -15,47 +15,55 @@ init();
 %a= generateIndices([2,0,3,5,2,3,4]);
 
 %constructing equations one by one:
-%eq1();
-%eq2();
-%eq3();
-%eq11();
-%eq12();
-%eq13();
-%eq14();
-%vec_ = eq15();
-%vec_ = eq16();
-%vec_ = eq17();
-%vec_ = eq18();
-%vec_ = eq19();
-vec_ = eq20();
+a{1} = eq1();
+a{2} = eq2();
+a{3} = eq3();
+a{4} = eq11();
+a{5} = eq12();
+a{6} = eq13();
+a{7} = eq14();
+a{8} = eq15();
+a{9} = eq16();
+a{10} = eq17();
+a{11} = eq18();
+a{12} = eq19();
+a{13} = eq20();
+a{14} = eq21();
+
+vec_ = a{1};
+for i = 2:14
+    temp = [vec_;a{i}];
+    vec_ = temp; 
+end
+
 end
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-function eq1()
-%constructign equation 10.a
+function [vec] = eq1()
+%constructing equation 10.a
 %y0 (i,s, t=1) = 0
 
     global maxV_;
-    rangeVarCoeff(8,[maxV_(1),0,0,0,maxV_(5),1], 1, 1);
+    vec = rangeVarCoeff(8,[maxV_(1),0,0,0,maxV_(5),1], 1, 1);
 end
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-function eq2()
+function [vec]=eq2()
 %constructign equation 10.b
 %y (i,r,s, t=1) = 0
 
     global maxV_;
-    rangeVarCoeff(9,[maxV_(1),0,0,maxV_(4),maxV_(5),1], 1, 1);
+    vec = rangeVarCoeff(9,[maxV_(1),0,0,maxV_(4),maxV_(5),1], 1, 1);
 end
 
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-function eq3()
+function [vec] = eq3()
 %constructign equation 10.c
 %ybar (i,r,s, t=1) = 0
 
     global maxV_;
-    rangeVarCoeff(10,[maxV_(1),0,0,maxV_(4),maxV_(5), 1],1,1);
+    vec = rangeVarCoeff(10,[maxV_(1),0,0,maxV_(4),maxV_(5), 1],1,1);
 end
 
 
@@ -313,13 +321,13 @@ function [vec_] = eq15()
         end
         temp(pos) = 1;
         
-        %calculaitng the positions in the conditional sum
+        %calculaitng the positions in the conditional sum of z
         %tau = 0 .. min(t, Td)
         t = indArr(iter,6);
         for tau = 0:t-1 %calculates j from i conditionally
             arr = indArr(iter,:);
             arr(6) = t-tau; %iterating over (t-tau)
-            pos = resolvePos(6, arr);
+            pos = resolvePos(11, arr);
             if (pos == -1)
                 display(strcat(sprintf('Error: position not found for dVar:%d and indices:',dVar), sprintf(' %d',indices(:)) ));
                 return;
@@ -547,13 +555,19 @@ function [vec_] = eq19()
         
         %calculating position for y (il,r,s,t)
         %fix sum over tau.
-        pos = resolvePos(9, ind);
-        if (pos == -1)
-            display(strcat(sprintf('Error: position not found for dVar:%d and indices:',dVar), sprintf(' %d',indices(:)) ));
-            return;
+  %calculaitng the positions in the conditional sum of z
+        %tau = 0 .. min(t, Td)
+        t = indArr(iter,6);
+        for tau = 0:t %calculates j from i conditionally
+            arr = indArr(iter,:);
+            arr(6) = tau; %iterating over (tau)
+            pos = resolvePos(9, arr);
+            if (pos == -1)
+                display(strcat(sprintf('Error: position not found for dVar:%d and indices:',dVar), sprintf(' %d',indices(:)) ));
+                return;
+            end
+            temp(pos) = 1/ind(6); %1/t
         end
-        temp(pos) = 1/ind(6); %1/t
-        
         %d(l, r,t)        
          %fill it with il wrt l
         ind = indArr(iter,:);
@@ -566,6 +580,7 @@ function [vec_] = eq19()
         end
         temp(pos) = -1/ind(6); % - 1/t
 
+        %update entire vector
         vec_(iter,:) = temp;
 
     end
@@ -598,6 +613,46 @@ function [vec_] = eq20()
 
         %pos for u (l,r,s,t)
         pos = resolvePos(1, indArr(iter,:));
+        if (pos == -1)
+            display(strcat(sprintf('Error: position not found for dVar:%d and indices:',dVar), sprintf(' %d',indices(:)) ));
+            return;
+        end
+        temp(pos) = 1;
+        
+
+        vec_(iter,:) = temp;
+
+    end
+end
+
+
+
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+function [vec_] = eq21()
+%constructign equation 21
+%w (i,r)  = Cr
+
+%generate indices combinations for l,r,s,t
+%The upper bounds like Rkl is dependent and can be dealt easily.
+% We also need to iterate l because il depends on l.
+%il is a constant depnding on l so don't need to iterate i.
+
+
+    global maxV_; global vecLen; global whatIL;
+
+    indArr = generateIndices([maxV_(1),0,0,maxV_(4),0,0], 1); 
+
+    %making the coeff vector
+    vec_ = zeros(length(indArr),vecLen);
+
+    %disp(indArr);
+    for iter = 1:length(indArr)
+        temp = zeros(1,vecLen);
+
+        %pos for w (i,r,)
+        pos = resolvePos(3, indArr(iter,:));
         if (pos == -1)
             display(strcat(sprintf('Error: position not found for dVar:%d and indices:',dVar), sprintf(' %d',indices(:)) ));
             return;

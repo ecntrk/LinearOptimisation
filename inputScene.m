@@ -14,8 +14,8 @@ N = 8;
 
 epsilon_i = [8,8,8,8,8,8,8,8];
 
-p_ij = zeros(8,8);
-%            A B C D E F G H
+p_ij = zeros(N,N);
+%            A B C D E F G H   from table 2.
 p_ij(1,:) = [1,2,3,4,6,8,5,7];
 p_ij(2,:) = [4,1,3,2,5,8,6,7];
 p_ij(3,:) = [6,3,1,2,7,8,4,5];
@@ -25,6 +25,7 @@ p_ij(6,:) = [8,7,4,6,3,1,2,5];
 p_ij(7,:) = [8,7,4,5,6,2,1,3];
 p_ij(8,:) = [8,6,3,5,7,4,2,1];
 
+r_ij = [20,25,25,20,25,25,20,25]; %from Table 1.
 
 %%%%%%%%%%%%%%%%%%%%%
 %%%%%%%%% type of equipments
@@ -87,10 +88,10 @@ whatL(:) = 1;
 %this here maps the il to a corresponding l value
 global whatIL; %il is the location of disaster l.
 global whatKL; %kl is disaster type of disaster l.
-whatIL = zeros(1,maxV_(3));
+whatIL = zeros(1,3);
 whatIL(:) = 1;
 
-whatKL = zeros(1,maxV_(3));
+whatKL = zeros(1,3);
 whatKL(:) = 1;
 %here is a potential bug. if you don't update the j_ and only whatJ, the
 %indexes the resolver finds will be wrong.
