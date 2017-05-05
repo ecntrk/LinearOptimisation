@@ -66,7 +66,8 @@ The coefficient vector for the first equation $ y^1_{0,1}(1) = 0$ will look like
 \section{Summary}
 What exactly are we finding?\\
 Reserve of the resources and what amount to be placed at which location.\\
-\subsection{Locations}
+The next sections will describe what are the variables and how indexes are depending on each others.
+\subsection{Locations (i, j)}
 \mybox[green!10]{We have our first variable N which is the number of locations. each of these locations are called i. each i has a set of nearby location set called $\varepsilon_i$. We call each of nearby locations j.} 
 Right now we know \textbf{i, j, N, $\varepsilon$ }and we know what they are. in the example, N = 8. each $\varepsilon_i$ is also 8. Moving on..
 
@@ -74,8 +75,27 @@ Right now we know \textbf{i, j, N, $\varepsilon$ }and we know what they are. in 
 \mybox[green!10]{Next thing on list is $p_{ij}$ which is preference score (ascending) of city j judging from city i. $r_{ij}$ is response time / transfer time of resources from j to i.}
 This means, $p_{ij}$ will determine the $\varepsilon_i$. we will deal with response time $r_{ij}$ later.
 \mybox[red!10]{\textbf{Concern:} if this $\varepsilon_i$ is not the same list of cities for every city? If it is, then there is no need to call for additional j. If not, and it is variable, we need to write a subroutine to generate viable list of j for each i.}
-\subsection{Resources} There are few different types. each one of them needs specialist and other general members. In example there are 3 types. Theres a teeny tiny  component of setup time for the resources too. 
-\mybox[green!10]{R is the number of resource \textit{types}. in example R = 3. $\alpha_r, \beta_r$ are number of specialists and generalists required for each of type-r equipment. $s_r$ is the setup time for type-r equipment. Obviously this should be independent of number of equipments.}
 
+\subsection{Disaster Scenarios (l, s)}
+There are different types of disasters. In the example it is 2. Each disaster needs different set of type-r equipments. we may cooc up as many scenarios as we can with different combination of simultaneous disaster of different type at different locations.  
+\mybox[green!10]{K is number of disaster types. K = 2. S is the number of scenarios. Each s from S has specific set of simultaneous disasters L. each l from L has a disaster type and location $k_l, i_l$.}
+
+\subsection{Resources (r)} There are few different types. each one of them needs specialist and other general members. In example there are 3 types. Theres a teeny tiny  component of setup time for the resources too. 
+\mybox[green!10]{R is the number of resource \textit{types}. in example R = 3. $\alpha_r, \beta_r$ are number of specialists and generalists required for each of type-r equipment. $s_r$ is the setup time for type-r equipment. Obviously this should be independent of number of equipments.}
+\subsection{Time (t)}
+Stuff about time.
+
+\section{Dependencies}
+$
+l \leftarrow s\\
+i \leftarrow (l) \leftarrow s\\
+j \leftarrow i\\
+r \leftarrow (k) \leftarrow l \leftarrow s \\
+t \leftarrow s\\
+$
+Order is: [t, s, l, r, i, j,]\\
+index generation function:\\
+input: s, t (0 means no t. 1 = ts, 2 means tkl)
+output, indexes
 
 \end{document}

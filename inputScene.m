@@ -75,16 +75,18 @@ global R_k; %equipments needed in case of k.
 global T_k; %time points for k where next resource is necessary
 
 K = 2; % terrorist attack and major flood. page 12.
-R_K(1,:) = [1,2]; %l = 1, bomb, need IRU, USAR, 1,2
-R_K(2,:) = [2,3]; %l = 2, flood, need USAR, HVP. 2,3
+R_K(1,:) = [1,2]; %k = 1, bomb, need IRU, USAR, 1,2
+R_K(2,:) = [2,3]; %k = 2, flood, need USAR, HVP. 2,3
 
 %%%%%%%%%%%%%%%%%%%%%
 %%%%%%%%%% Scenarios
 %%%%%%%%%%%%%%%%%%%%%
 global S; %set of scenarios
 
-%for now, lets consider only 1 scenario with bomb in A, B, C.
-S = 1;
+%for now, lets consider only 2 scenario with 
+%s1 = bomb in A, B, C. 
+%s2 = flood in B,C,D.
+S = 2;
 
 
 %this here maps the l to a corresponding s value
