@@ -1,0 +1,81 @@
+\documentclass[11pt]{article}
+\usepackage{amsmath}
+\usepackage[usenames,dvipsnames]{xcolor}
+\usepackage[breakable, theorems, skins]{tcolorbox}
+\tcbset{enhanced}
+\DeclareRobustCommand{\mybox}[2][gray!20]{%
+\begin{tcolorbox}[   %% Adjust the following parameters at will.
+        breakable,
+        left=0pt,
+        right=0pt,
+        top=0pt,
+        bottom=0pt,
+        colback=#1,
+        colframe=#1,
+        width=\dimexpr\textwidth\relax, 
+        enlarge left by=0mm,
+        boxsep=5pt,
+        arc=0pt,outer arc=0pt,
+        ]
+        #2
+\end{tcolorbox}
+}
+
+%%%%%%%%%%%%%%%%%%%%%%%
+%%%%%%%%%%%%%%%%%%%%%%%
+%%%%%%%%%%%%%%%%%%%%%%%
+
+\begin{document}
+\section{Variable arrangement}
+The \textit{decision variables} are arranged in the following manner:\\
+\begin{center}
+[$u, v, w, \bar{w}, x_0, x, \bar{x}, y_0, y, \bar{y}, z$]\\
+\end{center}
+
+\par \noindent The lengths of these depends on the the variables ($i, j, l, r, s, t$). Here are the dependencies:\\
+\begin{align}
+u \rightarrow l, r, s, t\\
+v \rightarrow i, r, s, t\\
+w, \bar{w} \rightarrow i, r\\
+x_0 \rightarrow i,j,s,t\\
+x, \bar{x}  \rightarrow i, j, r, s, t\\
+y_0 \rightarrow i,s,t\\
+y, \bar{y} \rightarrow i,r,s,t\\
+z \rightarrow i, r, s, t\\
+d_0 \rightarrow l, t\\
+d \rightarrow l, r, t
+\end{align}
+The total length of the coefficient array for the equations is $(lrst + irst + 2ir + ijst + 2ijrst + ist + 2irst + irst)$. Assuming  the lengths of each as $3$, we have ($81+ 81 +9 + 9+ 81 +243 +243 + 27 + 81 + 81 +81 + 9 + 27)= 1053$ elements in the coefficient array. Depending on the numbers, this vector can be extremely large.
+
+\par The decision variables will be arranged in the order of ($i, j, l, r, s, t$). for $u$ with 2 elements each ($l,r,s,t$), it'll be 
+\begin{align}
+[u^{1}_{1,1}(1),  u^2_{1,1}(1), u^1_{2,1}(1), u^2_{2,1}(1), u^{1}_{1,2}(1),  u^2_{1,2}(1), u^1_{2,2}(1), u^2_{2,2}(1), \\ \nonumber
+u^{1}_{1,1}(2),  u^2_{1,1}(2), u^1_{2,1}(2), u^2_{2,1}(2), u^{1}_{1,2}(2),  u^2_{1,2}(2), u^1_{2,2}(2), u^2_{2,2}(2),\\
+v^{1}_{1,1}(1),  v^2_{1,1}(1), v^1_{2,1}(1), v^2_{2,1}(1), v^{1}_{1,2}(1),  v^2_{1,2}(1), v^1_{2,2}(1), v^2_{2,2}(1), \\ \nonumber
+v^{1}_{1,1}(2),  v^2_{1,1}(2), v^1_{2,1}(2), v^2_{2,1}(2), v^{1}_{1,2}(2),  v^2_{1,2}(2), v^1_{2,2}(2), v^2_{2,2}(2),\\w^1_1, w^2_1, w^1_2, w^2_2, \bar{w}^1_1...............................]\nonumber
+\end{align}
+
+\par \noindent A matlab function will resolve the position of each decision variable given the values ($i, j, l, r, s, t$) in the coefficient vector.
+\section{Example}
+Considering equation 10 from the original text:\\
+$y^i_{0,s}(1) = 0$\\
+The coefficient vector for the first equation $ y^1_{0,1}(1) = 0$ will look like: [$000000...01000..00000$]where the single 1 is the $748^{th}$ position in the coefficient vector. The next iteration of eqn 10 is $ y^2_{0,1}(1) = 0$ which will look like [$000000...00100..00000$] while this time, the 1 is in $749^{th}$position in the vector (Considering all lengths are 3).
+
+
+\pagebreak
+\section{Summary}
+What exactly are we finding?\\
+Reserve of the resources and what amount to be placed at which location.\\
+\subsection{Locations}
+\mybox[green!10]{We have our first variable N which is the number of locations. each of these locations are called i. each i has a set of nearby location set called $\varepsilon_i$. We call each of nearby locations j.} 
+Right now we know \textbf{i, j, N, $\varepsilon$ }and we know what they are. in the example, N = 8. each $\varepsilon_i$ is also 8. Moving on..
+
+\mybox[red!40]{\textbf{Possible Conflict:} each i should be on $\varepsilon_i$ list as first priority. But, there's the table where C, D has themselves listed lower than others. How is this possible. Also there are no A's}
+\mybox[green!10]{Next thing on list is $p_{ij}$ which is preference score (ascending) of city j judging from city i. $r_{ij}$ is response time / transfer time of resources from j to i.}
+This means, $p_{ij}$ will determine the $\varepsilon_i$. we will deal with response time $r_{ij}$ later.
+\mybox[red!10]{\textbf{Concern:} if this $\varepsilon_i$ is not the same list of cities for every city? If it is, then there is no need to call for additional j. If not, and it is variable, we need to write a subroutine to generate viable list of j for each i.}
+\subsection{Resources} There are few different types. each one of them needs specialist and other general members. In example there are 3 types. Theres a teeny tiny  component of setup time for the resources too. 
+\mybox[green!10]{R is the number of resource \textit{types}. in example R = 3. $\alpha_r, \beta_r$ are number of specialists and generalists required for each of type-r equipment. $s_r$ is the setup time for type-r equipment. Obviously this should be independent of number of equipments.}
+
+
+\end{document}

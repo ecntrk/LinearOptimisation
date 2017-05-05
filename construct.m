@@ -8,6 +8,7 @@ function [vec_] = construct()
 %Decision Var Order: u, v, w, wbar, x0, x, xbar, y0, y, ybar, z
 
 %inputScene();
+
 %initialising all global vars
 init();
 
