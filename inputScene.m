@@ -2,7 +2,7 @@
 %Author: Debmalya Sinha. debmalya.01[att]gmail.com
 %Copyleft.
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-function [epsilon_i ] = inputScene ( )
+function [] = inputScene ( )
 %Takes the input variables in the scenario
 %   manually change the values here.
 
@@ -86,6 +86,7 @@ C_r = [72, 20, 46]; %from table 3
 %%%%%%%%%%%%%%%%%%%%%
 global sr ;  %setup time for all r.
 global tij; %Travel time from j to i.
+global Td; %deployment time.
 
 sr = zeros(1,R); 
 asr = [60, 30, 60]; %setup times from table 3
@@ -93,6 +94,7 @@ sr = ceil (asr/tick);
 
 tij = r_ij; %because t_ij is travel times and r_ij is transfer time of equipments from j to i.
 
+Td = 300/tick; %becaus eit is mentioned, firefighters need 5 hours break and we know shift time = break time 
 
 
 %%%%%%%%%%%%%%%%%%%%%

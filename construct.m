@@ -16,20 +16,20 @@ init();
 %a= generateIndices([2,0,3,5,2,3,4]);
 
 %constructing equations one by one:
-a{1} = eq1();
-a{2} = eq2();
-a{3} = eq3();
-a{4} = eq11();
-a{5} = eq12();
-a{6} = eq13();
-a{7} = eq14();
-a{8} = eq15();
-a{9} = eq16();
-a{10} = eq17();
-a{11} = eq18();
-a{12} = eq19();
-a{13} = eq20();
-a{14} = eq21();
+% a{1} = eq1();
+% a{2} = eq2();
+% a{3} = eq3();
+% a{4} = eq11();
+% a{5} = eq12();
+% a{6} = eq13();
+% a{7} = eq14();
+% a{8} = eq15();
+% a{9} = eq16();
+% a{10} = eq17();
+% a{11} = eq18();
+% a{12} = eq19();
+% a{13} = eq20();
+% a{14} = eq21();
 
 vec_ = a{1};
 for i = 2:14
@@ -40,21 +40,27 @@ end
 end
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-function [vec] = eq1()
+function [vec,vec2] = eq1()
 %constructing equation 10.a
 %y0 (i,s, t=1) = 0
 
     global maxV_;
-    vec = rangeVarCoeff(8,[maxV_(1),0,0,0,maxV_(5),1], 1, 1);
+    vec = rangeVarCoeff(8,[maxV_(1),0,0,maxV_(4),0,1], 1, 1);
+
+    vec2 = zeros(length(vec),1); %RHS is zero
+
 end
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-function [vec]=eq2()
+function [vec, vec2]=eq2()
 %constructign equation 10.b
 %y (i,r,s, t=1) = 0
 
     global maxV_;
-    vec = rangeVarCoeff(9,[maxV_(1),0,0,maxV_(4),maxV_(5),1], 1, 1);
+    vec = rangeVarCoeff(9,[maxV_(1),0,maxV_(3),maxV_(4),0,1], 1, 1);
+    
+    vec2 = zeros(length(vec),1); %RHS is zero
+
 end
 
 
@@ -64,23 +70,26 @@ function [vec] = eq3()
 %ybar (i,r,s, t=1) = 0
 
     global maxV_;
-    vec = rangeVarCoeff(10,[maxV_(1),0,0,maxV_(4),maxV_(5), 1],1,1);
+    vec = rangeVarCoeff(10,[maxV_(1),0,maxV_(3),maxV_(4),0, 1],1,1);
+    
+    vec2 = zeros(length(vec),1); %RHS is zero
 end
 
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-function [vec_] = eq11()
+function [vec_, vec2] = eq11()
 %constructign equation 11
-%y (i,r,s, t+1) - y (i,r,s, t+1) - sum(x ijrst) = 0
+%y (i,r,s, t+1) - y (i,r,s, t) - sum(x ijrst) = 0
 
-%generate indices combinations for i,r,s,t and then iterate j for sum(x).
-%put combination (t+1>sr+tij).
+%generate indices combinations for i,r,s,t = (Ts-1) and then iterate j for sum(x).
+
     global maxV_; global vecLen; global whatJ;
 
-    global sr ; global tij;
-    tCondition = (1+sr+tij)+1;
-    indArr = generateIndices([maxV_(1),0,0,maxV_(4),maxV_(5),maxV_(6)], 1); 
+    global sr ; global tij; global epsilon_i;
+    %tCondition = (1+sr(r)+tij(i,j)+1;
+    indArr = generateIndices([maxV_(1),0,maxV_(3),maxV_(4),0,maxV_(6)-1], 1); 
+
 
     %making the coeff vector
     vec_ = zeros(length(indArr),vecLen);
@@ -94,42 +103,49 @@ function [vec_] = eq11()
         temp(p2) = 1;
 
         %calculaitng the positions in the sum
-        %only then t condition is met!
-        if(indArr(iter,6) >= tCondition)
-            %do the actual sum
-            for j = 1:whatJ(indArr(iter,1)) %calculates j from i conditionally
-                arr = indArr(iter,:);
-                arr(2) = j; %iterating over j
-                pos = resolvePos(6, arr);
-                if (pos == -1)
-                    display(strcat(sprintf('Error: position not found for dVar:%d and indices:',dVar), sprintf(' %d',arr(:)) ));
-                    return;
-                end
-                temp(pos) = -1;
-            end
-        end
+            for j = epsilon_i(indArr(iter,4)) %calculates j from i conditionally
+                    
+                %put combination (t+1>sr+tij). 
+                condition = sr(indArr(count,3)) + tij(indArr(count,4),j);
+                if ((indArr(count,6)+1) > condition)         %only then t condition is met!
 
+                    %do the actual sum
+                    arr = indArr(iter,:);
+                    arr(5) = j; %iterating over j
+                    arr(6) = arr(6) + 1 - condition;
+                    pos = resolvePos(6, arr);
+                    if (pos == -1)
+                        display(strcat(sprintf('Error: position not found for dVar:%d and indices:',dVar), sprintf(' %d',arr(:)) ));
+                        return;
+                    end
+                    temp(pos) = -1;
+                
+                end
+
+            end
         vec_(iter,:) = temp;
 
     end
+    
+    vec2 = zeros(length(vec_),1); %RHS is zero
+
 end
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-function [vec_] = eq12()
+function [vec_, vec2] = eq12()
 %constructign equation 12
-%y (i,r,s, t+1) - y (i,r,s, t+1) - sum(x_0 ijst) - sum (sum (betaR * x (ijrst) ))= 0
+%y (i,r,s, t+1) - y (i,r,s, t) - sum(x_0 ijst) - sum (sum (betaR * x (ijrst) ))= 0
 
 %generate indices combinations for i,s,t and then iterate j,r for sum(x).
 %put combination (t+1>tij).
-    global maxV_; global vecLen; global whatJ;
-
+    global maxV_; global vecLen; global epsilon_i;
     global tij;
-    tCondition = (1+tij)+1;
-    indArr = generateIndices([maxV_(1),0,0,0,maxV_(5),maxV_(6)], 1);
 
     %having the coefficients for x ijrs(t)
     global betaR;
+
+    indArr = generateIndices([maxV_(1),0,0,maxV_(4),0,maxV_(6)-1], 1);
 
     %making the coeff vector
     vec_ = zeros(length(indArr),vecLen);
@@ -145,55 +161,62 @@ function [vec_] = eq12()
 
         %calculaitng the positions in the sum
         %only then t condition is met!
-        if(indArr(iter,6) >= tCondition)
+
             %do the actual sum over j
-            for j = 1:whatJ(indArr(iter,1)) %calculates j from i conditionally
-                arr = indArr(iter,:);
+            for j = epsilon_i(indArr(iter,4)) %calculates j from i conditionally
+                
+                %put combination (t+1>tij). 
+                condition = tij(indArr(count,4),j);
+                if ((indArr(count,6)+1) > condition)         %only then t condition is met!
 
-                %ifirst, single sub over j for x_0.
-                arr(2) = j; %iterating over j 
+                    arr = indArr(iter,:);
 
-                pos = resolvePos(5, arr);
-                if (pos == -1)
-                    display(strcat(sprintf('Error: position not found for dVar:%d and indices:',dVar), sprintf(' %d',arr(:)) ));
-                    return;
-                end
-                temp(pos) = -1;
-
-                %now the double sum of j and r for x
-                for r = 1:maxV_(4)
-                    arr(4) = r; %iterating over r
-                    pos = resolvePos(6, arr);
+                    %ifirst, single sum over j for x_0.
+                    arr(5) = j; %iterating over j 
+                    %updating t
+                    arr(6) = arr(6)+1-condiiton;
+                    pos = resolvePos(5, arr);
                     if (pos == -1)
                         display(strcat(sprintf('Error: position not found for dVar:%d and indices:',dVar), sprintf(' %d',arr(:)) ));
                         return;
                     end
-                    temp(pos) = -betaR(r);
-                end
+                    temp(pos) = -1;
 
+                    %now the double sum of j and r for x
+                    for r = 1:maxV_(3)
+                        arr(3) = r; %iterating over r
+                        pos = resolvePos(6, arr);
+                        if (pos == -1)
+                            display(strcat(sprintf('Error: position not found for dVar:%d and indices:',dVar), sprintf(' %d',arr(:)) ));
+                            return;
+                        end
+                        temp(pos) = -betaR(r);
+                    end
+                end
             end
-        end
 
         vec_(iter,:) = temp;
 
     end
+    
+    vec2 = zeros(length(vec_),1); %RHS is zero
+
 end
 
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-function [vec_] = eq13()
+function [vec_, vec2] = eq13()
 %constructign equation 13
-%yBar (i,r,s, t+1) - yBar (i,r,s, t+1) - sum(xBar (ijrst) + sum( alphaR * x(ijrst)) ) = 0
+%yBar (i,r,s, t+1) - yBar (i,r,s, t) - sum(xBar (ijrst) + sum( alphaR * x(ijrst)) ) = 0
 
-%generate indices combinations for i,r,s,t and then iterate r for sum(xbar + alpa * x).
+%generate indices combinations for i,r,s,t and then iterate j for sum(xbar + alpa * x).
 %put combination (t+1>tij).
 
-    global maxV_; global vecLen; global whatJ;
-
+    global maxV_; global vecLen; global epsilon_i;
     global tij;
-    tCondition = (1+tij)+1;
-    indArr = generateIndices([maxV_(1),0,0,maxV_(4),maxV_(5),maxV_(6)], 1);
+
+    indArr = generateIndices([maxV_(1),0,maxV_(3),maxV_(4),0,maxV_(6)-1], 1); %t = 1..Ts-1
 
     %having the coefficients for x ijrs(t)
     global alphaR;
@@ -212,14 +235,18 @@ function [vec_] = eq13()
 
         %calculaitng the positions in the sum
         %only then t condition is met!
-        if(indArr(iter,6) >= tCondition)
-            %do the actual sum over j
-            for j = 1:whatJ(indArr(iter,1)) %calculates j from i conditionally
+        %do the actual sum over j
+        for j = epsilon_i(indArr(iter,4)) %calculates j from i conditionally
+             %put combination (t+1>tij). 
+            condition = tij(indArr(count,4),j);
+            if ((indArr(count,6)+1) > condition)         %only then t condition is met!
+
                 arr = indArr(iter,:);
+                arr(5) = j; %iterating over j 
+                %updating t
+                arr(6) = arr(6)+1-condiiton;
 
                 %ifirst, single sub over j for xBar.
-                arr(2) = j; %iterating over j 
-
                 pos = resolvePos(7, arr);
                 if (pos == -1)
                     display(strcat(sprintf('Error: position not found for dVar:%d and indices:',dVar), sprintf(' %d',arr(:)) ));
@@ -234,30 +261,32 @@ function [vec_] = eq13()
                 return;
                 end
                 %indArr(iter,4) is the current value of r
-                temp(pos) = -alphaR(indArr(iter,4)); 
-
+                temp(pos) = -alphaR(indArr(iter,3)); 
             end
+
         end
 
         vec_(iter,:) = temp;
 
     end
+    
+    vec2 = zeros(length(vec_),1); %RHS is zero
+
 end
 
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-function [vec_] = eq14()
+function [vec_, vec2] = eq14()
 %constructign equation 14
-%z (i,r,s, t) - y (i,r,s, t+1) - sum(x ijrst) = 0
+%z (i,r,s, t)  - sum(x ijrst) = 0
 
 %generate indices combinations for i,r,s,t and then iterate j for sum(x).
-%put combination (t+1>sr+tij).
-    global maxV_; global vecLen; global whatJ;
+%put combination (t>sr+tij), not t+1.
+    global maxV_; global vecLen; global epsilon_i;
 
     global sr ; global tij;
-    tCondition = (1+sr+tij)+1;
-    indArr = generateIndices([maxV_(1),0,0,maxV_(4),maxV_(5),maxV_(6)], 1); 
+    indArr = generateIndices([maxV_(1),0,maxV_(3),maxV_(4),0,maxV_(6)], 1); %t = 1..Ts
 
     %making the coeff vector
     vec_ = zeros(length(indArr),vecLen);
@@ -275,11 +304,15 @@ function [vec_] = eq14()
         
         %calculaitng the positions in the sum
         %only then t condition is met!
-        if(indArr(iter,6) >= tCondition)
-            %do the actual sum
-            for j = 1:whatJ(indArr(iter,1)) %calculates j from i conditionally
+        
+        %do the actual sum
+        for j = epsilon_i(indArr(iter,4)) %calculates j from i conditionally
+            %put combination (t+1>sr+tij). 
+            condition = sr(indArr(count,3)) + tij(indArr(count,4),j);
+            if ((indArr(count,6)+1) > condition)         %only then t condition is met!
                 arr = indArr(iter,:);
                 arr(2) = j; %iterating over j
+                arr(6) = arr(6)-condition; %updating t
                 pos = resolvePos(6, arr);
                 if (pos == -1)
                     display(strcat(sprintf('Error: position not found for dVar:%d and indices:',dVar), sprintf(' %d',arr(:)) ));
@@ -292,21 +325,22 @@ function [vec_] = eq14()
         vec_(iter,:) = temp;
 
     end
+    vec2 = zeros(length(vec_),1); %RHS is zero
+
 end
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-function [vec_] = eq15()
+function [vec_,vec2] = eq15()
 %constructign equation 15
 %v (i,r,s, t) - sum z (i,r,s, t cond) - sum z (i,r,s, t cond)  = 0
 
 %generate indices combinations for i,r,s,t and then iterate j for sum(x).
 %put combination (t+1>sr+tij).
-    global maxV_; global vecLen;
+    global maxV_; global vecLen, global Td;
 
-    Td = 2;
 
-    indArr = generateIndices([maxV_(1),0,0,maxV_(4),maxV_(5),maxV_(6)], 1); 
+    indArr = generateIndices([maxV_(1),0,maxV_(3),maxV_(4),0,maxV_(6)], 1); 
 
     %making the coeff vector
     vec_ = zeros(length(indArr),vecLen);
@@ -344,6 +378,9 @@ function [vec_] = eq15()
         vec_(iter,:) = temp;
 
     end
+    
+    vec2 = zeros(length(vec_),1); %RHS is zero
+    
 end
 
 
