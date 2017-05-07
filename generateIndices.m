@@ -60,7 +60,15 @@ for c = 1:length(gInd)
     
 end
 %display(indArr);
- 
+%eliminating indices where i = j. simpler than iterating in range.
+if (iR(4) ~= 0 && iR(5) ~= 0)
+    for count = 1:length(indArr)
+        if (indArr(count,4) == indArr(count,5)) 
+            indArr(count,:) = [];
+        end
+    end
+end
+
 end
 
 

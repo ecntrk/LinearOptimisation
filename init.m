@@ -23,7 +23,7 @@ global T_k;
 
 %Define all the maximum values of the variables. For now, only 3!
 i_ = N;
-j_ = max(epsilon_i); %changed to dependant in generateindices
+j_ = N-1; %changed to dependant in generateindices
 l_ = L;
 r_ = R;
 s_ = S; 
