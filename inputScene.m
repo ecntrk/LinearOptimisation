@@ -14,7 +14,7 @@ tick = 30; % this means every discretised tick is for 30 minutes.
 %
 %The reason to put this here is, once use put minutes as time inputs, 
 %they don't ahve to change everything if they try to lower the 
-%discreettime limit. just make tick any other value!
+%discreet time limit. just make tick any other value!
 %
 %%%%%%%%%%%%%
 
@@ -106,15 +106,6 @@ aT_k{2} = [120, 240, 600] %(2 hr, 4 hr, 10 hr.) 30 mints per tick.
 %correction: made it cell anywway!
 for count = 1:K
     T_k{count} = ceil(aT_k{count}/tick);
-end
-
-global max_T_k; % this is needed to minimize footpront of DVar u.
-max_T_k = 0;
-for count = 1:length(T_k)
-    a = length(T_k{count});
-    if(max_T_k < a)
-        max_T_k = a;
-    end
 end
 
 
@@ -287,14 +278,7 @@ global whatL; %simultaneous disasters l's are happening in each s from S.
 whatL{1} = [1,2,3]; %these are l values
 whatL{2} = [11,12,13];
 
-global max_L_s; % this is needed to minimize footpront of DVar u.
-max_L_s = 0;
-for count = 1:length(whatL)
-    a = length(whatL{count});
-    if(max_L_s < a)
-        max_L_s = a;
-    end
-end
+
 
 global Ts;
 % considering 30 mins as 1 time tick, two s from S has 10 

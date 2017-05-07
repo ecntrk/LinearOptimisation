@@ -18,8 +18,8 @@ global R;
 global S;
 global L;
 global Ts;
-global max_L_s;
-global max_T_k;
+global whatL;
+global T_k;
 
 %Define all the maximum values of the variables. For now, only 3!
 i_ = N;
@@ -53,7 +53,24 @@ whatJ(:) = maxV_(2);
 %indexes the resolver finds will be wrong.
 
 
+% this is needed to minimize footpront of DVar u.
+% calculating max set length of Tk
+max_T_k = 0;
+for count = 1:length(T_k)
+    a = length(T_k{count});
+    if(max_T_k < a)
+        max_T_k = a;
+    end
+end
 
+% calculating max set length of Ls
+max_L_s = 0;
+for count = 1:length(whatL)
+    a = length(whatL{count});
+    if(max_L_s < a)
+        max_L_s = a;
+    end
+end
 
 global vecLen;
 vecLen = max_L_s*R*S*max_T_k + i_*r_*s_*t_ + 2*i_*r_ + i_*j_*s_*t_ ...

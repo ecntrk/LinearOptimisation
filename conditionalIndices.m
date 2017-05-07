@@ -2,63 +2,51 @@
 %Author: Debmalya Sinha. debmalya.01[att]gmail.com
 %Copyleft.
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-function [indArr] = conditionalIndices(s)
-%Clever trick to generate variable length indices combinations
+function [arr] = conditionalIndices(vec)
+%generates variable length indices combinations
 %sequentially. Can't be made parallel unfortunately right now.
 %
-%Input: indices range values at correct places, tStart  is the starting of
-%variable t (because of conditions like t+1>sr+tij
+%Input: vector[s,l,r,i,j,t]. put 1 in the indices wanted. 0 otherwise.
+%t=0, no t. t=1 refers to Tkl. t = 2 refers to full iteration of Ts.
 
-%extracting non zero elements form range
-nzi = nonzeros(iR);
-
-%making the starting positions
-iRs = iR;
-iRs(iRs>0)=1;
-iRs(end) = tSt;
-%guide index for position of the nonzero index elements
-gInd = zeros(1, nnz(iR)); 
-
+%S is always there, i,j will never be there.
+global S;
+global whatL;
+global whatKL; %determines k from l.
+global R_k;
+global T_k;
+global Ts;
+%arr = [0,0,0,0,0,0];
 count = 1;
-for c=1:length(iR)
-    if(iR(c) >0)
-        gInd(count) = c;
-        count = count+1;
-    end
-end
-
-%This many combinations to produce
-nzi(end) = nzi(end)-tSt+1;
-tot = prod(nzi);
-%initialising the output array of indices combinations
-indArr = zeros(tot,length(iR)); 
-
-%display (gInd); %debug stuff
-
-%Here goes the actual logic
-interval = 1;
-%we iterate coloumnwise
-for c = 1:length(gInd)
-    %display(c);
-    maxVal = iR(gInd(c));
-    minVal  = iRs(gInd(c));
-    %gInd(c)
-    if(c>1)
-        interval = interval * (iR(gInd(c-1)));%-iRs(gInd(c-1)))
-    end
-    cc =1;
-    %iterate val with 
-    asd = tot/((maxVal-minVal+1)*interval);
-    for rowSeg = 1:asd
-        for val = minVal:maxVal
-           for in = 1:interval
-               indArr(cc,gInd(c)) = val;
-               cc=cc+1; %faster than calculating index with rowSeg.
-           end
+display (S);
+for Scn = 1:S 
+    %display(Scn);
+    Lrange = whatL{Scn}
+    for Lcn = Lrange;
+        kk = whatKL(Lcn);
+        Rrange = R_k(kk,:)
+        if(vec(3) == 0)
+            Rrange = [0];
         end
+        for Rcn = Rrange
+            if (vec(6) == 0)
+                Trange = [0];
+            elseif(vec(6) == 1)
+                Trange = T_k{kk}; %T_k is cell
+            else
+                Trange = 1:Ts(Scn);
+            end 
+            
+            for Tcn = Trange
+                temp = [Scn, Lcn, Rcn, 0, 0, Tcn]
+                arr(count,:) = temp;
+                count = count + 1;
+            end
+        end
+        
     end
-    
 end
+
 %display(indArr);
  
 end
