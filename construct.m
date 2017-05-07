@@ -1,5 +1,5 @@
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-%Author: Debmalya Sinha. debmalya.01[at]gmail.com
+%Author: Debmalya Sinha. debmalya.01[att]gmail.com
 %Copyleft.
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 function [vec_] = construct()
@@ -102,7 +102,7 @@ function [vec_] = eq11()
                 arr(2) = j; %iterating over j
                 pos = resolvePos(6, arr);
                 if (pos == -1)
-                    display(strcat(sprintf('Error: position not found for dVar:%d and indices:',dVar), sprintf(' %d',indices(:)) ));
+                    display(strcat(sprintf('Error: position not found for dVar:%d and indices:',dVar), sprintf(' %d',arr(:)) ));
                     return;
                 end
                 temp(pos) = -1;
@@ -155,7 +155,7 @@ function [vec_] = eq12()
 
                 pos = resolvePos(5, arr);
                 if (pos == -1)
-                    display(strcat(sprintf('Error: position not found for dVar:%d and indices:',dVar), sprintf(' %d',indices(:)) ));
+                    display(strcat(sprintf('Error: position not found for dVar:%d and indices:',dVar), sprintf(' %d',arr(:)) ));
                     return;
                 end
                 temp(pos) = -1;
@@ -165,7 +165,7 @@ function [vec_] = eq12()
                     arr(4) = r; %iterating over r
                     pos = resolvePos(6, arr);
                     if (pos == -1)
-                        display(strcat(sprintf('Error: position not found for dVar:%d and indices:',dVar), sprintf(' %d',indices(:)) ));
+                        display(strcat(sprintf('Error: position not found for dVar:%d and indices:',dVar), sprintf(' %d',arr(:)) ));
                         return;
                     end
                     temp(pos) = -betaR(r);
@@ -222,7 +222,7 @@ function [vec_] = eq13()
 
                 pos = resolvePos(7, arr);
                 if (pos == -1)
-                    display(strcat(sprintf('Error: position not found for dVar:%d and indices:',dVar), sprintf(' %d',indices(:)) ));
+                    display(strcat(sprintf('Error: position not found for dVar:%d and indices:',dVar), sprintf(' %d',arr(:)) ));
                     return;
                 end
                 temp(pos) = -1;
@@ -230,7 +230,7 @@ function [vec_] = eq13()
                 %for x
                 pos = resolvePos(6, arr);
                 if (pos == -1)
-                display(strcat(sprintf('Error: position not found for dVar:%d and indices:',dVar), sprintf(' %d',indices(:)) ));
+                display(strcat(sprintf('Error: position not found for dVar:%d and indices:',dVar), sprintf(' %d',arr(:)) ));
                 return;
                 end
                 %indArr(iter,4) is the current value of r
@@ -268,7 +268,7 @@ function [vec_] = eq14()
         %calculating position for z irs(t)
         pos = resolvePos(11, indArr(iter,:));
         if (pos == -1)
-            display(strcat(sprintf('Error: position not found for dVar:%d and indices:',dVar), sprintf(' %d',indices(:)) ));
+            display(strcat(sprintf('Error: position not found for dVar:%d and indices:',dVar), sprintf(' %d',arr(:)) ));
             return;
         end
         temp(pos) = 1;
@@ -282,7 +282,7 @@ function [vec_] = eq14()
                 arr(2) = j; %iterating over j
                 pos = resolvePos(6, arr);
                 if (pos == -1)
-                    display(strcat(sprintf('Error: position not found for dVar:%d and indices:',dVar), sprintf(' %d',indices(:)) ));
+                    display(strcat(sprintf('Error: position not found for dVar:%d and indices:',dVar), sprintf(' %d',arr(:)) ));
                     return;
                 end
                 temp(pos) = -1;
@@ -317,7 +317,7 @@ function [vec_] = eq15()
         %calculating position for v irs(t)
         pos = resolvePos(2, indArr(iter,:));
         if (pos == -1)
-            display(strcat(sprintf('Error: position not found for dVar:%d and indices:',dVar), sprintf(' %d',indices(:)) ));
+            display(strcat(sprintf('Error: position not found for dVar:%d and indices:',dVar), sprintf(' %d',arr(:)) ));
             return;
         end
         temp(pos) = 1;
@@ -330,7 +330,7 @@ function [vec_] = eq15()
             arr(6) = t-tau; %iterating over (t-tau)
             pos = resolvePos(11, arr);
             if (pos == -1)
-                display(strcat(sprintf('Error: position not found for dVar:%d and indices:',dVar), sprintf(' %d',indices(:)) ));
+                display(strcat(sprintf('Error: position not found for dVar:%d and indices:',dVar), sprintf(' %d',arr(:)) ));
                 return;
             end
             %here comes the condition
@@ -380,7 +380,7 @@ function [vec_] = eq16()
         %calculating position for y_0 (il,s,t)
         pos = resolvePos(8, ind);
         if (pos == -1)
-            display(strcat(sprintf('Error: position not found for dVar:%d and indices:',dVar), sprintf(' %d',indices(:)) ));
+            display(strcat(sprintf('Error: position not found for dVar:%d and indices:',dVar), sprintf(' %d',arr(:)) ));
             return;
         end
         temp(pos) = 1;
@@ -392,7 +392,7 @@ function [vec_] = eq16()
         %disp(ind);
         pos = resolvePos(12, ind);
         if (pos == -1)
-            display(strcat(sprintf('Error: position not found for dVar:%d and indices:',dVar), sprintf(' %d',indices(:)) ));
+            display(strcat(sprintf('Error: position not found for dVar:%d and indices:',dVar), sprintf(' %d',arr(:)) ));
             return;
         end
         temp(pos) = -1;
@@ -435,7 +435,7 @@ function [vec_] = eq17()
         %calculating position for y_bar (il,r,s,t)
         pos = resolvePos(10, ind);
         if (pos == -1)
-            display(strcat(sprintf('Error: position not found for dVar:%d and indices:',dVar), sprintf(' %d',indices(:)) ));
+            display(strcat(sprintf('Error: position not found for dVar:%d and indices:',dVar), sprintf(' %d',arr(:)) ));
             return;
         end
         temp(pos) = 1;
@@ -443,7 +443,7 @@ function [vec_] = eq17()
         %u(il, r,s,t)        
         pos = resolvePos(2, ind);
         if (pos == -1)
-            display(strcat(sprintf('Error: position not found for dVar:%d and indices:',dVar), sprintf(' %d',indices(:)) ));
+            display(strcat(sprintf('Error: position not found for dVar:%d and indices:',dVar), sprintf(' %d',arr(:)) ));
             return;
         end
         temp(pos) = -1;
@@ -480,7 +480,7 @@ function [vec_] = eq18()
         %pos for u
         pos = resolvePos(1, indArr(iter,:));
         if (pos == -1)
-            display(strcat(sprintf('Error: position not found for dVar:%d and indices:',dVar), sprintf(' %d',indices(:)) ));
+            display(strcat(sprintf('Error: position not found for dVar:%d and indices:',dVar), sprintf(' %d',arr(:)) ));
             return;
         end
         temp(pos) = 1;
@@ -493,7 +493,7 @@ function [vec_] = eq18()
         %calculating position for y (il,r,s,t)
         pos = resolvePos(9, ind);
         if (pos == -1)
-            display(strcat(sprintf('Error: position not found for dVar:%d and indices:',dVar), sprintf(' %d',indices(:)) ));
+            display(strcat(sprintf('Error: position not found for dVar:%d and indices:',dVar), sprintf(' %d',arr(:)) ));
             return;
         end
         temp(pos) = 1;
@@ -505,7 +505,7 @@ function [vec_] = eq18()
                 
         pos = resolvePos(13, ind);
         if (pos == -1)
-            display(strcat(sprintf('Error: position not found for dVar:%d and indices:',dVar), sprintf(' %d',indices(:)) ));
+            display(strcat(sprintf('Error: position not found for dVar:%d and indices:',dVar), sprintf(' %d',arr(:)) ));
             return;
         end
         temp(pos) = -1;
@@ -543,7 +543,7 @@ function [vec_] = eq19()
         %pos for u
         pos = resolvePos(1, indArr(iter,:));
         if (pos == -1)
-            display(strcat(sprintf('Error: position not found for dVar:%d and indices:',dVar), sprintf(' %d',indices(:)) ));
+            display(strcat(sprintf('Error: position not found for dVar:%d and indices:',dVar), sprintf(' %d',arr(:)) ));
             return;
         end
         temp(pos) = 1;
@@ -564,7 +564,7 @@ function [vec_] = eq19()
             arr(6) = tau; %iterating over (tau)
             pos = resolvePos(9, arr);
             if (pos == -1)
-                display(strcat(sprintf('Error: position not found for dVar:%d and indices:',dVar), sprintf(' %d',indices(:)) ));
+                display(strcat(sprintf('Error: position not found for dVar:%d and indices:',dVar), sprintf(' %d',arr(:)) ));
                 return;
             end
             temp(pos) = 1/ind(6); %1/t
@@ -576,7 +576,7 @@ function [vec_] = eq19()
                 
         pos = resolvePos(13, ind);
         if (pos == -1)
-            display(strcat(sprintf('Error: position not found for dVar:%d and indices:',dVar), sprintf(' %d',indices(:)) ));
+            display(strcat(sprintf('Error: position not found for dVar:%d and indices:',dVar), sprintf(' %d',arr(:)) ));
             return;
         end
         temp(pos) = -1/ind(6); % - 1/t
@@ -615,7 +615,7 @@ function [vec_] = eq20()
         %pos for u (l,r,s,t)
         pos = resolvePos(1, indArr(iter,:));
         if (pos == -1)
-            display(strcat(sprintf('Error: position not found for dVar:%d and indices:',dVar), sprintf(' %d',indices(:)) ));
+            display(strcat(sprintf('Error: position not found for dVar:%d and indices:',dVar), sprintf(' %d',arr(:)) ));
             return;
         end
         temp(pos) = 1;
@@ -655,7 +655,7 @@ function [vec_] = eq21()
         %pos for w (i,r,)
         pos = resolvePos(3, indArr(iter,:));
         if (pos == -1)
-            display(strcat(sprintf('Error: position not found for dVar:%d and indices:',dVar), sprintf(' %d',indices(:)) ));
+            display(strcat(sprintf('Error: position not found for dVar:%d and indices:',dVar), sprintf(' %d',arr(:)) ));
             return;
         end
         temp(pos) = 1;

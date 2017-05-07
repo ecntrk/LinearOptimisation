@@ -2,7 +2,7 @@
 %Author: Debmalya Sinha. debmalya.01[att]gmail.com
 %Copyleft.
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-function [indArr] = generateIndices(iR, tSt)
+function [indArr] = conditionalIndices(s)
 %Clever trick to generate variable length indices combinations
 %sequentially. Can't be made parallel unfortunately right now.
 %
