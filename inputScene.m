@@ -2,7 +2,7 @@
 %Author: Debmalya Sinha. debmalya.01[att]gmail.com
 %Copyleft.
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-function [] = inputScene ( )
+function [d_lrt] = inputScene ( )
 %Takes the input variables in the scenario
 %   manually change the values here.
 
@@ -258,6 +258,7 @@ d_lrt{2,16} = [T_k{2}; %time ticks (2, 4, 10 hours)
               0, 0, 0; % IRU units (300 casualty per unit)
               0,10, 5; %USAR units
               5, 0 ,0]; %HVP (not needed at all) 
+
 
 
 %Simultaneously there's  d0_lt          

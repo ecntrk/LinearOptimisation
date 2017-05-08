@@ -387,63 +387,55 @@ end
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-function [vec_] = eq16()
+function [vec_,vec2] = eq16()
 %constructign equation 16
 %y_0 (il, t) - d_0 (l,t)  = 0
 
 %generate indices combinations for l,s,t
-%although l depends on s, it'll be dealt in generateindices()
+%although l depends on s, it'll be dealt in conditionalIndices()
 %it  will generate the correct number of l for each s! Don't worry!
 %
 %il is a constant depnding on l so don't need to iterate i.
 
 
-    global maxV_; global vecLen; global whatIL;
+    global vecLen; global whatIL; global d0_lt;
 
-    indArr = generateIndices([0,0,maxV_(3),0,maxV_(5),maxV_(6)], 1); 
+    indArr = conditionalIndices([1,1,0,0,0,1]); %unlike generateindices, you put 1 on values you want.
 
     %making the coeff vector
     vec_ = zeros(length(indArr),vecLen);
-
+    vec2 = zeros(length(indArr),1); %for RHS
+    
     %disp(indArr);
     for iter = 1:length(indArr)
         temp = zeros(1,vecLen);
         
         %fill it with il wrt l
         ind = indArr(iter,:);
-        ind(1) = whatIL(ind(3));
-        ind(3) = 0;
+        ind(4) = whatIL(ind(2));
+        ind(2) = 0; %we don't need l now
         
         %calculating position for y_0 (il,s,t)
         pos = resolvePos(8, ind);
         if (pos == -1)
-            display(strcat(sprintf('Error: position not found for dVar:%d and indices:',dVar), sprintf(' %d',arr(:)) ));
+            display(strcat(sprintf('Error: position not found for dVar:%d and indices:',dVar), sprintf(' %d',ind(:)) ));
             return;
         end
         temp(pos) = 1;
         
         %lets deal with the d (l,t)
-        ind(1) = 0; ind(5) = 0;
-        ind(3) = indArr(iter,3);
-        %calculating position for y_0 (il,s,t)
-        %disp(ind);
-        pos = resolvePos(12, ind);
-        if (pos == -1)
-            display(strcat(sprintf('Error: position not found for dVar:%d and indices:',dVar), sprintf(' %d',arr(:)) ));
-            return;
-        end
-        temp(pos) = -1;
-
-
+        vec2(iter) = d0_lt(indArr(iter,2)); %possible change when there more t.
+        
         vec_(iter,:) = temp;
 
     end
+    
 end
 
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-function [vec_] = eq17()
+function [vec_, vec2] = eq17()
 %constructign equation 17
 %y_bar (il,r,s,t) - v (il,r,s,t)  = 0
 
@@ -453,9 +445,10 @@ function [vec_] = eq17()
 %il is a constant depnding on l so don't need to iterate i.
 
 
-    global maxV_; global vecLen; global whatIL;
-
-    indArr = generateIndices([0,0,maxV_(3),maxV_(4),maxV_(5),maxV_(6)], 1); 
+    global vecLen; global whatIL;
+    
+    %unlike generateindices, you put 1 on values you want.
+    indArr = conditionalIndices([1,1,1,0,0,2]); % t=2 means it'll iterate over Ts not T_kl
 
     %making the coeff vector
     vec_ = zeros(length(indArr),vecLen);
@@ -466,21 +459,21 @@ function [vec_] = eq17()
         
         %fill it with il wrt l
         ind = indArr(iter,:);
-        ind(1) = whatIL(ind(3));
+        ind(4) = whatIL(ind(2));
         ind(3) = 0;
         
         %calculating position for y_bar (il,r,s,t)
         pos = resolvePos(10, ind);
         if (pos == -1)
-            display(strcat(sprintf('Error: position not found for dVar:%d and indices:',dVar), sprintf(' %d',arr(:)) ));
+            display(strcat(sprintf('Error: position not found for dVar:%d and indices:',dVar), sprintf(' %d',ind(:)) ));
             return;
         end
         temp(pos) = 1;
         
-        %u(il, r,s,t)        
+        %V(il, r,s,t)        
         pos = resolvePos(2, ind);
         if (pos == -1)
-            display(strcat(sprintf('Error: position not found for dVar:%d and indices:',dVar), sprintf(' %d',arr(:)) ));
+            display(strcat(sprintf('Error: position not found for dVar:%d and indices:',dVar), sprintf(' %d',ind(:)) ));
             return;
         end
         temp(pos) = -1;
@@ -488,12 +481,15 @@ function [vec_] = eq17()
         vec_(iter,:) = temp;
 
     end
+    
+    vec2 = zeros(length(vec_),1); %RHS is zero
+
 end
 
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-function [vec_] = eq18()
+function [vec_,vec2] = eq18()
 %constructign equation 18
 %u (l,r,s,t) - d(l,r,t) + y (il,r,s,t)  = 0
 
@@ -503,12 +499,14 @@ function [vec_] = eq18()
 %il is a constant depnding on l so don't need to iterate i.
 
 
-    global maxV_; global vecLen; global whatIL;
+    global d_lrt; global vecLen; global whatIL;
 
-    indArr = generateIndices([0,0,maxV_(3),maxV_(4),maxV_(5),maxV_(6)], 1); 
+    %unlike generateindices, you put 1 on values you want.
+    indArr = conditionalIndices([1,1,1,0,0,1]); 
 
     %making the coeff vector
     vec_ = zeros(length(indArr),vecLen);
+    vec2 = zeros(length(indArr),1);
 
     %disp(indArr);
     for iter = 1:length(indArr)
@@ -517,36 +515,37 @@ function [vec_] = eq18()
         %pos for u
         pos = resolvePos(1, indArr(iter,:));
         if (pos == -1)
-            display(strcat(sprintf('Error: position not found for dVar:%d and indices:',dVar), sprintf(' %d',arr(:)) ));
+            display(strcat(sprintf('Error: position not found for dVar:%d and indices:',dVar), sprintf(' %d',indArr(:)) ));
             return;
         end
         temp(pos) = 1;
         
         %fill it with il wrt l
         ind = indArr(iter,:);
-        ind(1) = whatIL(ind(3));
-        ind(3) = 0;
+        ind(4) = whatIL(ind(2));
+        ind(2) = 0;
         
         %calculating position for y (il,r,s,t)
         pos = resolvePos(9, ind);
         if (pos == -1)
-            display(strcat(sprintf('Error: position not found for dVar:%d and indices:',dVar), sprintf(' %d',arr(:)) ));
+            display(strcat(sprintf('Error: position not found for dVar:%d and indices:',dVar), sprintf(' %d',ind(:)) ));
             return;
         end
         temp(pos) = 1;
         
         %d(l, r,t)        
-         %fill it with il wrt l
-        ind = indArr(iter,:);
-        ind(5) = 0;
-                
-        pos = resolvePos(13, ind);
-        if (pos == -1)
-            display(strcat(sprintf('Error: position not found for dVar:%d and indices:',dVar), sprintf(' %d',arr(:)) ));
-            return;
+        temp_v =  d_lrt{2,l};
+        tRange = temp_v(1,:);
+        col = 1;
+        for ct = tRange
+            if(ct == ind(6))
+               break;
+            end
+            col = col+1;
         end
-        temp(pos) = -1;
-
+        
+        vec2(iter) = temp_v(indArr(iter,3)+1, col); %d_lrt, r+1 and mathcing t. see inputscene for clue.
+        
         vec_(iter,:) = temp;
 
     end
@@ -556,7 +555,7 @@ end
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-function [vec_] = eq19()
+function [vec_,vec2] = eq19()
 %constructign equation 19
 %u (l,r,s,t) - 1/t *d(l,r,t) + sum y (il,r,s,t)  = 0
 
@@ -566,12 +565,14 @@ function [vec_] = eq19()
 %il is a constant depnding on l so don't need to iterate i.
 
 
-    global maxV_; global vecLen; global whatIL;
+    global d_lrt; global vecLen; global whatIL;
 
-    indArr = generateIndices([0,0,maxV_(3),maxV_(4),maxV_(5),maxV_(6)], 1); 
+    %unlike generateindices, you put 1 on values you want.
+    indArr = conditionalIndices([1,1,1,0,0,1]); 
 
     %making the coeff vector
     vec_ = zeros(length(indArr),vecLen);
+    vec2 = zeros(length(indArr),1);
 
     %disp(indArr);
     for iter = 1:length(indArr)
@@ -593,10 +594,9 @@ function [vec_] = eq19()
         
         %calculating position for y (il,r,s,t)
         %fix sum over tau.
-  %calculaitng the positions in the conditional sum of z
         %tau = 0 .. min(t, Td)
         t = indArr(iter,6);
-        for tau = 0:t %calculates j from i conditionally
+        for tau = 1:t % tau iterates
             arr = indArr(iter,:);
             arr(6) = tau; %iterating over (tau)
             pos = resolvePos(9, arr);
@@ -606,17 +606,19 @@ function [vec_] = eq19()
             end
             temp(pos) = 1/ind(6); %1/t
         end
-        %d(l, r,t)        
-         %fill it with il wrt l
-        ind = indArr(iter,:);
-        ind(5) = 0;
-                
-        pos = resolvePos(13, ind);
-        if (pos == -1)
-            display(strcat(sprintf('Error: position not found for dVar:%d and indices:',dVar), sprintf(' %d',arr(:)) ));
-            return;
+        
+        %d(l, r,t)
+        temp_v =  d_lrt{2,l};
+        tRange = temp_v(1,:);
+        col = 1;
+        for ct = tRange
+            if(ct == ind(6))
+               break;
+            end
+            col = col+1;
         end
-        temp(pos) = -1/ind(6); % - 1/t
+        
+        vec2(iter) = temp_v(indArr(iter,3)+1, col) / ind(6); %d_lrt* 1/t, r+1 and mathcing t. see inputscene for clue.
 
         %update entire vector
         vec_(iter,:) = temp;
@@ -628,7 +630,7 @@ end
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-function [vec_] = eq20()
+function [vec_,vec2] = eq20()
 %constructign equation 20
 %u (l,r,s,t)  = 0
 
@@ -638,9 +640,11 @@ function [vec_] = eq20()
 %il is a constant depnding on l so don't need to iterate i.
 
 
-    global maxV_; global vecLen; global whatIL;
+     global vecLen; global whatIL;
 
-    indArr = generateIndices([0,0,maxV_(3),maxV_(4),maxV_(5),maxV_(6)], 1); 
+
+    %unlike generateindices, you put 1 on values you want.
+    indArr = conditionalIndices([1,1,1,0,0,1]); 
 
     %making the coeff vector
     vec_ = zeros(length(indArr),vecLen);
@@ -652,7 +656,7 @@ function [vec_] = eq20()
         %pos for u (l,r,s,t)
         pos = resolvePos(1, indArr(iter,:));
         if (pos == -1)
-            display(strcat(sprintf('Error: position not found for dVar:%d and indices:',dVar), sprintf(' %d',arr(:)) ));
+            display(strcat(sprintf('Error: position not found for dVar:%d and indices:',dVar), sprintf(' %d',indArr(iter,:)) ));
             return;
         end
         temp(pos) = 1;
@@ -661,6 +665,9 @@ function [vec_] = eq20()
         vec_(iter,:) = temp;
 
     end
+    
+    vec2 = zeros(length(vec_),1); %RHS is zero
+
 end
 
 
@@ -668,35 +675,41 @@ end
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-function [vec_] = eq21()
+function [vec_,vec2] = eq21()
 %constructign equation 21
-%w (i,r)  = Cr
+% sum w (i,r)  = Cr
 
-%generate indices combinations for l,r,s,t
+%generate indices combinations for r
 %The upper bounds like Rkl is dependent and can be dealt easily.
 % We also need to iterate l because il depends on l.
 %il is a constant depnding on l so don't need to iterate i.
 
 
-    global maxV_; global vecLen; global whatIL;
+    global maxV_; global vecLen; global C_r;
 
-    indArr = generateIndices([maxV_(1),0,0,maxV_(4),0,0], 1); 
+    indArr = generateIndices([0,0,maxV_(3),0,0,0], 1); 
 
     %making the coeff vector
     vec_ = zeros(length(indArr),vecLen);
+    vec2 = zeros(length(indArr),1);
 
     %disp(indArr);
     for iter = 1:length(indArr)
         temp = zeros(1,vecLen);
 
-        %pos for w (i,r,)
-        pos = resolvePos(3, indArr(iter,:));
-        if (pos == -1)
-            display(strcat(sprintf('Error: position not found for dVar:%d and indices:',dVar), sprintf(' %d',arr(:)) ));
-            return;
+        %pos for sum w (i,r,) over i
+        for i = 1:maxV_(4);
+            arr = indArr(iter,:);
+            arr(4) = i;
+            pos = resolvePos(3, arr);
+            if (pos == -1)
+                display(strcat(sprintf('Error: position not found for dVar:%d and indices:',dVar), sprintf(' %d',arr(:)) ));
+                return;
+            end
+            temp(pos) = 1;
         end
-        temp(pos) = 1;
         
+        vec2 = C_r(arr(3));
 
         vec_(iter,:) = temp;
 
