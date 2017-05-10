@@ -2,7 +2,7 @@
 %Author: Debmalya Sinha. debmalya.01[att]gmail.com
 %Copyleft.
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-function [vec_] = construct()
+function [f, aeq, beq, aineq, bineq] = construct()
 %Constructs coefficient vectors for a group of linear functions.
 %Var Order: i, j, l, r, s, t
 %Decision Var Order: u, v, w, wbar, x0, x, xbar, y0, y, ybar, z
@@ -14,28 +14,46 @@ init();
 
 %vec_ = rangeVarCoeff(1, [0,0,3,3,3,3], 1);
 %a= generateIndices([2,0,3,5,2,3,4]);
-
+f = eqnF();
 %constructing equations one by one:
-% a{1} = eq1();
-% a{2} = eq2();
-% a{3} = eq3();
-% a{4} = eq11();
-% a{5} = eq12();
-% a{6} = eq13();
-% a{7} = eq14();
-% a{8} = eq15();
-% a{9} = eq16();
-% a{10} = eq17();
-% a{11} = eq18();
-% a{12} = eq19();
-% a{13} = eq20();
-% a{14} = eq21();
+[a{1}, b{1}] = eq1();
+[a{2}, b{2}] = eq2();
+[a{3}, b{3}] = eq3();
+[a{4}, b{4}] = eq11();
+[a{5}, b{5}] = eq12();
+[a{6}, b{6}] = eq13();
+[a{7}, b{7}] = eq14();
+[a{8}, b{8}] = eq15();
+[a{9}, b{9}] = eq16();
+[a{10}, b{10}] = eq17();
+[a{11}, b{11}] = eq18();
+[a{12}, b{12}] = eq19();
+[a{13}, b{13}] = eq20();
+[a{14}, b{10}] = eq21();
 
-vec_ = a{1};
-for i = 2:14
-    temp = [vec_;a{i}];
-    vec_ = temp; 
+aeq = a{1}; beq = b{1};
+for i = 2:8
+    temp = [aeq;a{i}];
+    aeq = temp; 
+    temp = [beq;b{i}];
+    beq = temp; 
 end
+
+aineq = a{9}; bineq = b{9};
+for i = 10:13
+    temp = [aineq;a{i}];
+    aineq = temp; 
+    temp = [bineq;b{i}];
+    bineq = temp; 
+end
+%because both are >= and cplex wants <=
+aineq = aineq*-1; 
+bineq = bineq*-1;
+
+%the last ones. No need to change sign. these are <=
+aineq = [aineq;a{14}]; bineq = [bineq;b{14}];
+%aineq = [aineq;a{15}]; bineq = [bineq;b{15}];
+%aineq = [aineq;a{14}]; bineq = [bineq;b{16}];
 
 end
 
@@ -65,7 +83,7 @@ end
 
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-function [vec] = eq3()
+function [vec,vec2] = eq3()
 %constructign equation 10.c
 %ybar (i,r,s, t=1) = 0
 
@@ -84,7 +102,7 @@ function [vec_, vec2] = eq11()
 
 %generate indices combinations for i,r,s,t = (Ts-1) and then iterate j for sum(x).
 
-    global maxV_; global vecLen; global whatJ;
+    global maxV_; global vecLen; 
 
     global sr ; global tij; global epsilon_i;
     %tCondition = (1+sr(r)+tij(i,j)+1;
@@ -106,8 +124,8 @@ function [vec_, vec2] = eq11()
             for j = epsilon_i(indArr(iter,4)) %calculates j from i conditionally
                     
                 %put combination (t+1>sr+tij). 
-                condition = sr(indArr(count,3)) + tij(indArr(count,4),j);
-                if ((indArr(count,6)+1) > condition)         %only then t condition is met!
+                condition = sr(indArr(iter,3)) + tij(indArr(iter,4),j);
+                if ((indArr(iter,6)+1) > condition)         %only then t condition is met!
 
                     %do the actual sum
                     arr = indArr(iter,:);
@@ -166,15 +184,15 @@ function [vec_, vec2] = eq12()
             for j = epsilon_i(indArr(iter,4)) %calculates j from i conditionally
                 
                 %put combination (t+1>tij). 
-                condition = tij(indArr(count,4),j);
-                if ((indArr(count,6)+1) > condition)         %only then t condition is met!
+                condition = tij(indArr(iter,4),j);
+                if ((indArr(iter,6)+1) > condition)         %only then t condition is met!
 
                     arr = indArr(iter,:);
 
                     %ifirst, single sum over j for x_0.
                     arr(5) = j; %iterating over j 
                     %updating t
-                    arr(6) = arr(6)+1-condiiton;
+                    arr(6) = arr(6)+1-condition;
                     pos = resolvePos(5, arr);
                     if (pos == -1)
                         display(strcat(sprintf('Error: position not found for dVar:%d and indices:',dVar), sprintf(' %d',arr(:)) ));
@@ -238,13 +256,13 @@ function [vec_, vec2] = eq13()
         %do the actual sum over j
         for j = epsilon_i(indArr(iter,4)) %calculates j from i conditionally
              %put combination (t+1>tij). 
-            condition = tij(indArr(count,4),j);
-            if ((indArr(count,6)+1) > condition)         %only then t condition is met!
+            condition = tij(indArr(iter,4),j);
+            if ((indArr(iter,6)+1) > condition)         %only then t condition is met!
 
                 arr = indArr(iter,:);
                 arr(5) = j; %iterating over j 
                 %updating t
-                arr(6) = arr(6)+1-condiiton;
+                arr(6) = arr(6)+1-condition;
 
                 %ifirst, single sub over j for xBar.
                 pos = resolvePos(7, arr);
@@ -308,16 +326,18 @@ function [vec_, vec2] = eq14()
         %do the actual sum
         for j = epsilon_i(indArr(iter,4)) %calculates j from i conditionally
             %put combination (t+1>sr+tij). 
-            condition = sr(indArr(count,3)) + tij(indArr(count,4),j);
-            if ((indArr(count,6)+1) > condition)         %only then t condition is met!
+            condition = sr(indArr(iter,3)) + tij(indArr(iter,4),j);
+            if ((indArr(iter,6)) > condition)         %only then t condition is met!
                 arr = indArr(iter,:);
-                arr(2) = j; %iterating over j
+                arr(5) = j; %iterating over j
                 arr(6) = arr(6)-condition; %updating t
+                %display(arr);
                 pos = resolvePos(6, arr);
                 if (pos == -1)
                     display(strcat(sprintf('Error: position not found for dVar:%d and indices:',dVar), sprintf(' %d',arr(:)) ));
                     return;
                 end
+                %display (pos);
                 temp(pos) = -1;
             end
         end
@@ -460,7 +480,7 @@ function [vec_, vec2] = eq17()
         %fill it with il wrt l
         ind = indArr(iter,:);
         ind(4) = whatIL(ind(2));
-        ind(3) = 0;
+        ind(2) = 0;
         
         %calculating position for y_bar (il,r,s,t)
         pos = resolvePos(10, ind);
@@ -499,7 +519,7 @@ function [vec_,vec2] = eq18()
 %il is a constant depnding on l so don't need to iterate i.
 
 
-    global d_lrt; global vecLen; global whatIL;
+    global d_lrt; global vecLen; global whatIL; global whatKL;
 
     %unlike generateindices, you put 1 on values you want.
     indArr = conditionalIndices([1,1,1,0,0,1]); 
@@ -523,6 +543,7 @@ function [vec_,vec2] = eq18()
         %fill it with il wrt l
         ind = indArr(iter,:);
         ind(4) = whatIL(ind(2));
+        l = ind(2);
         ind(2) = 0;
         
         %calculating position for y (il,r,s,t)
@@ -534,8 +555,10 @@ function [vec_,vec2] = eq18()
         temp(pos) = 1;
         
         %d(l, r,t)        
-        temp_v =  d_lrt{2,l};
+        k = whatKL(l);
+        temp_v =  d_lrt{2,k};
         tRange = temp_v(1,:);
+        %display(ind(6));
         col = 1;
         for ct = tRange
             if(ct == ind(6))
@@ -565,7 +588,7 @@ function [vec_,vec2] = eq19()
 %il is a constant depnding on l so don't need to iterate i.
 
 
-    global d_lrt; global vecLen; global whatIL;
+    global d_lrt; global vecLen; global whatIL; global whatKL;
 
     %unlike generateindices, you put 1 on values you want.
     indArr = conditionalIndices([1,1,1,0,0,1]); 
@@ -589,8 +612,9 @@ function [vec_,vec2] = eq19()
         %y sum (il,r,s,t)
         %fill it with il wrt l
         ind = indArr(iter,:);
-        ind(1) = whatIL(ind(3));
-        ind(3) = 0;
+        ind(4) = whatIL(ind(2));
+        l = ind(2);
+        ind(2) = 0;
         
         %calculating position for y (il,r,s,t)
         %fix sum over tau.
@@ -608,7 +632,8 @@ function [vec_,vec2] = eq19()
         end
         
         %d(l, r,t)
-        temp_v =  d_lrt{2,l};
+        k = whatKL(l);
+        temp_v =  d_lrt{2,k}; 
         tRange = temp_v(1,:);
         col = 1;
         for ct = tRange
@@ -715,3 +740,95 @@ function [vec_,vec2] = eq21()
 
     end
 end
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%     To Be minimised
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+function [vec] = eqnF()
+global vecLen;
+vec = zeros(1,vecLen);
+global S; 
+global L_s;
+global phi_r;
+global theta;
+global mu;
+global N;
+global Ts;
+global epsilon_i;
+global R;
+global R_k;
+global T_k;
+global whatKL;
+global p_ij;
+global q_s;
+
+
+%hardcoding the function to minimise
+for s = 1:S
+    for l = L_s{s}
+        kk = whatKL(l);
+        Rrange = R_k(kk,:);
+        Trange = T_k{kk}; %T_k is cell
+
+        for r = Rrange
+            for t = Trange
+                %pos for u (l,r,s,t)
+                pos = resolvePos(1, [s,l,r,0,0,t]);
+                asd = q_s(s)*phi_r(r)*(Ts(s)-t+1);
+                vec(1,pos) = asd;
+            end
+        end
+    end
+end
+
+%2nd term
+for i = 1:N
+    for r = 1:R
+        pos = resolvePos(4, [0,0,r,i,0,0]);
+        vec(1,pos) = theta;
+    end
+end
+
+for s = 1:S
+    for t = 1:Ts(s)
+        for i = 1:N
+            for j = epsilon_i(i,:)
+                %pos for x0 (s i j t)
+                pos = resolvePos(5, [s,0,0,i,j,t]);
+                vec(1,pos) = mu*p_ij(i,j);
+                
+                %pos for x (s r i j t)
+                for r = 1:R
+                    pos = resolvePos(6, [s,0,r,i,j,t]);
+                    vec(1,pos) = mu*p_ij(i,j);
+                end  
+                
+            end
+        end
+    end
+end
+
+
+end
+

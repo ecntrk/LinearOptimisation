@@ -32,7 +32,7 @@ epsilon_i = zeros(N, N-1);
 %making the adjacent cities list epsilon_i
 for count = 1:N
     temp  = 1:N;
-    tempp = temp(find(temp~=count))
+    tempp = temp(find(temp~=count));
     epsilon_i(count,:) = tempp;
 end
 
@@ -80,6 +80,18 @@ betaR(:) = [20, 25, 5]; %actual data from table 3
 
 C_r = zeros(1,R);
 C_r = [72, 20, 46]; %from table 3
+
+%There are penalties for equipment efficiency. 
+global phi_r
+global theta;
+global mu;
+
+phi_r = zeros(1,R);
+phi_r(:) = 1; %please change this if you have data about efficiency
+
+theta = 1;
+mu = 1;
+
 
 %%%%%%%%%%%%%%%%%%%%%
 %%%%%%%%%% setup Time
@@ -282,10 +294,10 @@ S = 2;
 
 
 %this here maps the l to a corresponding s value
-global whatL; %simultaneous disasters l's are happening in each s from S.
+global L_s; %simultaneous disasters l's are happening in each s from S.
 %this has to be cell because variable numebr of locaitons possible
-whatL{1} = [1,2,3]; %these are l values
-whatL{2} = [11,12,13];
+L_s{1} = [1,2,3]; %these are l values
+L_s{2} = [11,12,13];
 
 
 
@@ -296,6 +308,11 @@ Ts = zeros(1,S);
 Ts(:) = 600 / tick; %Ts is anyway 10 hours for evey situation.
 %here's provision if the situation changes anytime in future!
 
+%There is the probability of having a particular diaster s!
+global q_s;
+q_s = zeros(1,S);
+q_s(:) = 1/S; %right now, making it same probability. 
+%chnage it if you may for each s
 
 
 end

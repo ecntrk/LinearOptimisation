@@ -11,7 +11,7 @@ function [arr] = conditionalIndices(vec)
 
 %S is always there, i,j will never be there.
 global S;
-global whatL;
+global L_s;
 global whatKL; %determines k from l.
 global R_k;
 global T_k;
@@ -21,10 +21,10 @@ count = 1;
 display (S);
 for Scn = 1:S 
     %display(Scn);
-    Lrange = whatL{Scn}
+    Lrange = L_s{Scn};
     for Lcn = Lrange;
         kk = whatKL(Lcn);
-        Rrange = R_k(kk,:)
+        Rrange = R_k(kk,:);
         if(vec(3) == 0)
             Rrange = [0];
         end
@@ -38,7 +38,7 @@ for Scn = 1:S
             end 
             
             for Tcn = Trange
-                temp = [Scn, Lcn, Rcn, 0, 0, Tcn]
+                temp = [Scn, Lcn, Rcn, 0, 0, Tcn];
                 arr(count,:) = temp;
                 count = count + 1;
             end

@@ -14,18 +14,18 @@ function [pos] = resolvePos(dVar, indices)
 %First let's find the position form the indices
 global varLen; 
 global dVarRanges; global maxV_;
-global S; global max_L_s; global R; global max_T_k
+global S; global L; global R; global Ts;
 pos = 1;
 interval = 1;
 
-a = maxV_;
-b = dVarRanges(dVar-1);
-interval = dVarRanges(dVar)-dVarRanges(dVar-1);
-
 if(dVar == 1)
-    interval = dVarRanges(dVar);
-    a = [S,max_L_s,R,0,0,max_T_k];
+    interval = dVarRanges(1);
+    a = [S,L,R,0,0,Ts];
     b = 0;  
+elseif(dVar>1 && dVar<= length(dVarRanges))
+    a = maxV_;
+    b = dVarRanges(dVar-1);
+    interval = dVarRanges(dVar)-dVarRanges(dVar-1);
 elseif (dVar<1 || dVar > length(dVarRanges))
     pos = -1; %that serves as error code.
     return;

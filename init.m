@@ -8,18 +8,19 @@ function init ()
 %Var Order: s, l, r, i, j, t
 %Decision Var Order: u, v, w, wbar, x0, x, xbar, y0, y, ybar, z, d_0, d
 
+inputScene();
 
 %%%
 % globals from input
 %%%
 global N; 
-global epsilon_i; 
+%global epsilon_i; 
 global R; 
 global S;
 global L;
 global Ts;
-global whatL;
-global T_k;
+%global L_s;
+%global T_k;
 
 %Define all the maximum values of the variables. For now, only 3!
 i_ = N;
@@ -46,34 +47,34 @@ maxV_(6) = t_;
 
 %%%%%%%%% OBSOLETE
 %this here maps the j to a corresponding i value
-global whatJ;
-whatJ = zeros(1,maxV_(1));
-whatJ(:) = maxV_(2);
+% global whatJ;
+% whatJ = zeros(1,maxV_(1));
+% whatJ(:) = maxV_(2);
 %here is a potential bug. if you don't update the j_ and only whatJ, the
 %indexes the resolver finds will be wrong.
 
 
 % this is needed to minimize footpront of DVar u.
 % calculating max set length of Tk
-max_T_k = 0;
-for count = 1:length(T_k)
-    a = length(T_k{count});
-    if(max_T_k < a)
-        max_T_k = a;
-    end
-end
-
-% calculating max set length of Ls
-max_L_s = 0;
-for count = 1:length(whatL)
-    a = length(whatL{count});
-    if(max_L_s < a)
-        max_L_s = a;
-    end
-end
+% max_T_k = 0;
+% for count = 1:length(T_k)
+%     a = length(T_k{count});
+%     if(max_T_k < a)
+%         max_T_k = a;
+%     end
+% end
+% 
+% % calculating max set length of Ls
+% max_L_s = 0;
+% for count = 1:length(L_s)
+%     a = length(L_s{count});
+%     if(max_L_s < a)
+%         max_L_s = a;
+%     end
+% end
 
 global vecLen;
-vecLen = max_L_s*R*S*max_T_k + i_*r_*s_*t_ + 2*i_*r_ + i_*j_*s_*t_ ...
+vecLen = l_*r_*s_*t_ + i_*r_*s_*t_ + 2*i_*r_ + i_*j_*s_*t_ ...
     + 2*i_*j_*r_*s_*t_ + i_*s_*t_ + 3*i_*r_*s_*t_;% + l_*t_ + l_*r_*t_;
 
 %Ranges for decisionvariables in the vector. 11 element for 11 variables in
@@ -82,7 +83,7 @@ vecLen = max_L_s*R*S*max_T_k + i_*r_*s_*t_ + 2*i_*r_ + i_*j_*s_*t_ ...
 global dVarRanges;
 dVarRanges = zeros(11);
 
-dVarRanges(1) = max_L_s*R*S*max_T_k;            % for u (because only u is different)
+dVarRanges(1) = l_*r_*s_*t_;            % for u (because only u is different)
 dVarRanges(2) = dVarRanges(1)+i_*r_*s_*t_ ;     % for v
 dVarRanges(3) = dVarRanges(2)+i_*r_;            % for w
 dVarRanges(4) = dVarRanges(3)+i_*r_;            % for wbar
@@ -93,8 +94,7 @@ dVarRanges(8) = dVarRanges(7)+i_*s_*t_;         % for y0
 dVarRanges(9) = dVarRanges(8)+i_*r_*s_*t_;      % for y
 dVarRanges(10) = dVarRanges(9)+i_*r_*s_*t_;     % for ybar
 dVarRanges(11) = dVarRanges(10)+i_*r_*s_*t_;    % for z
-%dVarRanges(12) = dVarRanges(11)+l_*t_;          % for d_0
-%dVarRanges(13) = dVarRanges(12)+l_*r_*t_;       % for d
+
 
 %i, j, l, r, s, t
 % resolvePos(1, [0,0,1,2,1,2])
