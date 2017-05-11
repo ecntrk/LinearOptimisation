@@ -27,12 +27,15 @@ f = eqnF();
 [a{9}, b{9}] = eq16();
 [a{10}, b{10}] = eq17();
 [a{11}, b{11}] = eq18();
-[a{12}, b{12}] = eq19();
-[a{13}, b{13}] = eq20();
-[a{14}, b{10}] = eq21();
+%[a{12}, b{12}] = eq19();
+%[a{13}, b{13}] = eq20();
+%[a{14}, b{10}] = eq21();
 
 aeq = a{1}; beq = b{1};
 for i = 2:8
+%     length(a{i})
+%         length(b{i})
+
     temp = [aeq;a{i}];
     aeq = temp; 
     temp = [beq;b{i}];
@@ -40,7 +43,7 @@ for i = 2:8
 end
 
 aineq = a{9}; bineq = b{9};
-for i = 10:13
+for i = 10:11
     temp = [aineq;a{i}];
     aineq = temp; 
     temp = [bineq;b{i}];
@@ -51,7 +54,7 @@ aineq = aineq*-1;
 bineq = bineq*-1;
 
 %the last ones. No need to change sign. these are <=
-aineq = [aineq;a{14}]; bineq = [bineq;b{14}];
+%aineq = [aineq;a{14}]; bineq = [bineq;b{14}];
 %aineq = [aineq;a{15}]; bineq = [bineq;b{15}];
 %aineq = [aineq;a{14}]; bineq = [bineq;b{16}];
 
@@ -64,8 +67,8 @@ function [vec,vec2] = eq1()
 
     global maxV_;
     vec = rangeVarCoeff(8,[maxV_(1),0,0,maxV_(4),0,1], 1, 1);
-
-    vec2 = zeros(length(vec),1); %RHS is zero
+    [r,~] = size(vec);
+    vec2 = zeros(r,1); %RHS is zero
 
 end
 
@@ -77,7 +80,8 @@ function [vec, vec2]=eq2()
     global maxV_;
     vec = rangeVarCoeff(9,[maxV_(1),0,maxV_(3),maxV_(4),0,1], 1, 1);
     
-    vec2 = zeros(length(vec),1); %RHS is zero
+    [r,~] = size(vec);
+    vec2 = zeros(r,1); %RHS is zero
 
 end
 
@@ -90,7 +94,8 @@ function [vec,vec2] = eq3()
     global maxV_;
     vec = rangeVarCoeff(10,[maxV_(1),0,maxV_(3),maxV_(4),0, 1],1,1);
     
-    vec2 = zeros(length(vec),1); %RHS is zero
+    [r,~] = size(vec);
+    vec2 = zeros(r,1); %RHS is zero
 end
 
 
@@ -145,7 +150,7 @@ function [vec_, vec2] = eq11()
 
     end
     
-    vec2 = zeros(length(vec_),1); %RHS is zero
+    vec2 = zeros(length(indArr),1); %RHS is zero
 
 end
 
@@ -217,7 +222,7 @@ function [vec_, vec2] = eq12()
 
     end
     
-    vec2 = zeros(length(vec_),1); %RHS is zero
+    vec2 = zeros(length(indArr),1); %RHS is zero
 
 end
 
@@ -288,7 +293,7 @@ function [vec_, vec2] = eq13()
 
     end
     
-    vec2 = zeros(length(vec_),1); %RHS is zero
+    vec2 = zeros(length(indArr),1); %RHS is zero
 
 end
 
@@ -345,7 +350,7 @@ function [vec_, vec2] = eq14()
         vec_(iter,:) = temp;
 
     end
-    vec2 = zeros(length(vec_),1); %RHS is zero
+    vec2 = zeros(length(indArr),1); %RHS is zero
 
 end
 
@@ -399,7 +404,7 @@ function [vec_,vec2] = eq15()
 
     end
     
-    vec2 = zeros(length(vec_),1); %RHS is zero
+    vec2 = zeros(length(indArr),1); %RHS is zero
     
 end
 
@@ -502,7 +507,7 @@ function [vec_, vec2] = eq17()
 
     end
     
-    vec2 = zeros(length(vec_),1); %RHS is zero
+    vec2 = zeros(length(indArr),1); %RHS is zero
 
 end
 

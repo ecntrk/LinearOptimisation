@@ -18,7 +18,7 @@ global T_k;
 global Ts;
 %arr = [0,0,0,0,0,0];
 count = 1;
-display (S);
+%display (S);
 for Scn = 1:S 
     %display(Scn);
     Lrange = L_s{Scn};
