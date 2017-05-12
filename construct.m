@@ -27,9 +27,11 @@ f = eqnF();
 [a{9}, b{9}] = eq16();
 [a{10}, b{10}] = eq17();
 [a{11}, b{11}] = eq18();
-%[a{12}, b{12}] = eq19();
-%[a{13}, b{13}] = eq20();
-%[a{14}, b{10}] = eq21();
+[a{12}, b{12}] = eq19();
+[a{13}, b{13}] = eq20();
+[a{14}, b{14}] = eq21();
+[a{15}, b{15}] = eq22();
+[a{16}, b{16}] = eq23();
 
 aeq = a{1}; beq = b{1};
 for i = 2:8
@@ -43,7 +45,7 @@ for i = 2:8
 end
 
 aineq = a{9}; bineq = b{9};
-for i = 10:11
+for i = 10:12
     temp = [aineq;a{i}];
     aineq = temp; 
     temp = [bineq;b{i}];
@@ -54,9 +56,9 @@ aineq = aineq*-1;
 bineq = bineq*-1;
 
 %the last ones. No need to change sign. these are <=
-%aineq = [aineq;a{14}]; bineq = [bineq;b{14}];
-%aineq = [aineq;a{15}]; bineq = [bineq;b{15}];
-%aineq = [aineq;a{14}]; bineq = [bineq;b{16}];
+aineq = [aineq;a{14}]; bineq = [bineq;b{14}];
+aineq = [aineq;a{15}]; bineq = [bineq;b{15}];
+aineq = [aineq;a{16}]; bineq = [bineq;b{16}];
 
 end
 
@@ -626,7 +628,7 @@ function [vec_,vec2] = eq19()
         %tau = 0 .. min(t, Td)
         t = indArr(iter,6);
         for tau = 1:t % tau iterates
-            arr = indArr(iter,:);
+            arr = ind;
             arr(6) = tau; %iterating over (tau)
             pos = resolvePos(9, arr);
             if (pos == -1)
@@ -717,19 +719,20 @@ function [vec_,vec2] = eq21()
 
     global maxV_; global vecLen; global C_r;
 
-    indArr = generateIndices([0,0,maxV_(3),0,0,0], 1); 
+    indArr = generateIndices([0,0,maxV_(3),0,0,0], 1);
 
     %making the coeff vector
     vec_ = zeros(length(indArr),vecLen);
     vec2 = zeros(length(indArr),1);
 
     %disp(indArr);
-    for iter = 1:length(indArr)
+    [row,~] = size(indArr);
+    for iter = 1:row
         temp = zeros(1,vecLen);
 
         %pos for sum w (i,r,) over i
+        arr = indArr(iter,:);
         for i = 1:maxV_(4);
-            arr = indArr(iter,:);
             arr(4) = i;
             pos = resolvePos(3, arr);
             if (pos == -1)
@@ -739,7 +742,7 @@ function [vec_,vec2] = eq21()
             temp(pos) = 1;
         end
         
-        vec2 = C_r(arr(3));
+        vec2(iter) = C_r(arr(3));
 
         vec_(iter,:) = temp;
 
@@ -748,15 +751,140 @@ end
 
 
 
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+function [vec_,vec2] = eq22()
+%constructign equation 22
+% double sum x (J, I, r, s,t)  <= w(i,r)
+
+%generate indices combinations for s,r,i
+%The upper bounds like Rkl is dependent and can be dealt easily.
+% We also need to iterate l because il depends on l.
+%il is a constant depnding on l so don't need to iterate i.
+
+
+    global maxV_; global vecLen; global Ts; global epsilon_i;
+
+    indArr = generateIndices([maxV_(1),0,maxV_(3),maxV_(4),0,0], 1);
+
+    %making the coeff vector
+    [nRow, ~] = size(indArr);
+    vec_ = zeros(nRow,vecLen);
+    vec2 = zeros(nRow,1);
+
+    %disp(indArr);
+    for iter = 1:nRow
+        temp = zeros(1,vecLen);
+
+        %pos for doublesum x (s,r,j, i,t) over Ts, j
+        arr = indArr(iter,:);
+        i = arr(4);
+        for t = 1:Ts(maxV_(1));            
+            for j = epsilon_i(i)
+                arr(4) = j; %because it has j in place of i.
+                arr(5) = i; %because it has i in place of j.
+                arr(6) = t;
+                pos = resolvePos(6, arr);
+                if (pos == -1)
+                    display(strcat(sprintf('Error: position not found for dVar:%d and indices:',dVar), sprintf(' %d',arr(:)) ));
+                    return;
+                end
+                temp(pos) = 1;
+            end
+        end
+        
+        %for w(i,r)
+        arr(:) = 0;
+        arr(3) = indArr(iter,3);
+        arr(4) = i;
+        
+        pos = resolvePos(3, arr);
+        if (pos == -1)
+            display(strcat(sprintf('Error: position not found for dVar:%d and indices:',dVar), sprintf(' %d',arr(:)) ));
+            return;
+        end
+        temp(pos) = -1;
+        
+        vec_(iter,:) = temp;
+
+    end
+end
 
 
 
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+function [vec_,vec2] = eq23()
+%constructign equation 23
+% double sum x_bar (J, I, r, s,t) + alpha_r * x (J, I, r, s,t) <= w_bar(i,r)
+
+%generate indices combinations for s,r,i
+%The upper bounds like Rkl is dependent and can be dealt easily.
+% We also need to iterate l because il depends on l.
+%il is a constant depnding on l so don't need to iterate i.
 
 
+    global maxV_; global vecLen; global Ts; global epsilon_i;
+    global alphaR;
+
+    indArr = generateIndices([maxV_(1),0,maxV_(3),maxV_(4),0,0], 1);
+
+    %making the coeff vector
+    [nRow, ~] = size(indArr);
+    vec_ = zeros(nRow,vecLen);
+    vec2 = zeros(nRow,1);
+
+    %disp(indArr);
+    for iter = 1:nRow
+        temp = zeros(1,vecLen);
+
+        %pos for doublesum x (s,r,j, i,t) over Ts, j
+        arr = indArr(iter,:);
+        i = arr(4);
+        for t = 1:Ts(maxV_(1));            
+            for j = epsilon_i(i)
+                arr(4) = j; %because it has j in place of i.
+                arr(5) = i; %because it has i in place of j.
+                arr(6) = t;
+                pos = resolvePos(7, arr);
+                if (pos == -1)
+                    display(strcat(sprintf('Error: position not found for dVar:%d and indices:',dVar), sprintf(' %d',arr(:)) ));
+                    return;
+                end
+                temp(pos) = 1;
+                
+                %for x(jirst)
+                pos = resolvePos(6, arr);
+                if (pos == -1)
+                    display(strcat(sprintf('Error: position not found for dVar:%d and indices:',dVar), sprintf(' %d',arr(:)) ));
+                    return;
+                end
+                temp(pos) = alphaR(arr(3));
+
+            end
+        end
+        
+        %for w(i,r)
+        arr(:) = 0;
+        arr(3) = indArr(iter,3);
+        arr(4) = i;
+        
+        pos = resolvePos(4, arr);
+        if (pos == -1)
+            display(strcat(sprintf('Error: position not found for dVar:%d and indices:',dVar), sprintf(' %d',arr(:)) ));
+            return;
+        end
+        temp(pos) = -1;
+        
+        vec_(iter,:) = temp;
+
+    end
+end
 
 
-
-
+%%%%%%
+%ENd of all equaitons
+%%%%%%
 
 
 
