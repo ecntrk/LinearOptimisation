@@ -2,7 +2,7 @@
 %Author: Debmalya Sinha. debmalya.01[att]gmail.com
 %Copyleft.
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-function [d_lrt] = inputScene ( )
+function [] = inputScene ( )
 %Takes the input variables in the scenario
 %   manually change the values here.
 
@@ -290,14 +290,25 @@ global S; %set of scenarios
 %for now, lets consider only 2 scenario with 
 %s1 = bomb in A, B, C. 
 %s2 = flood in B,C,D.
-S = 2;
+S = 20;
 
 
 %this here maps the l to a corresponding s value
 global L_s; %simultaneous disasters l's are happening in each s from S.
 %this has to be cell because variable numebr of locaitons possible
-L_s{1} = [1,2,3]; %these are l values
-L_s{2} = [11,12,13];
+% L_s{1} = [1,2,3]; %these are l values
+% L_s{2} = [11,12,13];
+
+%creating all possible combination of scenarios of same type
+tempV = 1:8;
+temp1 = nchoosek(tempV, 3);%generating combinaitons of 8C3
+tempV = 9:16;
+temp2 = nchoosek(tempV, 3);%generating combinaitons of 8C3
+temp = [temp1;temp2];
+[rowcomb,~] = size(temp);
+for iter = 1:rowcomb
+L_s{iter} = temp(iter,:);
+end
 
 
 

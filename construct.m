@@ -2,7 +2,7 @@
 %Author: Debmalya Sinha. debmalya.01[att]gmail.com
 %Copyleft.
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-function [f, aeq, beq, aineq, bineq] = construct()
+function [a, b, f, aeq, beq, aineq, bineq] = construct()
 %Constructs coefficient vectors for a group of linear functions.
 %Var Order: i, j, l, r, s, t
 %Decision Var Order: u, v, w, wbar, x0, x, xbar, y0, y, ybar, z
@@ -20,7 +20,7 @@ f = eqnF();
 [a{2}, b{2}] = eq2();
 [a{3}, b{3}] = eq3();
 [a{4}, b{4}] = eq11();
-[a{5}, b{5}] = eq12();
+[a{5}, b{5}] = eq12(); % this is causing blank output at optimiser
 [a{6}, b{6}] = eq13();
 [a{7}, b{7}] = eq14();
 [a{8}, b{8}] = eq15();
@@ -128,7 +128,7 @@ function [vec_, vec2] = eq11()
         temp(p2) = 1;
 
         %calculaitng the positions in the sum
-            for j = epsilon_i(indArr(iter,4)) %calculates j from i conditionally
+            for j = epsilon_i(indArr(iter,4),:) %calculates j from i conditionally
                     
                 %put combination (t+1>sr+tij). 
                 condition = sr(indArr(iter,3)) + tij(indArr(iter,4),j);
@@ -160,7 +160,7 @@ end
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 function [vec_, vec2] = eq12()
 %constructign equation 12
-%y (i,r,s, t+1) - y (i,r,s, t) - sum(x_0 ijst) - sum (sum (betaR * x (ijrst) ))= 0
+%y_0 (i,r,s, t+1) - y_0 (i,r,s, t) - sum(x_0 ijst) - sum (sum (betaR * x (ijrst) ))= 0
 
 %generate indices combinations for i,s,t and then iterate j,r for sum(x).
 %put combination (t+1>tij).
@@ -188,8 +188,8 @@ function [vec_, vec2] = eq12()
         %only then t condition is met!
 
             %do the actual sum over j
-            for j = epsilon_i(indArr(iter,4)) %calculates j from i conditionally
-                
+            for j = epsilon_i(indArr(iter,4), :) %calculates j from i conditionally
+                %display(j);
                 %put combination (t+1>tij). 
                 condition = tij(indArr(iter,4),j);
                 if ((indArr(iter,6)+1) > condition)         %only then t condition is met!
@@ -261,7 +261,7 @@ function [vec_, vec2] = eq13()
         %calculaitng the positions in the sum
         %only then t condition is met!
         %do the actual sum over j
-        for j = epsilon_i(indArr(iter,4)) %calculates j from i conditionally
+        for j = epsilon_i(indArr(iter,4),:) %calculates j from i conditionally
              %put combination (t+1>tij). 
             condition = tij(indArr(iter,4),j);
             if ((indArr(iter,6)+1) > condition)         %only then t condition is met!
@@ -331,7 +331,7 @@ function [vec_, vec2] = eq14()
         %only then t condition is met!
         
         %do the actual sum
-        for j = epsilon_i(indArr(iter,4)) %calculates j from i conditionally
+        for j = epsilon_i(indArr(iter,4),:) %calculates j from i conditionally
             %put combination (t+1>sr+tij). 
             condition = sr(indArr(iter,3)) + tij(indArr(iter,4),j);
             if ((indArr(iter,6)) > condition)         %only then t condition is met!
@@ -780,7 +780,7 @@ function [vec_,vec2] = eq22()
         arr = indArr(iter,:);
         i = arr(4);
         for t = 1:Ts(maxV_(1));            
-            for j = epsilon_i(i)
+            for j = epsilon_i(i,:)
                 arr(4) = j; %because it has j in place of i.
                 arr(5) = i; %because it has i in place of j.
                 arr(6) = t;
@@ -842,7 +842,7 @@ function [vec_,vec2] = eq23()
         arr = indArr(iter,:);
         i = arr(4);
         for t = 1:Ts(maxV_(1));            
-            for j = epsilon_i(i)
+            for j = epsilon_i(i,:)
                 arr(4) = j; %because it has j in place of i.
                 arr(5) = i; %because it has i in place of j.
                 arr(6) = t;
