@@ -8,7 +8,7 @@ function init ()
 %Var Order: s, l, r, i, j, t
 %Decision Var Order: u, v, w, wbar, x0, x, xbar, y0, y, ybar, z, d_0, d
 
-inputScene();
+%inputScene();
 
 %%%
 % globals from input

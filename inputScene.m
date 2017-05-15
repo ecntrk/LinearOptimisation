@@ -2,7 +2,7 @@
 %Author: Debmalya Sinha. debmalya.01[att]gmail.com
 %Copyleft.
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-function [] = inputScene ( )
+function inputScene
 %Takes the input variables in the scenario
 %   manually change the values here.
 
@@ -290,7 +290,7 @@ global S; %set of scenarios
 %for now, lets consider only 2 scenario with 
 %s1 = bomb in A, B, C. 
 %s2 = flood in B,C,D.
-S = 20;
+S = 3;
 
 
 %this here maps the l to a corresponding s value
@@ -325,6 +325,6 @@ q_s = zeros(1,S);
 q_s(:) = 1/S; %right now, making it same probability. 
 %chnage it if you may for each s
 
-
+%keyboard
 end
 
