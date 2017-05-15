@@ -6,7 +6,7 @@ function init ()
 %Initialisation of the various variables.
 %User needs to change the numbers manually in case of any changes
 %Var Order: s, l, r, i, j, t
-%Decision Var Order: u, v, w, wbar, x0, x, xbar, y0, y, ybar, z, d_0, d
+%Decision Var Order: u, v, w, wbar, x0, x, xbar, y0, y, ybar, z, 
 
 %inputScene();
 
@@ -75,7 +75,7 @@ maxV_(6) = t_;
 
 global vecLen;
 vecLen = l_*r_*s_*t_ + i_*r_*s_*t_ + 2*i_*r_ + i_*j_*s_*t_ ...
-    + 2*i_*j_*r_*s_*t_ + i_*s_*t_ + 3*i_*r_*s_*t_;% + l_*t_ + l_*r_*t_;
+    + 2*i_*j_*r_*s_*t_ + i_*s_*t_ + 3*i_*r_*s_*t_% + l_*t_ + l_*r_*t_;
 
 %Ranges for decisionvariables in the vector. 11 element for 11 variables in
 %the predetermined order: u, v, w, wbar, x0, x, xbar, y0, y, ybar, z

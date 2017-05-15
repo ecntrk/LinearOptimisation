@@ -10,7 +10,7 @@ function [a, b, f, aeq, beq, aineq, bineq] = construct()
 %inputScene();
 
 %initialising all global vars
-init();
+%init();
 
 %vec_ = rangeVarCoeff(1, [0,0,3,3,3,3], 1);
 %a= generateIndices([2,0,3,5,2,3,4]);
