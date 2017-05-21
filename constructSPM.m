@@ -2,15 +2,16 @@
 %Author: Debmalya Sinha. debmalya.01[att]gmail.com
 %Copyleft.
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-function [f, aeq, beq, aneq, bneq] = constructSPM()
+%function [f, aeq, beq, aneq, bneq] = constructSPM()
+function [f, A, lhs, rhs, lb, ub] = constructSPM()
 %Constructs coefficient vectors for a group of linear functions.
 %Var Order: i, j, l, r, s, t
 %Decision Var Order: u, v, w, wbar, x0, x, xbar, y0, y, ybar, z
 
-%inputScene();
+inputScene();
 
 %initialising all global vars
-%init();
+init();
 
 global vecLen;
 
@@ -25,51 +26,8 @@ Naneq = 0;
 f = sparse(eqnF());
 
 % %constructing equations one by one:
-% [a{1}, b{1}] = eq1();
-% [a{2}, b{2}] = eq2();
-% [a{3}, b{3}] = eq3();
-% [a{4}, b{4}] = eq11();
-% [a{5}, b{5}] = eq12(); % this is causing blank output at optimiser
-% [a{6}, b{6}] = eq13();
-% [a{7}, b{7}] = eq14();
-% [a{8}, b{8}] = eq15();
-% [a{9}, b{9}] = eq16();
-% [a{10}, b{10}] = eq17();
-% [a{11}, b{11}] = eq18();
-% [a{12}, b{12}] = eq19();
-% [a{13}, b{13}] = eq20();
-% [a{14}, b{14}] = eq21();
-% [a{15}, b{15}] = eq22();
-% [a{16}, b{16}] = eq23();
-% 
-% aeq = a{1}; beq = b{1};
-% for i = 2:8
-% %     length(a{i})
-% %         length(b{i})
-% 
-%     temp = [aeq;a{i}];
-%     aeq = temp; 
-%     temp = [beq;b{i}];
-%     beq = temp; 
-% end
-% 
-% aineq = a{9}; bineq = b{9};
-% for i = 10:12
-%     temp = [aineq;a{i}];
-%     aineq = temp; 
-%     temp = [bineq;b{i}];
-%     bineq = temp; 
-% end
-% %because both are >= and cplex wants <=
-% aineq = aineq*-1; 
-% bineq = bineq*-1;
-% 
-% %the last ones. No need to change sign. these are <=
-% aineq = [aineq;a{14}]; bineq = [bineq;b{14}];
-% aineq = [aineq;a{15}]; bineq = [bineq;b{15}];
-% aineq = [aineq;a{16}]; bineq = [bineq;b{16}];
 
-num = zeros(1,16);
+
 spm = eq1();
 spmat = spm;
 tt = Naeq;
@@ -107,55 +65,59 @@ tt = Naeq;
 spm = eq15();
 spm(:,1) = spm(:,1) + tt;
 spmat = [spmat;spm];
+tt = Naeq;
 
+%making the = 
+%aeq = sparse(spmat(:,1),spmat(:,2),spmat(:,3), Naeq, vecLen);
+%beq = sparse(Naeq,1);
+lhs = zeros(Naeq,1);
 
-aeq = sparse(spmat(:,1),spmat(:,2),spmat(:,3), Naeq, vecLen);
-beq = sparse(Naeq,1);
 
 
 [spm, bspm] = eq16();
-spm(:,3) = spm(:,3)*-1;
-bspm(:,3) = bspm(:,3)*-1;
-spmat = spm;
+spm(:,1) = spm(:,1) + tt; 
+spmat = [spmat;spm];
+bspm(:,1) = bspm(:,1) + tt; 
 bspmat = bspm;
-tt = Naneq;
+tt = Naneq+Naeq;
 
 [spm, bspm] = eq17();
-spm(:,3) = spm(:,3)*-1;
-bspm(:,3) = bspm(:,3)*-1;
 spm(:,1) = spm(:,1) + tt; 
 spmat = [spmat;spm];
 bspm(:,1) = bspm(:,1) + tt; 
 bspmat = [bspmat;bspm];
-tt = Naneq;
+tt = Naneq+Naeq;
 
 [spm, bspm] = eq18();
-spm(:,3) = spm(:,3)*-1;
-bspm(:,3) = bspm(:,3)*-1;
 spm(:,1) = spm(:,1) + tt; 
 spmat = [spmat;spm];
 bspm(:,1) = bspm(:,1) + tt; 
 bspmat = [bspmat;bspm];
-tt = Naneq;
+tt = Naneq+Naeq;
 
 
 [spm, bspm] = eq19();
-spm(:,3) = spm(:,3)*-1;
-bspm(:,3) = bspm(:,3)*-1;
 spm(:,1) = spm(:,1) + tt; 
 spmat = [spmat;spm];
 bspm(:,1) = bspm(:,1) + tt; 
 bspmat = [bspmat;bspm];
-tt = Naneq;
+tt = Naneq+Naeq;
 
 [spm, bspm] = eq20();
-spm(:,3) = spm(:,3)*-1;
-bspm(:,3) = bspm(:,3)*-1;
 spm(:,1) = spm(:,1) + tt; 
 spmat = [spmat;spm];
 bspm(:,1) = bspm(:,1) + tt; 
 bspmat = [bspmat;bspm];
-tt = Naneq;
+tt = Naneq+Naeq;
+
+
+%making the >=
+temp = zeros(Naneq,1);
+temp(:) = inf;
+lhs = [lhs;temp];
+
+%moving onto <=
+tempo = tt;
 
 
 [spm, bspm] = eq21();
@@ -163,14 +125,15 @@ spm(:,1) = spm(:,1) + tt;
 spmat = [spmat;spm];
 bspm(:,1) = bspm(:,1) + tt; 
 bspmat = [bspmat;bspm];
-tt = Naneq;
+tt = Naneq+Naeq;
+
 
 [spm, bspm] = eq22();
 spm(:,1) = spm(:,1) + tt; 
 spmat = [spmat;spm];
 bspm(:,1) = bspm(:,1) + tt; 
 bspmat = [bspmat;bspm];
-tt = Naneq;
+tt = Naneq+Naeq;
 
 [spm, bspm] = eq23();
 spm(:,1) = spm(:,1) + tt; 
@@ -178,7 +141,21 @@ spmat = [spmat;spm];
 bspm(:,1) = bspm(:,1) + tt; 
 bspmat = [bspmat;bspm];
 
- [Naneq,~] = size(bspmat);
+[Naneq,~] = size(bspmat);
+
+%making the final <=
+temp = zeros(Naneq+Naeq - tempo,1);
+temp(:) = -inf;
+lhs = [lhs;temp];
+
+
+lb = zeros(length(lhs),1);
+ub = zeros(length(lhs),1);
+lb(:) = inf;
+ub(:) = inf;
+
+
+lhs = sparse(lhs);
 
 for iter = 1:Naneq
 if(bspmat(iter,3)== 0)
@@ -188,9 +165,10 @@ end
 
 bspmat( ~any(bspmat,2), : ) = [];
 
-aneq = sparse(spmat(:,1)',spmat(:,2)',spmat(:,3)',Naneq,vecLen);
-bneq = sparse(bspmat(:,1)',bspmat(:,2)',bspmat(:,3)',Naneq,1);
-
+A = sparse(spmat(:,1)',spmat(:,2)',spmat(:,3)',Naneq+Naeq,vecLen);
+%aneq = sparse(spmat(:,1)',spmat(:,2)',spmat(:,3)',Naneq+Naeq,vecLen);
+rhs = sparse(bspmat(:,1)',bspmat(:,2)',bspmat(:,3)',Naneq+Naeq,1);
+%bneq = sparse(bspmat(:,1)',bspmat(:,2)',bspmat(:,3)',Naneq+Naeq,1);
 
 
 
@@ -318,7 +296,7 @@ end
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 function [spm] = eq12()
 %constructign equation 12
-%y_0 (i,r,s, t+1) - y_0 (i,r,s, t) - sum(x_0 ijst) - sum (sum (betaR * x (ijrst) ))= 0
+%y_0 (i,s, t+1) - y_0 (i,s, t) - sum(x_0 ijst) - sum (sum (betaR * x (ijrst) ))= 0
 
 %generate indices combinations for i,s,t and then iterate j,r for sum(x).
 %put combination (t+1>tij).
@@ -1338,6 +1316,6 @@ for s = 1:S
     end
 end
 
-
+%vec(:) = vec(:)*-1;
 end
 
