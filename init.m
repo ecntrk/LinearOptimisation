@@ -34,7 +34,7 @@ global varLen; %The number of variables i,j,l,r,s,t
 varLen = 6;
 
 global maxV_;
-maxV_ = zeros(varLen);
+maxV_ = zeros(1,varLen);
 
 %the order is according to dependencies. refer to documentaiton sec 2..
 maxV_(1) = s_; %because s is top of th efood chain! 

@@ -35,23 +35,24 @@ f = eqnF();
 
 aeq = a{1}; beq = b{1};
 for i = 2:8
-size(a{i})
-size(b{i})
-
+%size(a{i})
+%size(b{i})
+if(i ~= 5)
     temp = [aeq;a{i}];
     aeq = temp; 
     temp = [beq;b{i}];
     beq = temp; 
 end
+end
 
 aineq = a{9}; bineq = b{9};
-for i = 10:12
+for i = 10:13
     temp = [aineq;a{i}];
     aineq = temp; 
     temp = [bineq;b{i}];
     bineq = temp; 
 end
-%because both are >= and cplex wants <=
+%because both are >= and cplex wants <
 aineq = aineq*-1; 
 bineq = bineq*-1;
 
@@ -430,11 +431,12 @@ function [vec_,vec2] = eq16()
     indArr = conditionalIndices([1,1,0,0,0,1]); %unlike generateindices, you put 1 on values you want.
 
     %making the coeff vector
-    vec_ = zeros(length(indArr),vecLen);
-    vec2 = zeros(length(indArr),1); %for RHS
+    [rN,~] = size(indArr)
+    vec_ = zeros(rN,vecLen);
+    vec2 = zeros(rN,1); %for RHS
     
     %disp(indArr);
-    for iter = 1:length(indArr)
+    for iter = 1:rN
         temp = zeros(1,vecLen);
         
         %fill it with il wrt l
@@ -478,10 +480,12 @@ function [vec_, vec2] = eq17()
     indArr = conditionalIndices([1,1,1,0,0,2]); % t=2 means it'll iterate over Ts not T_kl
 
     %making the coeff vector
-    vec_ = zeros(length(indArr),vecLen);
+        [rN,~] = size(indArr)
+
+    vec_ = zeros(rN,vecLen);
 
     %disp(indArr);
-    for iter = 1:length(indArr)
+    for iter = 1:rN
         temp = zeros(1,vecLen);
         
         %fill it with il wrt l
@@ -509,7 +513,7 @@ function [vec_, vec2] = eq17()
 
     end
     
-    vec2 = zeros(length(indArr),1); %RHS is zero
+    vec2 = zeros(rN,1); %RHS is zero
 
 end
 
@@ -532,11 +536,13 @@ function [vec_,vec2] = eq18()
     indArr = conditionalIndices([1,1,1,0,0,1]); 
 
     %making the coeff vector
-    vec_ = zeros(length(indArr),vecLen);
-    vec2 = zeros(length(indArr),1);
+        [rN,~] = size(indArr)
+
+    vec_ = zeros(rN,vecLen);
+    vec2 = zeros(rN,1);
 
     %disp(indArr);
-    for iter = 1:length(indArr)
+    for iter = 1:rN
         temp = zeros(1,vecLen);
 
         %pos for u
@@ -601,11 +607,13 @@ function [vec_,vec2] = eq19()
     indArr = conditionalIndices([1,1,1,0,0,1]); 
 
     %making the coeff vector
-    vec_ = zeros(length(indArr),vecLen);
-    vec2 = zeros(length(indArr),1);
+        [rN,~] = size(indArr)
+
+    vec_ = zeros(rN,vecLen);
+    vec2 = zeros(rN,1);
 
     %disp(indArr);
-    for iter = 1:length(indArr)
+    for iter = 1:rN
         temp = zeros(1,vecLen);
 
         %pos for u
@@ -677,12 +685,13 @@ function [vec_,vec2] = eq20()
 
     %unlike generateindices, you put 1 on values you want.
     indArr = conditionalIndices([1,1,1,0,0,1]); 
+    [rN,~] = size(indArr)
 
     %making the coeff vector
-    vec_ = zeros(length(indArr),vecLen);
+    vec_ = zeros(rN,vecLen);
 
     %disp(indArr);
-    for iter = 1:length(indArr)
+    for iter = 1:rN
         temp = zeros(1,vecLen);
 
         %pos for u (l,r,s,t)
@@ -697,8 +706,7 @@ function [vec_,vec2] = eq20()
         vec_(iter,:) = temp;
 
     end
-    
-    vec2 = zeros(length(vec_),1); %RHS is zero
+    vec2 = zeros(rN,1); %RHS is zero
 
 end
 
@@ -722,8 +730,10 @@ function [vec_,vec2] = eq21()
     indArr = generateIndices([0,0,maxV_(3),0,0,0], 1);
 
     %making the coeff vector
-    vec_ = zeros(length(indArr),vecLen);
-    vec2 = zeros(length(indArr),1);
+        [rN,~] = size(indArr)
+
+    vec_ = zeros(rN,vecLen);
+    vec2 = zeros(rN,1);
 
     %disp(indArr);
     [row,~] = size(indArr);
@@ -768,7 +778,7 @@ function [vec_,vec2] = eq22()
     indArr = generateIndices([maxV_(1),0,maxV_(3),maxV_(4),0,0], 1);
 
     %making the coeff vector
-    [nRow, ~] = size(indArr);
+    [nRow, ~] = size(indArr)
     vec_ = zeros(nRow,vecLen);
     vec2 = zeros(nRow,1);
 
@@ -830,7 +840,7 @@ function [vec_,vec2] = eq23()
     indArr = generateIndices([maxV_(1),0,maxV_(3),maxV_(4),0,0], 1);
 
     %making the coeff vector
-    [nRow, ~] = size(indArr);
+    [nRow, ~] = size(indArr)
     vec_ = zeros(nRow,vecLen);
     vec2 = zeros(nRow,1);
 

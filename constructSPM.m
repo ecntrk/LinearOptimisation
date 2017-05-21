@@ -7,10 +7,10 @@ function [f, aeq, beq, aneq, bneq] = constructSPM()
 %Var Order: i, j, l, r, s, t
 %Decision Var Order: u, v, w, wbar, x0, x, xbar, y0, y, ybar, z
 
-inputScene();
+%inputScene();
 
 %initialising all global vars
-init();
+%init();
 
 global vecLen;
 
@@ -114,11 +114,15 @@ beq = sparse(Naeq,1);
 
 
 [spm, bspm] = eq16();
+spm(:,3) = spm(:,3)*-1;
+bspm(:,3) = bspm(:,3)*-1;
 spmat = spm;
 bspmat = bspm;
 tt = Naneq;
 
 [spm, bspm] = eq17();
+spm(:,3) = spm(:,3)*-1;
+bspm(:,3) = bspm(:,3)*-1;
 spm(:,1) = spm(:,1) + tt; 
 spmat = [spmat;spm];
 bspm(:,1) = bspm(:,1) + tt; 
@@ -126,6 +130,8 @@ bspmat = [bspmat;bspm];
 tt = Naneq;
 
 [spm, bspm] = eq18();
+spm(:,3) = spm(:,3)*-1;
+bspm(:,3) = bspm(:,3)*-1;
 spm(:,1) = spm(:,1) + tt; 
 spmat = [spmat;spm];
 bspm(:,1) = bspm(:,1) + tt; 
@@ -134,6 +140,8 @@ tt = Naneq;
 
 
 [spm, bspm] = eq19();
+spm(:,3) = spm(:,3)*-1;
+bspm(:,3) = bspm(:,3)*-1;
 spm(:,1) = spm(:,1) + tt; 
 spmat = [spmat;spm];
 bspm(:,1) = bspm(:,1) + tt; 
@@ -141,6 +149,8 @@ bspmat = [bspmat;bspm];
 tt = Naneq;
 
 [spm, bspm] = eq20();
+spm(:,3) = spm(:,3)*-1;
+bspm(:,3) = bspm(:,3)*-1;
 spm(:,1) = spm(:,1) + tt; 
 spmat = [spmat;spm];
 bspm(:,1) = bspm(:,1) + tt; 
@@ -175,10 +185,11 @@ if(bspmat(iter,3)== 0)
     bspmat(iter,:)= [0,0,0];
 end
 end
+
 bspmat( ~any(bspmat,2), : ) = [];
 
-aneq = sparse(spmat(:,1)',spmat(:,2)',-spmat(:,3)',Naneq,vecLen);
-bneq = sparse(bspmat(:,1)',bspmat(:,2)',-bspmat(:,3)',Naneq,1);
+aneq = sparse(spmat(:,1)',spmat(:,2)',spmat(:,3)',Naneq,vecLen);
+bneq = sparse(bspmat(:,1)',bspmat(:,2)',bspmat(:,3)',Naneq,1);
 
 
 
@@ -732,7 +743,7 @@ function [spm, bspm] = eq17()
     
 
     %disp(indArr);
-    for iter = 1:length(indArr)
+    for iter = 1:rN
         %temp = zeros(1,vecLen);
         
         %fill it with il wrt l
@@ -805,7 +816,7 @@ function [spm,bspm] = eq18()
     
 
     %disp(indArr);
-    for iter = 1:length(indArr)
+    for iter = 1:rN
         %temp = zeros(1,vecLen);
 
         %pos for u
@@ -896,7 +907,7 @@ function [spm, bspm] = eq19()
     
 
     %disp(indArr);
-    for iter = 1:length(indArr)
+    for iter = 1:rN
         %temp = zeros(1,vecLen);
 
         %pos for u
@@ -992,7 +1003,7 @@ function [spm, bspm] = eq20()
     
 
     %disp(indArr);
-    for iter = 1:length(indArr)
+    for iter = 1:rN
         %temp = zeros(1,vecLen);
 
         %pos for u (l,r,s,t)
@@ -1069,7 +1080,7 @@ function [spm,bspm] = eq21()
         end
         
         %vec2(iter) = C_r(arr(3));
-        spm(bnum,:)=[iter,1,C_r(arr(3))]; bnum= bnum+1;
+        bspm(bnum,:)=[iter,1,C_r(arr(3))]; bnum= bnum+1;
 
         %vec_(iter,:) = temp;
 

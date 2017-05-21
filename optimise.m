@@ -20,9 +20,15 @@ else
 end
 
 init();
-[a,b, f, ae, be, ane, bne] = construct();
-
-X = cplexmilp(f,ane,bne,[a{1};a{2};a{3};a{4};a{6};a{7};a{8}], [b{1};b{2};b{3};b{4};b{6};b{7};b{8}]);
+tic;
+disp('generating coefficient for S,L,R,I,J,T: ');disp(maxV_)
+%[f, ae, be, ane, bne] = construct();
+[f, ae, be, ane, bne] = constructSPM();
+disp('coeff matrix generation complete. Optimising now...')
+toc
+X = cplexmilp(f,ane,bne,ae,be);
+disp('optimisation complete')
+toc
 
  x1(1,:) = find(X);
  x1(2,:) = X(X~=0);
@@ -43,7 +49,7 @@ for t = 1:maxV_(6)
     end
    end
 end
-display(iter);
+disp('number of u: ',iter);
 %for v
 v = zeros(maxV_(1),maxV_(3),maxV_(4),maxV_(6));
 for t = 1:maxV_(6)
@@ -56,7 +62,8 @@ for t = 1:maxV_(6)
     end
    end
 end
-display(iter);
+
+disp('number of v: ',iter);
 
 %for w
 w = zeros(maxV_(3),maxV_(4));
@@ -66,7 +73,7 @@ w = zeros(maxV_(3),maxV_(4));
             iter = iter+1;
     end
    end
-display(iter);
+disp('number of w: ',iter);
 
 %for w_bar
 wR = zeros(maxV_(3),maxV_(4));
@@ -77,7 +84,7 @@ wR = zeros(maxV_(3),maxV_(4));
     end
    end
    
-display(iter);
+disp('number of w_bar: ',iter);
    
 %for x_0 (s,i,j,t)
 x0 = zeros(maxV_(1),maxV_(4),maxV_(5),maxV_(6));
@@ -91,7 +98,8 @@ for t = 1:maxV_(6)
     end
    end
 end
-display(iter);
+
+disp('number of x0: ',iter);
    
 %for x (srijt)
 x = zeros(maxV_(1),maxV_(3),maxV_(4),maxV_(5),maxV_(6));
@@ -108,7 +116,7 @@ for t = 1:maxV_(6)
    end
 end
   
-display(iter);
+disp('number of x: ',iter);
 
 %for x_bar (srijt)
 xR = zeros(maxV_(1),maxV_(3),maxV_(4),maxV_(5),maxV_(6));
@@ -124,7 +132,8 @@ for t = 1:maxV_(6)
    end
    end
 end
-display(iter);
+
+disp('number of x_bar: ',iter);
 
 %for y0
 y0 = zeros(maxV_(1),maxV_(4),maxV_(6));
@@ -136,7 +145,8 @@ for t = 1:maxV_(6)
         end
    end
 end
-display(iter);
+
+disp('number of y0: ',iter);
 
 %for y
 y = zeros(maxV_(1),maxV_(3),maxV_(4),maxV_(6));
@@ -150,7 +160,7 @@ for t = 1:maxV_(6)
     end
    end
 end
-display(iter);
+disp('number of y: ',iter);
 
 
 %for y_bar
@@ -165,7 +175,7 @@ for t = 1:maxV_(6)
     end
    end
 end
-display(iter);
+disp('number of y_bar: ',iter);
 
 %for z
 z = zeros(maxV_(1),maxV_(3),maxV_(4),maxV_(6));
@@ -179,7 +189,7 @@ for t = 1:maxV_(6)
     end
    end
 end
-display(iter);
+disp('number of z: ',iter);
 
 
 
