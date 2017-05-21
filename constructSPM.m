@@ -3,6 +3,7 @@
 %Copyleft.
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 %function [f, aeq, beq, aneq, bneq] = constructSPM()
+
 function [f, A, lhs, rhs, lb, ub] = constructSPM()
 %Constructs coefficient vectors for a group of linear functions.
 %Var Order: i, j, l, r, s, t
@@ -23,8 +24,8 @@ Naneq = 0;
 
 %vec_ = rangeVarCoeff(1, [0,0,3,3,3,3], 1);
 %a= generateIndices([2,0,3,5,2,3,4]);
-f = sparse(eqnF());
-
+%f = sparse=(eqnF());
+f = eqnF();
 % %constructing equations one by one:
 
 
@@ -112,8 +113,7 @@ tt = Naneq+Naeq;
 
 
 %making the >=
-temp = zeros(Naneq,1);
-temp(:) = inf;
+temp = -Inf(Naneq,1);
 lhs = [lhs;temp];
 
 %moving onto <=
@@ -144,15 +144,13 @@ bspmat = [bspmat;bspm];
 [Naneq,~] = size(bspmat);
 
 %making the final <=
-temp = zeros(Naneq+Naeq - tempo,1);
-temp(:) = -inf;
+temp = -Inf(Naneq+Naeq - tempo,1);
+
 lhs = [lhs;temp];
 
 
-lb = zeros(length(lhs),1);
-ub = zeros(length(lhs),1);
-lb(:) = inf;
-ub(:) = inf;
+lb = zeros(vecLen,1);
+ub = Inf(vecLen,1);
 
 
 lhs = sparse(lhs);
@@ -173,6 +171,187 @@ rhs = sparse(bspmat(:,1)',bspmat(:,2)',bspmat(:,3)',Naneq+Naeq,1);
 
 
 end
+
+
+function [f, A, lhs, rhs, lb, ub] = constructSPM1()
+%Constructs coefficient vectors for a group of linear functions.
+%Var Order: i, j, l, r, s, t
+%Decision Var Order: u, v, w, wbar, x0, x, xbar, y0, y, ybar, z
+
+inputScene();
+
+%initialising all global vars
+init();
+
+global vecLen;
+
+
+global Naeq;
+global Naneq;
+Naeq = 0;
+Naneq = 0;
+
+%vec_ = rangeVarCoeff(1, [0,0,3,3,3,3], 1);
+%a= generateIndices([2,0,3,5,2,3,4]);
+%f = sparse=(eqnF());
+f = eqnF();
+% %constructing equations one by one:
+
+
+% spm = eq1();
+% spmat = spm;
+% tt = Naeq;
+% 
+% spm = eq2();
+% spm(:,1) = spm(:,1) + tt; 
+% spmat = [spmat;spm];
+% tt = Naeq;
+% 
+% spm = eq3();
+% spm(:,1) = spm(:,1) + tt; 
+% spmat = [spmat;spm];
+% tt = Naeq;
+% 
+% spm = eq11();
+% spm(:,1) = spm(:,1) + tt; 
+% spmat = [spmat;spm];
+% tt = Naeq;
+% 
+% % spm = eq12();
+% % spm(:,1) = spm(:,1) + tt; 
+% % spmat = [spmat;spm];
+% % tt = Naeq;
+% 
+% spm = eq13();
+% spm(:,1) = spm(:,1) + tt; 
+% spmat = [spmat;spm];
+% tt = Naeq;
+% 
+% spm = eq14();
+% spm(:,1) = spm(:,1) + tt; 
+% spmat = [spmat;spm];
+% tt = Naeq;
+% 
+% spm = eq15();
+% spm(:,1) = spm(:,1) + tt;
+% spmat = [spmat;spm];
+% tt = Naeq;
+
+%making the = 
+%aeq = sparse(spmat(:,1),spmat(:,2),spmat(:,3), Naeq, vecLen);
+%beq = sparse(Naeq,1);
+%lhs = zeros(Naeq,1);
+
+
+% [spm, bspm] = eq16();
+% spm(:,1) = spm(:,1) + tt; 
+% spmat = [spmat;spm];
+% bspm(:,1) = bspm(:,1) + tt; 
+% bspmat = bspm;
+% tt = Naneq+Naeq;
+% 
+% [spm, bspm] = eq17();
+% spm(:,1) = spm(:,1) + tt; 
+% spmat = [spmat;spm];
+% bspm(:,1) = bspm(:,1) + tt; 
+% bspmat = [bspmat;bspm];
+% tt = Naneq+Naeq;
+% 
+% [spm, bspm] = eq18();
+% spm(:,1) = spm(:,1) + tt; 
+% spmat = [spmat;spm];
+% bspm(:,1) = bspm(:,1) + tt; 
+% bspmat = [bspmat;bspm];
+% tt = Naneq+Naeq;
+% 
+% 
+% [spm, bspm] = eq19();
+% spm(:,1) = spm(:,1) + tt; 
+% spmat = [spmat;spm];
+% bspm(:,1) = bspm(:,1) + tt; 
+% bspmat = [bspmat;bspm];
+% tt = Naneq+Naeq;
+% 
+% [spm, bspm] = eq20();
+% spm(:,1) = spm(:,1) + tt; 
+% spmat = [spmat;spm];
+% bspm(:,1) = bspm(:,1) + tt; 
+% bspmat = [bspmat;bspm];
+% tt = Naneq+Naeq;
+% 
+% 
+% %making the >=
+% temp = zeros(Naneq,1);
+% temp(:) = inf;
+% lhs = [lhs;temp];
+% 
+% %moving onto <=
+% tempo = tt;
+% 
+% 
+% [spm, bspm] = eq21();
+% spm(:,1) = spm(:,1) + tt; 
+% spmat = [spmat;spm];
+% bspm(:,1) = bspm(:,1) + tt; 
+% bspmat = [bspmat;bspm];
+% tt = Naneq+Naeq;
+% 
+% 
+% [spm, bspm] = eq22();
+% spm(:,1) = spm(:,1) + tt; 
+% spmat = [spmat;spm];
+% bspm(:,1) = bspm(:,1) + tt; 
+% bspmat = [bspmat;bspm];
+% tt = Naneq+Naeq;
+% 
+% [spm, bspm] = eq23();
+% spm(:,1) = spm(:,1) + tt; 
+% spmat = [spmat;spm];
+% bspm(:,1) = bspm(:,1) + tt; 
+% bspmat = [bspmat;bspm];
+
+% [Naneq,~] = size(bspmat);
+% 
+% %making the final <=
+% temp = zeros(Naneq+Naeq - tempo,1);
+% temp(:) = -inf;
+% lhs = [lhs;temp];
+
+
+[spm, bspm] = eq16();
+
+row = length(bspm);
+
+lhs = -Inf(row,1);
+A = sparse(spm(:,1),spm(:,2),spm(:,3),row,vecLen);
+rhs = sparse(bspm(:,1),bspm(:,2),bspm(:,3),row,1);
+
+
+lb = ones(vecLen,1);
+ub = Inf(vecLen,1);
+
+
+
+% lhs = sparse(lhs);
+% 
+% for iter = 1:Naneq
+% if(bspmat(iter,3)== 0)
+%     bspmat(iter,:)= [0,0,0];
+% end
+% end
+% 
+% bspmat( ~any(bspmat,2), : ) = [];
+% 
+% A = sparse(spmat(:,1)',spmat(:,2)',spmat(:,3)',Naneq+Naeq,vecLen);
+% %aneq = sparse(spmat(:,1)',spmat(:,2)',spmat(:,3)',Naneq+Naeq,vecLen);
+% rhs = sparse(bspmat(:,1)',bspmat(:,2)',bspmat(:,3)',Naneq+Naeq,1);
+% %bneq = sparse(bspmat(:,1)',bspmat(:,2)',bspmat(:,3)',Naneq+Naeq,1);
+% 
+
+
+end
+
+
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 function [svec] = eq1()

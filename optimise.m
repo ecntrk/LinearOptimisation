@@ -2,7 +2,7 @@
 %Author: Debmalya Sinha. debmalya.01[at]gmail.com
 %Copyleft.
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-function [allvar, u, v, w, wR, x0, x, xR, y0, y, yR, z] = optimise(loadfile)
+function [ u, v, w, wR, x0, x, xR, y0, y, yR, z] = optimise(loadfile)
 % This function generates the coefficient vectors and optimises it by CPLEX.
 % Usage [x] = optimise(loadFile); loadfile is a mat file for a variable
 % environment. If you don't have it, put noting. It will take values from 
@@ -33,7 +33,7 @@ cObj = Cplex;
 
 cObj.Model.name = 'disaster1';
 cObj.Model.sense = 'minimize';
-cObj.Model.obj = f';
+cObj.Model.obj = f;
 cObj.Model.A = A;
 cObj. Model.lhs = lhs;
 cObj.Model.rhs = rhs;
@@ -52,11 +52,11 @@ X = cObj.solve();
 
 disp('optimisation complete')
 toc
-
- x1(1,:) = find(X);
- x1(2,:) = X(X~=0);
- 
- allvar = x1';
+% 
+%  x1(1,:) = find(X);
+%  x1(2,:) = X(X~=0);
+%  
+%  allvar = x1';
 
 %doing this for each decision variable
 iter = 1;
