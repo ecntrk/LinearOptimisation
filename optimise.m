@@ -20,7 +20,7 @@ else
 end
 
 init();
-[a,b,f, ae,be,ane,bne] = construct();
+[a,b, f, ae, be, ane, bne] = construct();
 
 X = cplexmilp(f,ane,bne,[a{1};a{2};a{3};a{4};a{6};a{7};a{8}], [b{1};b{2};b{3};b{4};b{6};b{7};b{8}]);
 

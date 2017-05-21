@@ -2,7 +2,7 @@
 %Author: Debmalya Sinha. debmalya.01[att]gmail.com
 %Copyleft.
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-function [f, aeq, beq, aineq, bineq] = construct()
+function [f, aeq, beq, aneq, bneq] = constructSPM()
 %Constructs coefficient vectors for a group of linear functions.
 %Var Order: i, j, l, r, s, t
 %Decision Var Order: u, v, w, wbar, x0, x, xbar, y0, y, ybar, z
@@ -12,104 +12,238 @@ inputScene();
 %initialising all global vars
 init();
 
+global vecLen;
+
+
+global Naeq;
+global Naneq;
+Naeq = 0;
+Naneq = 0;
+
 %vec_ = rangeVarCoeff(1, [0,0,3,3,3,3], 1);
 %a= generateIndices([2,0,3,5,2,3,4]);
-f = eqnF();
-%constructing equations one by one:
-[a{1}, b{1}] = eq1();
-[a{2}, b{2}] = eq2();
-[a{3}, b{3}] = eq3();
-[a{4}, b{4}] = eq11();
-[a{5}, b{5}] = eq12(); % this is causing blank output at optimiser
-[a{6}, b{6}] = eq13();
-[a{7}, b{7}] = eq14();
-[a{8}, b{8}] = eq15();
-[a{9}, b{9}] = eq16();
-[a{10}, b{10}] = eq17();
-[a{11}, b{11}] = eq18();
-[a{12}, b{12}] = eq19();
-[a{13}, b{13}] = eq20();
-[a{14}, b{14}] = eq21();
-[a{15}, b{15}] = eq22();
-[a{16}, b{16}] = eq23();
+f = sparse(eqnF());
 
-aeq = a{1}; beq = b{1};
-for i = 2:8
-size(a{i})
-size(b{i})
+% %constructing equations one by one:
+% [a{1}, b{1}] = eq1();
+% [a{2}, b{2}] = eq2();
+% [a{3}, b{3}] = eq3();
+% [a{4}, b{4}] = eq11();
+% [a{5}, b{5}] = eq12(); % this is causing blank output at optimiser
+% [a{6}, b{6}] = eq13();
+% [a{7}, b{7}] = eq14();
+% [a{8}, b{8}] = eq15();
+% [a{9}, b{9}] = eq16();
+% [a{10}, b{10}] = eq17();
+% [a{11}, b{11}] = eq18();
+% [a{12}, b{12}] = eq19();
+% [a{13}, b{13}] = eq20();
+% [a{14}, b{14}] = eq21();
+% [a{15}, b{15}] = eq22();
+% [a{16}, b{16}] = eq23();
+% 
+% aeq = a{1}; beq = b{1};
+% for i = 2:8
+% %     length(a{i})
+% %         length(b{i})
+% 
+%     temp = [aeq;a{i}];
+%     aeq = temp; 
+%     temp = [beq;b{i}];
+%     beq = temp; 
+% end
+% 
+% aineq = a{9}; bineq = b{9};
+% for i = 10:12
+%     temp = [aineq;a{i}];
+%     aineq = temp; 
+%     temp = [bineq;b{i}];
+%     bineq = temp; 
+% end
+% %because both are >= and cplex wants <=
+% aineq = aineq*-1; 
+% bineq = bineq*-1;
+% 
+% %the last ones. No need to change sign. these are <=
+% aineq = [aineq;a{14}]; bineq = [bineq;b{14}];
+% aineq = [aineq;a{15}]; bineq = [bineq;b{15}];
+% aineq = [aineq;a{16}]; bineq = [bineq;b{16}];
 
-    temp = [aeq;a{i}];
-    aeq = temp; 
-    temp = [beq;b{i}];
-    beq = temp; 
+num = zeros(1,16);
+spm = eq1();
+spmat = spm;
+tt = Naeq;
+
+spm = eq2();
+spm(:,1) = spm(:,1) + tt; 
+spmat = [spmat;spm];
+tt = Naeq;
+
+spm = eq3();
+spm(:,1) = spm(:,1) + tt; 
+spmat = [spmat;spm];
+tt = Naeq;
+
+spm = eq11();
+spm(:,1) = spm(:,1) + tt; 
+spmat = [spmat;spm];
+tt = Naeq;
+
+% spm = eq12();
+% spm(:,1) = spm(:,1) + tt; 
+% spmat = [spmat;spm];
+% tt = Naeq;
+
+spm = eq13();
+spm(:,1) = spm(:,1) + tt; 
+spmat = [spmat;spm];
+tt = Naeq;
+
+spm = eq14();
+spm(:,1) = spm(:,1) + tt; 
+spmat = [spmat;spm];
+tt = Naeq;
+
+spm = eq15();
+spm(:,1) = spm(:,1) + tt;
+spmat = [spmat;spm];
+
+
+aeq = sparse(spmat(:,1),spmat(:,2),spmat(:,3), Naeq, vecLen);
+beq = sparse(Naeq,1);
+
+
+[spm, bspm] = eq16();
+spmat = spm;
+bspmat = bspm;
+tt = Naneq;
+
+[spm, bspm] = eq17();
+spm(:,1) = spm(:,1) + tt; 
+spmat = [spmat;spm];
+bspm(:,1) = bspm(:,1) + tt; 
+bspmat = [bspmat;bspm];
+tt = Naneq;
+
+[spm, bspm] = eq18();
+spm(:,1) = spm(:,1) + tt; 
+spmat = [spmat;spm];
+bspm(:,1) = bspm(:,1) + tt; 
+bspmat = [bspmat;bspm];
+tt = Naneq;
+
+
+[spm, bspm] = eq19();
+spm(:,1) = spm(:,1) + tt; 
+spmat = [spmat;spm];
+bspm(:,1) = bspm(:,1) + tt; 
+bspmat = [bspmat;bspm];
+tt = Naneq;
+
+[spm, bspm] = eq20();
+spm(:,1) = spm(:,1) + tt; 
+spmat = [spmat;spm];
+bspm(:,1) = bspm(:,1) + tt; 
+bspmat = [bspmat;bspm];
+tt = Naneq;
+
+
+[spm, bspm] = eq21();
+spm(:,1) = spm(:,1) + tt; 
+spmat = [spmat;spm];
+bspm(:,1) = bspm(:,1) + tt; 
+bspmat = [bspmat;bspm];
+tt = Naneq;
+
+[spm, bspm] = eq22();
+spm(:,1) = spm(:,1) + tt; 
+spmat = [spmat;spm];
+bspm(:,1) = bspm(:,1) + tt; 
+bspmat = [bspmat;bspm];
+tt = Naneq;
+
+[spm, bspm] = eq23();
+spm(:,1) = spm(:,1) + tt; 
+spmat = [spmat;spm];
+bspm(:,1) = bspm(:,1) + tt; 
+bspmat = [bspmat;bspm];
+
+ [Naneq,~] = size(bspmat);
+
+for iter = 1:Naneq
+if(bspmat(iter,3)== 0)
+    bspmat(iter,:)= [0,0,0];
 end
-
-aineq = a{9}; bineq = b{9};
-for i = 10:12
-    temp = [aineq;a{i}];
-    aineq = temp; 
-    temp = [bineq;b{i}];
-    bineq = temp; 
 end
-%because both are >= and cplex wants <=
-aineq = aineq*-1; 
-bineq = bineq*-1;
+bspmat( ~any(bspmat,2), : ) = [];
 
-%the last ones. No need to change sign. these are <=
-aineq = [aineq;a{14}]; bineq = [bineq;b{14}];
-aineq = [aineq;a{15}]; bineq = [bineq;b{15}];
-aineq = [aineq;a{16}]; bineq = [bineq;b{16}];
+aneq = sparse(spmat(:,1)',spmat(:,2)',-spmat(:,3)',Naneq,vecLen);
+bneq = sparse(bspmat(:,1)',bspmat(:,2)',-bspmat(:,3)',Naneq,1);
+
+
+
 
 end
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-function [vec,vec2] = eq1()
+function [svec] = eq1()
 %constructing equation 10.a
 %y0 (i,s, t=1) = 0
 
     global maxV_;
-    vec = rangeVarCoeff(8,[maxV_(1),0,0,maxV_(4),0,1], 1, 1);
-    [r,~] = size(vec);
-    vec2 = zeros(r,1); %RHS is zero
-
+    svec = rangeVarCoeff(8,[maxV_(1),0,0,maxV_(4),0,1], 1, 1);
+    %[r,~] = size(vec);
+    %svec2 = zeros(r,1); %RHS is zero
+    global Naeq;
+    [r,~] = size(svec);
+    Naeq = r;
 end
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-function [vec, vec2]=eq2()
+function [svec]=eq2()
 %constructign equation 10.b
 %y (i,r,s, t=1) = 0
 
     global maxV_;
-    vec = rangeVarCoeff(9,[maxV_(1),0,maxV_(3),maxV_(4),0,1], 1, 1);
+    svec = rangeVarCoeff(9,[maxV_(1),0,maxV_(3),maxV_(4),0,1], 1, 1);
     
-    [r,~] = size(vec);
-    vec2 = zeros(r,1); %RHS is zero
+    
+    global Naeq;
+    [r,~] = size(svec);
+    Naeq = Naeq + r;
+    %vec2 = zeros(r,1); %RHS is zero
+    
 
 end
 
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-function [vec,vec2] = eq3()
+function [svec] = eq3()
 %constructign equation 10.c
 %ybar (i,r,s, t=1) = 0
 
     global maxV_;
-    vec = rangeVarCoeff(10,[maxV_(1),0,maxV_(3),maxV_(4),0, 1],1,1);
+    svec = rangeVarCoeff(10,[maxV_(1),0,maxV_(3),maxV_(4),0, 1],1,1);
     
-    [r,~] = size(vec);
-    vec2 = zeros(r,1); %RHS is zero
+    %[r,~] = size(vec);
+    global Naeq;
+    [r,~] = size(svec);
+    Naeq = Naeq + r;
+
+    %vec2 = zeros(r,1); %RHS is zero
 end
 
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-function [vec_, vec2] = eq11()
+function [spm] = eq11()
 %constructign equation 11
 %y (i,r,s, t+1) - y (i,r,s, t) - sum(x ijrst) = 0
 
 %generate indices combinations for i,r,s,t = (Ts-1) and then iterate j for sum(x).
 
-    global maxV_; global vecLen; 
+    global maxV_; 
+    %global vecLen; 
 
     global sr ; global tij; global epsilon_i;
     %tCondition = (1+sr(r)+tij(i,j)+1;
@@ -117,16 +251,26 @@ function [vec_, vec2] = eq11()
 
 
     %making the coeff vector
-    vec_ = zeros(length(indArr),vecLen);
+    [rN , ~] = size(indArr);
+    %vec_ = zeros(length(indArr),vecLen);
+    %total coeff on one row
+    cN = 1 + 1 + maxV_(5);
+    spm = zeros(rN*cN,3);
+    num = 1;
+    
+    global Naeq;
+    Naeq = Naeq + rN;
 
     %disp(indArr);
-    for iter = 1:length(indArr)
-        temp = zeros(1,vecLen);
+    for iter = 1:rN
+        %temp = zeros(1,vecLen);
         %calculating positions for y irs(t), y irs(t+1)
         [p1, p2] = doubleVarCoeff(9, indArr(iter,:));
-        temp(p1) = -1;
-        temp(p2) = 1;
-
+        %temp(p1) = -1;
+        %temp(p2) = 1;
+        spm(num,:)=[iter,p1,-1]; num= num+1;
+        spm(num,:)=[iter,p2,1]; num= num+1;
+        
         %calculaitng the positions in the sum
             for j = epsilon_i(indArr(iter,4),:) %calculates j from i conditionally
                     
@@ -143,28 +287,33 @@ function [vec_, vec2] = eq11()
                         display(strcat(sprintf('Error: position not found for dVar:%d and indices:',dVar), sprintf(' %d',arr(:)) ));
                         return;
                     end
-                    temp(pos) = -1;
-                
+                    %temp(pos) = -1;
+                    spm(num,:)=[iter,pos,-1]; num= num+1;
+
                 end
 
             end
-        vec_(iter,:) = temp;
+        %vec_(iter,:) = temp;
 
     end
     
-    vec2 = zeros(length(indArr),1); %RHS is zero
-
+    %vec2 = zeros(length(indArr),1); %RHS is zero
+    %
+    spm( ~any(spm,2), : ) = [];
+    
 end
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-function [vec_, vec2] = eq12()
+function [spm] = eq12()
 %constructign equation 12
 %y_0 (i,r,s, t+1) - y_0 (i,r,s, t) - sum(x_0 ijst) - sum (sum (betaR * x (ijrst) ))= 0
 
 %generate indices combinations for i,s,t and then iterate j,r for sum(x).
 %put combination (t+1>tij).
-    global maxV_; global vecLen; global epsilon_i;
+    global maxV_; 
+    %global vecLen; 
+    global epsilon_i;
     global tij;
 
     %having the coefficients for x ijrs(t)
@@ -173,16 +322,27 @@ function [vec_, vec2] = eq12()
     indArr = generateIndices([maxV_(1),0,0,maxV_(4),0,maxV_(6)-1], 1);
 
     %making the coeff vector
-    vec_ = zeros(length(indArr),vecLen);
+    [rN , ~] = size(indArr);
+    %vec_ = zeros(length(indArr),vecLen);
+    %total coeff on one row
+    cN = 1 + 1 + maxV_(5) + maxV_(5)*maxV_(3);
+    spm = zeros(rN*cN,3);
+    num = 1;
+
+    global Naeq;
+    Naeq = Naeq + rN;
 
     %disp(indArr);
     %building the coeff vector for each of i,s,t
-    for iter = 1:length(indArr)
-        temp = zeros(1,vecLen);
+    for iter = 1:rN
+        %temp = zeros(1,vecLen);
         %calculating positions for y_0 is(t), y_0 is(t+1)
         [p1, p2] = doubleVarCoeff(8, indArr(iter,:));
-        temp(p1) = -1;
-        temp(p2) = 1;
+        %temp(p1) = -1;
+        %temp(p2) = 1;
+                    
+        spm(num,:)=[iter,p1,-1]; num= num+1;
+        spm(num,:)=[iter,p2,1]; num= num+1;
 
         %calculaitng the positions in the sum
         %only then t condition is met!
@@ -205,7 +365,8 @@ function [vec_, vec2] = eq12()
                         display(strcat(sprintf('Error: position not found for dVar:%d and indices:',dVar), sprintf(' %d',arr(:)) ));
                         return;
                     end
-                    temp(pos) = -1;
+                    %temp(pos) = -1;
+                    spm(num,:)=[iter,pos,-1]; num= num+1;
 
                     %now the double sum of j and r for x
                     for r = 1:maxV_(3)
@@ -215,30 +376,36 @@ function [vec_, vec2] = eq12()
                             display(strcat(sprintf('Error: position not found for dVar:%d and indices:',dVar), sprintf(' %d',arr(:)) ));
                             return;
                         end
-                        temp(pos) = -betaR(r);
+                        %temp(pos) = -betaR(r);
+                        spm(num,:)=[iter,pos, -betaR(r)]; num= num+1;
+
                     end
                 end
             end
 
-        vec_(iter,:) = temp;
+        %vec_(iter,:) = temp;
 
     end
     
-    vec2 = zeros(length(indArr),1); %RHS is zero
+    %vec2 = zeros(length(indArr),1); %RHS is zero
+    % stripping off extra rows with zeros 
+    spm( ~any(spm,2), : ) = [];
 
 end
 
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-function [vec_, vec2] = eq13()
+function [spm] = eq13()
 %constructign equation 13
 %yBar (i,r,s, t+1) - yBar (i,r,s, t) - sum(xBar (ijrst) + sum( alphaR * x(ijrst)) ) = 0
 
 %generate indices combinations for i,r,s,t and then iterate j for sum(xbar + alpa * x).
 %put combination (t+1>tij).
 
-    global maxV_; global vecLen; global epsilon_i;
+    global maxV_; 
+    %global vecLen; 
+    global epsilon_i;
     global tij;
 
     indArr = generateIndices([maxV_(1),0,maxV_(3),maxV_(4),0,maxV_(6)-1], 1); %t = 1..Ts-1
@@ -247,16 +414,27 @@ function [vec_, vec2] = eq13()
     global alphaR;
 
     %making the coeff vector
-    vec_ = zeros(length(indArr),vecLen);
+    [rN , ~] = size(indArr);
+    %vec_ = zeros(length(indArr),vecLen);
+    %total coeff on one row
+    cN = 1 + 1 + maxV_(5) + maxV_(5);
+    spm = zeros(rN*cN,3);
+    num = 1;
+
+    global Naeq;
+    Naeq = Naeq + rN;
 
     %disp(indArr);
     %building the coeff vector for each of i,s,t
-    for iter = 1:length(indArr)
-        temp = zeros(1,vecLen);
+    for iter = 1:rN
+        %temp = zeros(1,vecLen);
         %calculating positions for yBar irs(t), yBar irs(t+1)
         [p1, p2] = doubleVarCoeff(10, indArr(iter,:));
-        temp(p1) = -1;
-        temp(p2) = 1;
+        %temp(p1) = -1;
+        %temp(p2) = 1;
+        
+        spm(num,:)=[iter,p1,-1]; num= num+1;
+        spm(num,:)=[iter,p2,1]; num= num+1;
 
         %calculaitng the positions in the sum
         %only then t condition is met!
@@ -277,7 +455,8 @@ function [vec_, vec2] = eq13()
                     display(strcat(sprintf('Error: position not found for dVar:%d and indices:',dVar), sprintf(' %d',arr(:)) ));
                     return;
                 end
-                temp(pos) = -1;
+                %temp(pos) = -1;
+               spm(num,:)=[iter,pos,-1]; num= num+1;
 
                 %for x
                 pos = resolvePos(6, arr);
@@ -286,47 +465,63 @@ function [vec_, vec2] = eq13()
                 return;
                 end
                 %indArr(iter,4) is the current value of r
-                temp(pos) = -alphaR(indArr(iter,3)); 
+                %temp(pos) = -alphaR(indArr(iter,3)); 
+                spm(num,:)=[iter,pos,-alphaR(indArr(iter,3))]; num= num+1;
+
             end
 
         end
 
-        vec_(iter,:) = temp;
+        %vec_(iter,:) = temp;
 
     end
     
-    vec2 = zeros(length(indArr),1); %RHS is zero
+    %vec2 = zeros(length(indArr),1); %RHS is zero
 
+    % stripping off extra rows with zeros 
+    spm( ~any(spm,2), : ) = [];
 end
 
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-function [vec_, vec2] = eq14()
+function [spm] = eq14()
 %constructign equation 14
 %z (i,r,s, t)  - sum(x ijrst) = 0
 
 %generate indices combinations for i,r,s,t and then iterate j for sum(x).
 %put combination (t>sr+tij), not t+1.
-    global maxV_; global vecLen; global epsilon_i;
+    global maxV_; 
+    %global vecLen; 
+    global epsilon_i;
 
-    global sr ; global tij;
+    global sr ; 
+    global tij;
     indArr = generateIndices([maxV_(1),0,maxV_(3),maxV_(4),0,maxV_(6)], 1); %t = 1..Ts
 
     %making the coeff vector
-    vec_ = zeros(length(indArr),vecLen);
+    [rN , ~] = size(indArr);
+    %vec_ = zeros(length(indArr),vecLen);
+    %total coeff on one row
+    cN = 1 +  maxV_(5);
+    spm = zeros(rN*cN,3);
+    num = 1;
+
+    global Naeq;
+    Naeq = Naeq + rN;
 
     %disp(indArr);
-    for iter = 1:length(indArr)
-        temp = zeros(1,vecLen);
+    for iter = 1:rN
+        %temp = zeros(1,vecLen);
         %calculating position for z irs(t)
         pos = resolvePos(11, indArr(iter,:));
         if (pos == -1)
             display(strcat(sprintf('Error: position not found for dVar:%d and indices:',dVar), sprintf(' %d',arr(:)) ));
             return;
         end
-        temp(pos) = 1;
-        
+        %temp(pos) = 1;
+        spm(num,:)=[iter,pos,1]; num= num+1;
+
         %calculaitng the positions in the sum
         %only then t condition is met!
         
@@ -345,44 +540,59 @@ function [vec_, vec2] = eq14()
                     return;
                 end
                 %display (pos);
-                temp(pos) = -1;
+                %temp(pos) = -1;
+                spm(num,:)=[iter,pos,-1]; num= num+1;
+
             end
         end
 
-        vec_(iter,:) = temp;
+        %vec_(iter,:) = temp;
 
     end
-    vec2 = zeros(length(indArr),1); %RHS is zero
-
+    %vec2 = zeros(length(indArr),1); %RHS is zero
+    
+    % stripping off extra rows with zeros
+    spm( ~any(spm,2), : ) = [];
 end
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-function [vec_,vec2] = eq15()
+function [spm] = eq15()
 %constructign equation 15
 %v (i,r,s, t) - sum z (i,r,s, t cond) - sum z (i,r,s, t cond)  = 0
 
 %generate indices combinations for i,r,s,t and then iterate j for sum(x).
 %put combination (t+1>sr+tij).
-    global maxV_; global vecLen, global Td;
+    global maxV_; 
+    %global vecLen;
+    global Td;
 
 
     indArr = generateIndices([maxV_(1),0,maxV_(3),maxV_(4),0,maxV_(6)], 1); 
 
     %making the coeff vector
-    vec_ = zeros(length(indArr),vecLen);
+    [rN , ~] = size(indArr);
+    %vec_ = zeros(length(indArr),vecLen);
+    %total coeff on one row
+    cN = 1 + maxV_(6)+ maxV_(6);
+    spm = zeros(rN*cN,3);
+    num = 1;
+
+    global Naeq;
+    Naeq = Naeq + rN;
 
     %disp(indArr);
-    for iter = 1:length(indArr)
-        temp = zeros(1,vecLen);
+    for iter = 1:rN
+        %temp = zeros(1,vecLen);
         %calculating position for v irs(t)
         pos = resolvePos(2, indArr(iter,:));
         if (pos == -1)
             display(strcat(sprintf('Error: position not found for dVar:%d and indices:',dVar), sprintf(' %d',arr(:)) ));
             return;
         end
-        temp(pos) = 1;
-        
+        %temp(pos) = 1;
+        spm(num,:)=[iter,pos,1]; num= num+1;
+
         %calculaitng the positions in the conditional sum of z
         %tau = 0 .. min(t, Td)
         t = indArr(iter,6);
@@ -396,17 +606,24 @@ function [vec_,vec2] = eq15()
             end
             %here comes the condition
             if (tau <= min(t,Td)-1)
-                temp(pos) = -1;
+                %temp(pos) = -1;
+                spm(num,:)=[iter,pos,-1]; num= num+1;
+
             else
-                temp(pos) = -2;
+                %temp(pos) = -2;
+                spm(num,:)=[iter,pos,-2]; num= num+1;
+
             end
         end
 
-        vec_(iter,:) = temp;
+        %vec_(iter,:) = temp;
 
     end
     
-    vec2 = zeros(length(indArr),1); %RHS is zero
+    %vec2 = zeros(length(indArr),1); %RHS is zero
+    
+    % stripping off extra rows with zeros
+    spm( ~any(spm,2), : ) = [];
     
 end
 
@@ -414,7 +631,7 @@ end
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-function [vec_,vec2] = eq16()
+function [spm, bspm] = eq16()
 %constructign equation 16
 %y_0 (il, t) - d_0 (l,t)  = 0
 
@@ -425,17 +642,32 @@ function [vec_,vec2] = eq16()
 %il is a constant depnding on l so don't need to iterate i.
 
 
-    global vecLen; global whatIL; global d0_lt;
+    %global vecLen; 
+    global whatIL; 
+    global d0_lt;
+    %global maxV_;
 
     indArr = conditionalIndices([1,1,0,0,0,1]); %unlike generateindices, you put 1 on values you want.
 
+ 
+
     %making the coeff vector
-    vec_ = zeros(length(indArr),vecLen);
-    vec2 = zeros(length(indArr),1); %for RHS
+    [rN , ~] = size(indArr);
+    %vec_ = zeros(length(indArr),vecLen);
+    %vec2 = zeros(length(indArr),1); %for RHS
+    %total coeff on one row
+    cN = 1 ;
+    spm = zeros(rN*cN,3);
+    bspm = zeros(rN,3);
+    num = 1;
+    bnum = 1;
+        
+    global Naneq;
+    Naneq = rN;
     
     %disp(indArr);
-    for iter = 1:length(indArr)
-        temp = zeros(1,vecLen);
+    for iter = 1:rN
+        %temp = zeros(1,vecLen);
         
         %fill it with il wrt l
         ind = indArr(iter,:);
@@ -448,21 +680,27 @@ function [vec_,vec2] = eq16()
             display(strcat(sprintf('Error: position not found for dVar:%d and indices:',dVar), sprintf(' %d',ind(:)) ));
             return;
         end
-        temp(pos) = 1;
-        
-        %lets deal with the d (l,t)
-        vec2(iter) = d0_lt(indArr(iter,2)); %possible change when there more t.
-        
-        vec_(iter,:) = temp;
+        %temp(pos) = 1;
+        spm(num,:)=[iter,pos,1]; num= num+1;
+        bspm(bnum,:)=[iter,1,d0_lt(indArr(iter,2))]; bnum= bnum+1;
 
+                
+        %lets deal with the d (l,t)
+        %vec2(iter) = d0_lt(indArr(iter,2)); %possible change when there more t.
+        
+        %vec_(iter,:) = temp;
+
+         
     end
     
+    % stripping off extra rows with zeros
+    spm( ~any(spm,2), : ) = [];
 end
 
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-function [vec_, vec2] = eq17()
+function [spm, bspm] = eq17()
 %constructign equation 17
 %y_bar (il,r,s,t) - v (il,r,s,t)  = 0
 
@@ -472,17 +710,30 @@ function [vec_, vec2] = eq17()
 %il is a constant depnding on l so don't need to iterate i.
 
 
-    global vecLen; global whatIL;
+    %global vecLen; 
+    global whatIL;
     
     %unlike generateindices, you put 1 on values you want.
     indArr = conditionalIndices([1,1,1,0,0,2]); % t=2 means it'll iterate over Ts not T_kl
 
     %making the coeff vector
-    vec_ = zeros(length(indArr),vecLen);
+    [rN , ~] = size(indArr);
+    %vec_ = zeros(length(indArr),vecLen);
+    %vec2 = zeros(length(indArr),1); %for RHS
+    %total coeff on one row
+    cN = 1 + 1;
+    spm = zeros(rN*cN,3);
+    bspm = zeros(rN,3);
+    num = 1;
+    %bnum = 1;
+
+    global Naneq;
+    Naneq = Naneq + rN;
+    
 
     %disp(indArr);
     for iter = 1:length(indArr)
-        temp = zeros(1,vecLen);
+        %temp = zeros(1,vecLen);
         
         %fill it with il wrt l
         ind = indArr(iter,:);
@@ -495,28 +746,32 @@ function [vec_, vec2] = eq17()
             display(strcat(sprintf('Error: position not found for dVar:%d and indices:',dVar), sprintf(' %d',ind(:)) ));
             return;
         end
-        temp(pos) = 1;
-        
+        %temp(pos) = 1;
+        spm(num,:)=[iter,pos,1]; num= num+1;
+
         %V(il, r,s,t)        
         pos = resolvePos(2, ind);
         if (pos == -1)
             display(strcat(sprintf('Error: position not found for dVar:%d and indices:',dVar), sprintf(' %d',ind(:)) ));
             return;
         end
-        temp(pos) = -1;
+        %temp(pos) = -1;
+        spm(num,:)=[iter,pos,-1]; num= num+1;
 
-        vec_(iter,:) = temp;
+        %vec_(iter,:) = temp;
 
     end
     
-    vec2 = zeros(length(indArr),1); %RHS is zero
+    %vec2 = zeros(length(indArr),1); %RHS is zero
+    
+    spm( ~any(spm,2), : ) = [];
 
 end
 
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-function [vec_,vec2] = eq18()
+function [spm,bspm] = eq18()
 %constructign equation 18
 %u (l,r,s,t) - d(l,r,t) + y (il,r,s,t)  = 0
 
@@ -526,18 +781,32 @@ function [vec_,vec2] = eq18()
 %il is a constant depnding on l so don't need to iterate i.
 
 
-    global d_lrt; global vecLen; global whatIL; global whatKL;
+    global d_lrt; 
+    %global vecLen; 
+    global whatIL; 
+    global whatKL;
 
     %unlike generateindices, you put 1 on values you want.
     indArr = conditionalIndices([1,1,1,0,0,1]); 
 
     %making the coeff vector
-    vec_ = zeros(length(indArr),vecLen);
-    vec2 = zeros(length(indArr),1);
+    [rN , ~] = size(indArr);
+    %vec_ = zeros(length(indArr),vecLen);
+    %vec2 = zeros(length(indArr),1); %for RHS
+    %total coeff on one row
+    cN = 1 + 1;
+    spm = zeros(rN*cN,3);
+    bspm = zeros(rN,3);
+    num = 1;
+    bnum = 1;
+
+    global Naneq;
+    Naneq = Naneq + rN;
+    
 
     %disp(indArr);
     for iter = 1:length(indArr)
-        temp = zeros(1,vecLen);
+        %temp = zeros(1,vecLen);
 
         %pos for u
         pos = resolvePos(1, indArr(iter,:));
@@ -545,8 +814,9 @@ function [vec_,vec2] = eq18()
             display(strcat(sprintf('Error: position not found for dVar:%d and indices:',dVar), sprintf(' %d',indArr(:)) ));
             return;
         end
-        temp(pos) = 1;
-        
+        %temp(pos) = 1;
+        spm(num,:)=[iter,pos,1]; num= num+1;
+
         %fill it with il wrt l
         ind = indArr(iter,:);
         ind(4) = whatIL(ind(2));
@@ -559,8 +829,9 @@ function [vec_,vec2] = eq18()
             display(strcat(sprintf('Error: position not found for dVar:%d and indices:',dVar), sprintf(' %d',ind(:)) ));
             return;
         end
-        temp(pos) = 1;
-        
+        %temp(pos) = 1;
+        spm(num,:)=[iter,pos,1]; num= num+1;
+
         %d(l, r,t)        
         k = whatKL(l);
         temp_v =  d_lrt{2,k};
@@ -574,18 +845,23 @@ function [vec_,vec2] = eq18()
             col = col+1;
         end
         
-        vec2(iter) = temp_v(indArr(iter,3)+1, col); %d_lrt, r+1 and mathcing t. see inputscene for clue.
+        %vec2(iter) = temp_v(indArr(iter,3)+1, col); %d_lrt, r+1 and mathcing t. see inputscene for clue.
         
-        vec_(iter,:) = temp;
+        %vec_(iter,:) = temp;
+
+        bspm(bnum,:)=[iter,1,temp_v(indArr(iter,3)+1, col)]; bnum= bnum+1;
 
     end
+    
+    spm( ~any(spm,2), : ) = [];
+
 end
 
 
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-function [vec_,vec2] = eq19()
+function [spm, bspm] = eq19()
 %constructign equation 19
 %u (l,r,s,t) - 1/t *d(l,r,t) + sum y (il,r,s,t)  = 0
 
@@ -595,18 +871,33 @@ function [vec_,vec2] = eq19()
 %il is a constant depnding on l so don't need to iterate i.
 
 
-    global d_lrt; global vecLen; global whatIL; global whatKL;
-
+    global d_lrt; 
+    %global vecLen; 
+    global whatIL; 
+    global whatKL;
+    global maxV_;
+    
     %unlike generateindices, you put 1 on values you want.
     indArr = conditionalIndices([1,1,1,0,0,1]); 
 
     %making the coeff vector
-    vec_ = zeros(length(indArr),vecLen);
-    vec2 = zeros(length(indArr),1);
+    [rN , ~] = size(indArr);
+    %vec_ = zeros(length(indArr),vecLen);
+    %vec2 = zeros(length(indArr),1); %for RHS
+    %total coeff on one row
+    cN = 1 + maxV_(6);
+    spm = zeros(rN*cN,3);
+    bspm = zeros(rN,3);
+    num = 1;
+    bnum = 1;
+
+    global Naneq;
+    Naneq = Naneq + rN;
+    
 
     %disp(indArr);
     for iter = 1:length(indArr)
-        temp = zeros(1,vecLen);
+        %temp = zeros(1,vecLen);
 
         %pos for u
         pos = resolvePos(1, indArr(iter,:));
@@ -614,7 +905,8 @@ function [vec_,vec2] = eq19()
             display(strcat(sprintf('Error: position not found for dVar:%d and indices:',dVar), sprintf(' %d',arr(:)) ));
             return;
         end
-        temp(pos) = 1;
+        %temp(pos) = 1;
+        spm(num,:)=[iter,pos,1]; num= num+1;
         
         %y sum (il,r,s,t)
         %fill it with il wrt l
@@ -635,7 +927,9 @@ function [vec_,vec2] = eq19()
                 display(strcat(sprintf('Error: position not found for dVar:%d and indices:',dVar), sprintf(' %d',arr(:)) ));
                 return;
             end
-            temp(pos) = 1/ind(6); %1/t
+            %temp(pos) = 1/ind(6); %1/t
+            spm(num,:)=[iter,pos,1/ind(6)]; num= num+1;
+
         end
         
         %d(l, r,t)
@@ -650,19 +944,23 @@ function [vec_,vec2] = eq19()
             col = col+1;
         end
         
-        vec2(iter) = temp_v(indArr(iter,3)+1, col) / ind(6); %d_lrt* 1/t, r+1 and mathcing t. see inputscene for clue.
+        %vec2(iter) = temp_v(indArr(iter,3)+1, col) / ind(6); %d_lrt* 1/t, r+1 and mathcing t. see inputscene for clue.
+        bspm(bnum,:)=[iter,1,temp_v(indArr(iter,3)+1, col) / ind(6)]; bnum= bnum+1;
 
         %update entire vector
-        vec_(iter,:) = temp;
+        %vec_(iter,:) = temp;
 
     end
+    
+    spm( ~any(spm,2), : ) = [];
+
 end
 
 
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-function [vec_,vec2] = eq20()
+function [spm, bspm] = eq20()
 %constructign equation 20
 %u (l,r,s,t)  = 0
 
@@ -672,18 +970,30 @@ function [vec_,vec2] = eq20()
 %il is a constant depnding on l so don't need to iterate i.
 
 
-     global vecLen; global whatIL;
+     %global vecLen; global whatIL;
 
 
     %unlike generateindices, you put 1 on values you want.
     indArr = conditionalIndices([1,1,1,0,0,1]); 
 
     %making the coeff vector
-    vec_ = zeros(length(indArr),vecLen);
+    [rN , ~] = size(indArr);
+    %vec_ = zeros(length(indArr),vecLen);
+    %vec2 = zeros(length(indArr),1); %for RHS
+    %total coeff on one row
+    cN = 1 ;
+    spm = zeros(rN*cN,3);
+    bspm = zeros(rN,3);
+    num = 1;
+    %bnum = 1;
+
+    global Naneq;
+    Naneq = Naneq + rN;
+    
 
     %disp(indArr);
     for iter = 1:length(indArr)
-        temp = zeros(1,vecLen);
+        %temp = zeros(1,vecLen);
 
         %pos for u (l,r,s,t)
         pos = resolvePos(1, indArr(iter,:));
@@ -691,14 +1001,16 @@ function [vec_,vec2] = eq20()
             display(strcat(sprintf('Error: position not found for dVar:%d and indices:',dVar), sprintf(' %d',indArr(iter,:)) ));
             return;
         end
-        temp(pos) = 1;
-        
+        %temp(pos) = 1;
+        spm(num,:)=[iter,pos,1]; num= num+1;
 
-        vec_(iter,:) = temp;
+
+        %vec_(iter,:) = temp;
 
     end
     
-    vec2 = zeros(length(vec_),1); %RHS is zero
+    %vec2 = zeros(length(vec_),1); %RHS is zero
+    spm( ~any(spm,2), : ) = [];
 
 end
 
@@ -707,7 +1019,7 @@ end
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-function [vec_,vec2] = eq21()
+function [spm,bspm] = eq21()
 %constructign equation 21
 % sum w (i,r)  = Cr
 
@@ -717,18 +1029,30 @@ function [vec_,vec2] = eq21()
 %il is a constant depnding on l so don't need to iterate i.
 
 
-    global maxV_; global vecLen; global C_r;
+    global maxV_; 
+    %global vecLen; 
+    global C_r;
 
     indArr = generateIndices([0,0,maxV_(3),0,0,0], 1);
 
     %making the coeff vector
-    vec_ = zeros(length(indArr),vecLen);
-    vec2 = zeros(length(indArr),1);
+    [rN , ~] = size(indArr);
+    %vec_ = zeros(length(indArr),vecLen);
+    %vec2 = zeros(length(indArr),1); %for RHS
+    %total coeff on one row
+    cN =  maxV_(4);
+    spm = zeros(rN*cN,3);
+    bspm = zeros(rN,3);
+    num = 1;
+    bnum = 1;
 
-    %disp(indArr);
-    [row,~] = size(indArr);
-    for iter = 1:row
-        temp = zeros(1,vecLen);
+
+    global Naneq;
+    Naneq = Naneq + rN;
+    
+%disp(indArr);
+    for iter = 1:rN
+        %temp = zeros(1,vecLen);
 
         %pos for sum w (i,r,) over i
         arr = indArr(iter,:);
@@ -739,21 +1063,26 @@ function [vec_,vec2] = eq21()
                 display(strcat(sprintf('Error: position not found for dVar:%d and indices:',dVar), sprintf(' %d',arr(:)) ));
                 return;
             end
-            temp(pos) = 1;
+            %temp(pos) = 1;
+            spm(num,:)=[iter,pos,1]; num= num+1;
+
         end
         
-        vec2(iter) = C_r(arr(3));
+        %vec2(iter) = C_r(arr(3));
+        spm(bnum,:)=[iter,1,C_r(arr(3))]; bnum= bnum+1;
 
-        vec_(iter,:) = temp;
+        %vec_(iter,:) = temp;
 
     end
+        spm( ~any(spm,2), : ) = [];
+
 end
 
 
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-function [vec_,vec2] = eq22()
+function [spm,bspm] = eq22()
 %constructign equation 22
 % double sum x (J, I, r, s,t)  <= w(i,r)
 
@@ -763,18 +1092,30 @@ function [vec_,vec2] = eq22()
 %il is a constant depnding on l so don't need to iterate i.
 
 
-    global maxV_; global vecLen; global Ts; global epsilon_i;
+    global maxV_; 
+    %global vecLen; 
+    global Ts; 
+    global epsilon_i;
 
     indArr = generateIndices([maxV_(1),0,maxV_(3),maxV_(4),0,0], 1);
 
     %making the coeff vector
-    [nRow, ~] = size(indArr);
-    vec_ = zeros(nRow,vecLen);
-    vec2 = zeros(nRow,1);
+    [rN , ~] = size(indArr);
+    %vec_ = zeros(length(indArr),vecLen);
+    %vec2 = zeros(length(indArr),1); %for RHS
+    %total coeff on one row
+    cN = 1 + maxV_(5)*maxV_(6);
+    spm = zeros(rN*cN,3);
+    bspm = zeros(rN,3);
+    num = 1;
+    %bnum = 1;
 
+    global Naneq;
+    Naneq = Naneq + rN;
+    
     %disp(indArr);
-    for iter = 1:nRow
-        temp = zeros(1,vecLen);
+    for iter = 1:rN
+        %temp = zeros(1,vecLen);
 
         %pos for doublesum x (s,r,j, i,t) over Ts, j
         arr = indArr(iter,:);
@@ -789,7 +1130,9 @@ function [vec_,vec2] = eq22()
                     display(strcat(sprintf('Error: position not found for dVar:%d and indices:',dVar), sprintf(' %d',arr(:)) ));
                     return;
                 end
-                temp(pos) = 1;
+                %temp(pos) = 1;
+                spm(num,:)=[iter,pos,1]; num= num+1;
+
             end
         end
         
@@ -803,18 +1146,22 @@ function [vec_,vec2] = eq22()
             display(strcat(sprintf('Error: position not found for dVar:%d and indices:',dVar), sprintf(' %d',arr(:)) ));
             return;
         end
-        temp(pos) = -1;
-        
-        vec_(iter,:) = temp;
+        %temp(pos) = -1;
+        spm(num,:)=[iter,pos,-1]; num= num+1;
+
+        %vec_(iter,:) = temp;
 
     end
+    
+    spm( ~any(spm,2), : ) = [];
+
 end
 
 
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-function [vec_,vec2] = eq23()
+function [spm,bspm] = eq23()
 %constructign equation 23
 % double sum x_bar (J, I, r, s,t) + alpha_r * x (J, I, r, s,t) <= w_bar(i,r)
 
@@ -824,19 +1171,32 @@ function [vec_,vec2] = eq23()
 %il is a constant depnding on l so don't need to iterate i.
 
 
-    global maxV_; global vecLen; global Ts; global epsilon_i;
+    global maxV_; 
+    %global vecLen; 
+    global Ts; 
+    global epsilon_i;
     global alphaR;
 
     indArr = generateIndices([maxV_(1),0,maxV_(3),maxV_(4),0,0], 1);
 
     %making the coeff vector
-    [nRow, ~] = size(indArr);
-    vec_ = zeros(nRow,vecLen);
-    vec2 = zeros(nRow,1);
+    [rN , ~] = size(indArr);
+    %vec_ = zeros(length(indArr),vecLen);
+    %vec2 = zeros(length(indArr),1); %for RHS
+    %total coeff on one row
+    cN = 1 + maxV_(5)*maxV_(6) + maxV_(5)*maxV_(6);
+    spm = zeros(rN*cN,3);
+    bspm = zeros(rN,3);
+    num = 1;
+    %bnum = 1;
+
+    global Naneq;
+    Naneq = Naneq + rN;
+    
 
     %disp(indArr);
-    for iter = 1:nRow
-        temp = zeros(1,vecLen);
+    for iter = 1:rN
+        %temp = zeros(1,vecLen);
 
         %pos for doublesum x (s,r,j, i,t) over Ts, j
         arr = indArr(iter,:);
@@ -851,15 +1211,17 @@ function [vec_,vec2] = eq23()
                     display(strcat(sprintf('Error: position not found for dVar:%d and indices:',dVar), sprintf(' %d',arr(:)) ));
                     return;
                 end
-                temp(pos) = 1;
-                
+                %temp(pos) = 1;
+                spm(num,:)=[iter,pos,1]; num= num+1;
+
                 %for x(jirst)
                 pos = resolvePos(6, arr);
                 if (pos == -1)
                     display(strcat(sprintf('Error: position not found for dVar:%d and indices:',dVar), sprintf(' %d',arr(:)) ));
                     return;
                 end
-                temp(pos) = alphaR(arr(3));
+                %temp(pos) = alphaR(arr(3));
+                spm(num,:)=[iter,pos,alphaR(arr(3))]; num= num+1;
 
             end
         end
@@ -874,16 +1236,19 @@ function [vec_,vec2] = eq23()
             display(strcat(sprintf('Error: position not found for dVar:%d and indices:',dVar), sprintf(' %d',arr(:)) ));
             return;
         end
-        temp(pos) = -1;
-        
-        vec_(iter,:) = temp;
+        %temp(pos) = -1;
+        spm(num,:)=[iter,pos,-1]; num= num+1;
+
+        %vec_(iter,:) = temp;
 
     end
+        spm( ~any(spm,2), : ) = [];
+
 end
 
 
 %%%%%%
-%ENd of all equaitons
+%End of all equaitons
 %%%%%%
 
 
@@ -964,3 +1329,4 @@ end
 
 
 end
+

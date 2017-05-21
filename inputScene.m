@@ -290,7 +290,7 @@ global S; %set of scenarios
 %for now, lets consider only 2 scenario with 
 %s1 = bomb in A, B, C. 
 %s2 = flood in B,C,D.
-S = 5;
+S = 2;
 
 
 %this here maps the l to a corresponding s value
