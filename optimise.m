@@ -42,9 +42,11 @@ cObj.Model.ub = ub;
 cObj.writeModel('disaster1.lp');
 
 options = cplexoptimset('Display', 'on');
-X = cObj.solve();
+ansObj = cObj.solve();
 
-%X = cplexmilp(f',ane,bne,ae,be);
+X = ansObj.x;
+
+%X = cplexmilp(f,ane,bne,ae,be);
 
 
 

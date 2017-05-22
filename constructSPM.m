@@ -15,7 +15,7 @@ inputScene();
 init();
 
 global vecLen;
-
+global dVarRanges;
 
 global Naeq;
 global Naneq;
@@ -28,7 +28,9 @@ Naneq = 0;
 f = eqnF();
 % %constructing equations one by one:
 
-
+%%
+%block for the = equations
+%%
 spm = eq1();
 spmat = spm;
 tt = Naeq;
@@ -36,65 +38,69 @@ tt = Naeq;
 spm = eq2();
 spm(:,1) = spm(:,1) + tt; 
 spmat = [spmat;spm];
-tt = Naeq;
+tt = Naeq+tt;
 
 spm = eq3();
 spm(:,1) = spm(:,1) + tt; 
 spmat = [spmat;spm];
-tt = Naeq;
+tt = Naeq+tt;
 
 spm = eq11();
 spm(:,1) = spm(:,1) + tt; 
 spmat = [spmat;spm];
-tt = Naeq;
+tt = Naeq+tt;
 
 % spm = eq12();
 % spm(:,1) = spm(:,1) + tt; 
 % spmat = [spmat;spm];
-% tt = Naeq;
+% tt = Naeq+tt;
 
 spm = eq13();
 spm(:,1) = spm(:,1) + tt; 
 spmat = [spmat;spm];
-tt = Naeq;
+tt = Naeq+tt;
 
 spm = eq14();
 spm(:,1) = spm(:,1) + tt; 
 spmat = [spmat;spm];
-tt = Naeq;
+tt = Naeq+tt;
 
 spm = eq15();
 spm(:,1) = spm(:,1) + tt;
 spmat = [spmat;spm];
-tt = Naeq;
+tt = Naeq+tt;
 
 %making the = 
 %aeq = sparse(spmat(:,1),spmat(:,2),spmat(:,3), Naeq, vecLen);
 %beq = sparse(Naeq,1);
-lhs = zeros(Naeq,1);
 
 
+%% 
+% Starting the <= equations
+%%
+
+tt1 = tt; %to identify number of <= equaitons
 
 [spm, bspm] = eq16();
 spm(:,1) = spm(:,1) + tt; 
 spmat = [spmat;spm];
 bspm(:,1) = bspm(:,1) + tt; 
 bspmat = bspm;
-tt = Naneq+Naeq;
+tt = Naneq+tt;
 
 [spm, bspm] = eq17();
 spm(:,1) = spm(:,1) + tt; 
 spmat = [spmat;spm];
 bspm(:,1) = bspm(:,1) + tt; 
 bspmat = [bspmat;bspm];
-tt = Naneq+Naeq;
+tt = Naneq+tt;
 
 [spm, bspm] = eq18();
 spm(:,1) = spm(:,1) + tt; 
 spmat = [spmat;spm];
 bspm(:,1) = bspm(:,1) + tt; 
 bspmat = [bspmat;bspm];
-tt = Naneq+Naeq;
+tt = Naneq+tt;
 
 
 [spm, bspm] = eq19();
@@ -102,30 +108,41 @@ spm(:,1) = spm(:,1) + tt;
 spmat = [spmat;spm];
 bspm(:,1) = bspm(:,1) + tt; 
 bspmat = [bspmat;bspm];
-tt = Naneq+Naeq;
+tt = Naneq+tt;
 
 [spm, bspm] = eq20();
 spm(:,1) = spm(:,1) + tt; 
 spmat = [spmat;spm];
 bspm(:,1) = bspm(:,1) + tt; 
 bspmat = [bspmat;bspm];
-tt = Naneq+Naeq;
+tt = Naneq+tt;
 
 
-%making the >=
-temp = -Inf(Naneq,1);
-lhs = [lhs;temp];
+%making the lhs from bspmat
 
+for iter = 1:(tt-tt1)
+    if(bspmat(iter,2)== 0)
+        bspmat(iter,:)= [0,0,0];
+    end
+end
+
+bspmat( ~any(bspmat,2), : ) = [];
+lhsB = bspmat;
+
+
+%%
 %moving onto <=
-tempo = tt;
+%%
+
+tt2 = tt;
 
 
 [spm, bspm] = eq21();
 spm(:,1) = spm(:,1) + tt; 
 spmat = [spmat;spm];
 bspm(:,1) = bspm(:,1) + tt; 
-bspmat = [bspmat;bspm];
-tt = Naneq+Naeq;
+bspmat = bspm;
+tt = Naneq+tt;
 
 
 [spm, bspm] = eq22();
@@ -133,39 +150,69 @@ spm(:,1) = spm(:,1) + tt;
 spmat = [spmat;spm];
 bspm(:,1) = bspm(:,1) + tt; 
 bspmat = [bspmat;bspm];
-tt = Naneq+Naeq;
+tt = Naneq+tt;
 
 [spm, bspm] = eq23();
 spm(:,1) = spm(:,1) + tt; 
 spmat = [spmat;spm];
 bspm(:,1) = bspm(:,1) + tt; 
 bspmat = [bspmat;bspm];
+tt = Naneq+tt;
 
-[Naneq,~] = size(bspmat);
+%[Naneq,~] = size(bspmat);
 
 %making the final <=
-temp = -Inf(Naneq+Naeq - tempo,1);
-
-lhs = [lhs;temp];
 
 
-lb = zeros(vecLen,1);
-ub = Inf(vecLen,1);
-
-
-lhs = sparse(lhs);
-
-for iter = 1:Naneq
-if(bspmat(iter,3)== 0)
-    bspmat(iter,:)= [0,0,0];
-end
+for iter = 1:(tt-tt2)
+    if(bspmat(iter,2)== 0)
+        bspmat(iter,:)= [0,0,0];
+    end
 end
 
 bspmat( ~any(bspmat,2), : ) = [];
 
-A = sparse(spmat(:,1)',spmat(:,2)',spmat(:,3)',Naneq+Naeq,vecLen);
+rhsB = bspmat;
+
+%%
+%Equations construction compelte. moving to last adjustments
+
+lb = zeros(vecLen,1);
+ub = Inf(vecLen,1);
+%here, w, wbar, x0, x, xbar all are positive integers. so putting lb = 1
+%for them
+lb(dVarRanges(2)+1 : dVarRanges(7), 1) = 1;
+
+
+lhs(:,1) = 1:tt;
+lhs(:,2) = 1;
+lhs(:,3) = -Inf;
+
+rhs(:,1) = 1:tt;
+rhs(:,2) = 1;
+rhs(:,3) = Inf;
+
+%updating portions with b values for lhs
+[row ,~] = size(lhsB);
+for iter = 1:row
+     lhs(lhsB(iter,1),3) = lhsB(iter,3);
+end
+
+%updating portions with b values for rhs
+[row ,~] = size(rhsB);
+for iter = 1:row
+     rhs(rhsB(iter,1),3) = rhsB(iter,3);
+end
+
+
+
+lhs = sparse(lhs(:,1), lhs(:,2), lhs(:,3), tt,1);
+rhs = sparse(rhs(:,1), rhs(:,2), rhs(:,3), tt,1);
+
+
+
+A = sparse(spmat(:,1)',spmat(:,2)',spmat(:,3)',tt,vecLen);
 %aneq = sparse(spmat(:,1)',spmat(:,2)',spmat(:,3)',Naneq+Naeq,vecLen);
-rhs = sparse(bspmat(:,1)',bspmat(:,2)',bspmat(:,3)',Naneq+Naeq,1);
 %bneq = sparse(bspmat(:,1)',bspmat(:,2)',bspmat(:,3)',Naneq+Naeq,1);
 
 
@@ -351,8 +398,8 @@ ub = Inf(vecLen,1);
 
 end
 
-
-
+%%
+% Starting function
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 function [svec] = eq1()
 %constructing equation 10.a
@@ -378,7 +425,7 @@ function [svec]=eq2()
     
     global Naeq;
     [r,~] = size(svec);
-    Naeq = Naeq + r;
+    Naeq = r;
     %vec2 = zeros(r,1); %RHS is zero
     
 
@@ -396,7 +443,7 @@ function [svec] = eq3()
     %[r,~] = size(vec);
     global Naeq;
     [r,~] = size(svec);
-    Naeq = Naeq + r;
+    Naeq = r;
 
     %vec2 = zeros(r,1); %RHS is zero
 end
@@ -427,7 +474,7 @@ function [spm] = eq11()
     num = 1;
     
     global Naeq;
-    Naeq = Naeq + rN;
+    Naeq = rN;
 
     %disp(indArr);
     for iter = 1:rN
@@ -498,7 +545,7 @@ function [spm] = eq12()
     num = 1;
 
     global Naeq;
-    Naeq = Naeq + rN;
+    Naeq = rN;
 
     %disp(indArr);
     %building the coeff vector for each of i,s,t
@@ -590,7 +637,7 @@ function [spm] = eq13()
     num = 1;
 
     global Naeq;
-    Naeq = Naeq + rN;
+    Naeq = rN;
 
     %disp(indArr);
     %building the coeff vector for each of i,s,t
@@ -676,7 +723,7 @@ function [spm] = eq14()
     num = 1;
 
     global Naeq;
-    Naeq = Naeq + rN;
+    Naeq = rN;
 
     %disp(indArr);
     for iter = 1:rN
@@ -747,7 +794,7 @@ function [spm] = eq15()
     num = 1;
 
     global Naeq;
-    Naeq = Naeq + rN;
+    Naeq = rN;
 
     %disp(indArr);
     for iter = 1:rN
@@ -896,7 +943,7 @@ function [spm, bspm] = eq17()
     %bnum = 1;
 
     global Naneq;
-    Naneq = Naneq + rN;
+    Naneq = rN;
     
 
     %disp(indArr);
@@ -969,7 +1016,7 @@ function [spm,bspm] = eq18()
     bnum = 1;
 
     global Naneq;
-    Naneq = Naneq + rN;
+    Naneq = rN;
     
 
     %disp(indArr);
@@ -1060,7 +1107,7 @@ function [spm, bspm] = eq19()
     bnum = 1;
 
     global Naneq;
-    Naneq = Naneq + rN;
+    Naneq = rN;
     
 
     %disp(indArr);
@@ -1156,7 +1203,7 @@ function [spm, bspm] = eq20()
     %bnum = 1;
 
     global Naneq;
-    Naneq = Naneq + rN;
+    Naneq = rN;
     
 
     %disp(indArr);
@@ -1216,7 +1263,7 @@ function [spm,bspm] = eq21()
 
 
     global Naneq;
-    Naneq = Naneq + rN;
+    Naneq = rN;
     
 %disp(indArr);
     for iter = 1:rN
@@ -1279,7 +1326,7 @@ function [spm,bspm] = eq22()
     %bnum = 1;
 
     global Naneq;
-    Naneq = Naneq + rN;
+    Naneq = rN;
     
     %disp(indArr);
     for iter = 1:rN
@@ -1359,7 +1406,7 @@ function [spm,bspm] = eq23()
     %bnum = 1;
 
     global Naneq;
-    Naneq = Naneq + rN;
+    Naneq = rN;
     
 
     %disp(indArr);
