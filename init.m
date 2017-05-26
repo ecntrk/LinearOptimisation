@@ -81,7 +81,7 @@ vecLen = l_*r_*s_*t_ + i_*r_*s_*t_ + 2*i_*r_ + i_*j_*s_*t_ ...
 %the predetermined order: u, v, w, wbar, x0, x, xbar, y0, y, ybar, z
 
 global dVarRanges;
-dVarRanges = zeros(11);
+dVarRanges = zeros(1,11);
 
 dVarRanges(1) = l_*r_*s_*t_;            % for u (because only u is different)
 dVarRanges(2) = dVarRanges(1)+i_*r_*s_*t_ ;     % for v
@@ -95,7 +95,7 @@ dVarRanges(9) = dVarRanges(8)+i_*r_*s_*t_;      % for y
 dVarRanges(10) = dVarRanges(9)+i_*r_*s_*t_;     % for ybar
 dVarRanges(11) = dVarRanges(10)+i_*r_*s_*t_;    % for z
 
-
+disp(dVarRanges);
 %i, j, l, r, s, t
 % resolvePos(1, [0,0,1,2,1,2])
 % resolvePos(2, [1,0,0,1,1,1])

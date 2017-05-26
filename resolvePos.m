@@ -20,7 +20,7 @@ interval = 1;
 
 if(dVar == 1)
     interval = dVarRanges(1);
-    a = [S,L,R,0,0,Ts];
+    a = [S,L,R,0,0,max(Ts)];
     b = 0;  
 elseif(dVar>1 && dVar<= length(dVarRanges))
     a = maxV_;
@@ -37,6 +37,13 @@ for count= varLen:-1:1
             pos = pos + interval*(indices(count)-1);
         end
 end
+
+% for count= 1:varLen
+%         if(indices(count) ~= 0)
+%             interval = interval./a(count);
+%             pos = pos + interval*(indices(count)-1);
+%         end
+% end
 
 pos =  b + pos;
 

@@ -41,6 +41,8 @@ cObj.Model.lb = lb;
 cObj.Model.ub = ub;
 cObj.writeModel('disaster1.lp');
 
+%This is a mixed integer proble and CPLEX automatically detects it (becuase
+%we have intergers and no quadratic term)
 options = cplexoptimset('Display', 'on');
 ansObj = cObj.solve();
 

@@ -9,17 +9,18 @@ function [spm] = rangeVarCoeff(dVar, indicesRange, tStart, coeff)
 %global vecLen;
 
 %calculating how many different indices for dVar to produce
-nzi = nonzeros(indicesRange);
-nzi(end) = nzi(end)-tStart+1;
-totalRange = prod(nzi);
+% nzi = nonzeros(indicesRange);
+% nzi(end) = nzi(end)-tStart+1;
+% totalRange = prod(nzi)
 
 indicesArr = generateIndices(indicesRange, tStart);
+[tot ,~] = size(indicesArr);
 
 %vec_ = zeros(totalRange,vecLen);
-spm = zeros(totalRange,3); %sparse matrix
+spm = zeros(tot,3); %sparse matrix
 %ind = indices; ind(ind~=0)=1;
 
-for iter = 1:totalRange
+for iter = 1:tot
     la = indicesArr(iter,:);
     %aa = singleVarCoeff(dVar, la, coeff);
     pos = resolvePos(dVar, la);

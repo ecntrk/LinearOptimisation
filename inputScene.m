@@ -8,7 +8,7 @@ function inputScene
 
 
 %%Time tick limit
-tick = 30; % this means every discretised tick is for 30 minutes.
+tick = 20; % this means every discretised tick is for 30 minutes.
 %Dr. Doan's original code had 20 mins but for this example, 30 min is
 %better choice
 %
