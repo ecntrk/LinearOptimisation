@@ -66,10 +66,10 @@ toc
 iter = 1;
 %for u
 u = zeros(maxV_(1),maxV_(2),maxV_(3),maxV_(6));
-for t = 1:maxV_(6)
-   for r = 1: maxV_(3)
-    for l = 1: maxV_(2)
-        for s = 1: maxV_(1)
+for s = 1:maxV_(1)
+   for l = 1: maxV_(2)
+    for r = 1: maxV_(3)
+        for t = 1: maxV_(6)
             u(s,l,r,t) = X(iter);
             iter = iter+1;
         end
@@ -79,10 +79,10 @@ end
 %disp('number of u: ',iter);
 %for v
 v = zeros(maxV_(1),maxV_(3),maxV_(4),maxV_(6));
-for t = 1:maxV_(6)
-   for i = 1: maxV_(4)
-    for r = 1: maxV_(3)
-        for s = 1: maxV_(1)
+for s = 1:maxV_(1)
+   for r = 1: maxV_(3)
+    for i = 1: maxV_(4)
+        for t = 1: maxV_(6)
             v(s,r,i,t) = X(iter);
             iter = iter+1;
         end
@@ -94,8 +94,8 @@ end
 
 %for w
 w = zeros(maxV_(3),maxV_(4));
-   for i = 1: maxV_(4)
-    for r = 1: maxV_(3)
+   for r = 1: maxV_(3)
+    for i = 1: maxV_(4)
             w(r,i) = X(iter);
             iter = iter+1;
     end
@@ -104,8 +104,8 @@ w = zeros(maxV_(3),maxV_(4));
 
 %for w_bar
 wR = zeros(maxV_(3),maxV_(4));
-   for i = 1: maxV_(4)
-    for r = 1: maxV_(3)
+   for r = 1: maxV_(3)
+    for i = 1: maxV_(4)
             wR(r,i) = X(iter);
             iter = iter+1;
     end
@@ -115,10 +115,10 @@ wR = zeros(maxV_(3),maxV_(4));
    
 %for x_0 (s,i,j,t)
 x0 = zeros(maxV_(1),maxV_(4),maxV_(5),maxV_(6));
-for t = 1:maxV_(6)
-   for j = 1: maxV_(5)
-    for i = 1: maxV_(4)
-        for s = 1: maxV_(1)
+for s = 1:maxV_(1)
+   for i = 1: maxV_(4)
+    for j = 1: maxV_(5)
+        for t = 1: maxV_(6)
             x0(s,i,j,t) = X(iter);
             iter = iter+1;
         end
@@ -130,11 +130,11 @@ end
    
 %for x (srijt)
 x = zeros(maxV_(1),maxV_(3),maxV_(4),maxV_(5),maxV_(6));
-for t = 1:maxV_(6)
-   for j = 1: maxV_(5)
+for s = 1:maxV_(1)
+   for r = 1: maxV_(3)
    for i = 1: maxV_(4)
-    for r = 1: maxV_(3)
-        for s = 1: maxV_(1)
+    for j = 1: maxV_(5)
+        for t = 1: maxV_(6)
             x(s,r,i,j,t) = X(iter);
             iter = iter+1;
         end
@@ -147,11 +147,11 @@ end
 
 %for x_bar (srijt)
 xR = zeros(maxV_(1),maxV_(3),maxV_(4),maxV_(5),maxV_(6));
-for t = 1:maxV_(6)
-   for j = 1: maxV_(5)
+for s = 1:maxV_(1)
+   for r = 1: maxV_(3)
    for i = 1: maxV_(4)
-    for r = 1: maxV_(3)
-        for s = 1: maxV_(1)
+    for j = 1: maxV_(5)
+        for t = 1: maxV_(6)
             xR(s,r,i,j,t) = X(iter);
             iter = iter+1;
         end
@@ -164,9 +164,9 @@ end
 
 %for y0
 y0 = zeros(maxV_(1),maxV_(4),maxV_(6));
-for t = 1:maxV_(6)
+for s = 1:maxV_(1)
    for i = 1: maxV_(4)
-        for s = 1: maxV_(1)
+        for t = 1: maxV_(6)
             y0(s,i,t) = X(iter);
             iter = iter+1;
         end
@@ -177,10 +177,10 @@ end
 
 %for y
 y = zeros(maxV_(1),maxV_(3),maxV_(4),maxV_(6));
-for t = 1:maxV_(6)
-   for i = 1: maxV_(4)
-    for r = 1: maxV_(3)
-        for s = 1: maxV_(1)
+for s = 1:maxV_(1)
+   for r = 1: maxV_(3)
+    for i = 1: maxV_(4)
+        for t = 1: maxV_(6)
             y(s,r,i,t) = X(iter);
             iter = iter+1;
         end
@@ -192,10 +192,10 @@ end
 
 %for y_bar
 yR = zeros(maxV_(1),maxV_(3),maxV_(4),maxV_(6));
-for t = 1:maxV_(6)
-   for i = 1: maxV_(4)
-    for r = 1: maxV_(3)
-        for s = 1: maxV_(1)
+for s = 1:maxV_(1)
+   for r = 1: maxV_(3)
+    for i = 1: maxV_(4)
+        for t = 1: maxV_(6)
             yR(s,r,i,t) = X(iter);
             iter = iter+1;
         end
@@ -206,10 +206,10 @@ end
 
 %for z
 z = zeros(maxV_(1),maxV_(3),maxV_(4),maxV_(6));
-for t = 1:maxV_(6)
-   for i = 1: maxV_(4)
-    for r = 1: maxV_(3)
-        for s = 1: maxV_(1)
+for s = 1:maxV_(1)
+   for r = 1: maxV_(3)
+    for i = 1: maxV_(4)
+        for t = 1: maxV_(6)
             z(s,r,i,t) = X(iter);
             iter = iter+1;
         end

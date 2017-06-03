@@ -11,8 +11,8 @@ function [f, A, lhs, rhs, lb, ub] = constructSPM()
 
 
 %initialising all global vars
-%inputScene(); %for debug
-%init(); %for debug
+inputScene(); %for debug
+init(); %for debug
 
 global vecLen;
 global dVarRanges;
@@ -51,10 +51,10 @@ spm(:,1) = spm(:,1) + tt;
 spmat = [spmat;spm];
 tt = Naeq+tt
 
-% spm = eq12();
-% spm(:,1) = spm(:,1) + tt; 
-% spmat = [spmat;spm];
-% tt = Naeq+tt
+spm = eq12();
+spm(:,1) = spm(:,1) + tt; 
+spmat = [spmat;spm];
+tt = Naeq+tt
 
 spm = eq13();
 spm(:,1) = spm(:,1) + tt; 
@@ -72,9 +72,9 @@ spmat = [spmat;spm];
 tt = Naeq+tt
 
 
-%
-% Starting the >= equations
-%
+
+%Starting the >= equations
+
 
 tt1 = tt %to identify number of >= equaitons
 
@@ -685,9 +685,24 @@ function [spm, bspm] = eq16()
         end
         %temp(pos) = 1;
         spm(num,:)=[iter,pos,1]; num= num+1;
-        bspm(bnum,:)=[iter,1,d0_lt(indArr(iter,2))]; bnum= bnum+1;
 
+        
+        %last resort for eqn 12
+
+        %This line is causing conflict with Eqn 12. 
+        %adding generalists (d0_lt) at every time tick is not feasibly
+        %Assuming generalists as cumulative solves the problem
+        %so, for l = 1, d0_lt = 0,0,0,200.
+        %so, for l = 9, d0_lt = 0,0,150.
+        
+        if (ind(6) == 20) %only at the last time tick (t=20, add generalists
+            bspm(bnum,:)=[iter,1,d0_lt(indArr(iter,2))]; bnum= bnum+1;
+        else %all the other time ticks add 0.
+            bspm(bnum,:)=[iter,1,0]; bnum= bnum+1;
+        end
                 
+        
+        
         %lets deal with the d (l,t)
         %vec2(iter) = d0_lt(indArr(iter,2)); %possible change when there more t.
         

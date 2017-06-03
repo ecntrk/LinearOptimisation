@@ -470,3 +470,41 @@ Removing perturbation.
 
 Dual simplex solved model.
 
+
+Log for 'disaster1' Clone_2 (V12.7.1.0) Sat Jun  3 18:28:14 2017
+
+
+Log for 'disaster1' Clone_2 (V12.7.1.0) Sat Jun  3 19:00:10 2017
+
+
+Log for 'disaster1' Clone_2 (V12.7.1.0) Sat Jun  3 19:26:22 2017
+
+
+Log for 'disaster1' Clone_2 (V12.7.1.0) Sat Jun  3 19:33:15 2017
+
+
+Iteration log . . .
+Iteration:     1    Scaled infeas =         11696.891250
+Iteration:   347    Scaled infeas =         10314.283750
+Iteration:   620    Scaled infeas =            26.326250
+Iteration:   722    Scaled infeas =            21.192500
+Iteration:  1870    Scaled infeas =             8.767900
+Iteration:  2667    Scaled infeas =             2.924842
+Iteration:  3534    Scaled infeas =             0.033274
+Iteration:  4184    Objective     =          1656.000000
+Iteration:  5021    Objective     =          1656.000000
+Iteration:  5164    Objective     =          1656.000000
+Iteration:  6024    Objective     =          1656.000000
+Perturbation started.
+Switched to devex.
+Iteration:  6785    Objective     =          1656.000000
+Iteration:  7178    Objective     =          1655.999977
+Iteration:  7627    Objective     =          1655.999961
+Iteration:  8244    Objective     =          1655.999934
+Iteration:  8793    Objective     =          1655.999840
+Iteration:  9303    Objective     =          1422.413480
+Iteration:  9767    Objective     =          1342.823621
+Removing perturbation.
+
+Dual simplex solved model.
+

@@ -64,7 +64,8 @@ end
 %display(indArr);
 %eliminating indices where i = j. simpler than iterating in range.
 if (iR(4) ~= 0 && iR(5) ~= 0)
-    for count = 1:length(indArr)
+[rr,~] = size(indArr);
+    for count = 1:rr
         if (indArr(count,4) == indArr(count,5)) 
             indArr(count,:) = [];
         end
