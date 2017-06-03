@@ -1,0 +1,472 @@
+
+Log for 'disaster1' Clone_2 (V12.7.1.0) Sun May 21 17:49:41 2017
+
+
+Log for 'disaster1' Clone_2 (V12.7.1.0) Sun May 21 17:57:58 2017
+
+
+Log for 'disaster1' Clone_2 (V12.7.1.0) Sun May 21 18:01:56 2017
+
+
+Log for 'disaster1' Clone_2 (V12.7.1.0) Sun May 21 18:02:15 2017
+
+
+Log for 'disaster1' Clone_2 (V12.7.1.0) Mon May 22 23:05:34 2017
+
+
+Log for 'disaster1' Clone_2 (V12.7.1.0) Mon May 22 23:06:32 2017
+
+
+Log for 'disaster1' Clone_2 (V12.7.1.0) Thu May 25 18:45:23 2017
+
+
+Log for 'disaster1' Clone_2 (V12.7.1.0) Thu May 25 18:46:13 2017
+
+
+Log for 'disaster1' Clone_2 (V12.7.1.0) Thu May 25 18:47:17 2017
+
+
+Log for 'disaster1' Clone_2 (V12.7.1.0) Thu May 25 23:28:43 2017
+
+
+Log for 'disaster1' Clone_2 (V12.7.1.0) Thu May 25 23:29:36 2017
+
+
+Log for 'disaster1' Clone_2 (V12.7.1.0) Thu May 25 23:30:03 2017
+
+
+Log for 'disaster1' Clone_2 (V12.7.1.0) Thu May 25 23:31:23 2017
+
+
+Log for 'disaster1' Clone_2 (V12.7.1.0) Thu May 25 23:34:34 2017
+
+
+Log for 'disaster1' Clone_2 (V12.7.1.0) Thu May 25 23:39:22 2017
+
+
+Log for 'disaster1' Clone_2 (V12.7.1.0) Thu May 25 23:42:00 2017
+
+
+Log for 'disaster1' Clone_2 (V12.7.1.0) Thu May 25 23:49:09 2017
+
+
+Log for 'disaster1' Clone_2 (V12.7.1.0) Thu May 25 23:54:51 2017
+
+
+Log for 'disaster1' Clone_2 (V12.7.1.0) Thu May 25 23:55:47 2017
+
+
+Log for 'disaster1' Clone_2 (V12.7.1.0) Fri May 26 00:03:39 2017
+
+
+Log for 'disaster1' Clone_2 (V12.7.1.0) Fri May 26 00:09:05 2017
+
+
+Log for 'disaster1' Clone_2 (V12.7.1.0) Fri May 26 00:11:30 2017
+
+
+Log for 'disaster1' Clone_2 (V12.7.1.0) Fri May 26 00:46:47 2017
+
+
+Log for 'disaster1' Clone_2 (V12.7.1.0) Fri May 26 07:49:32 2017
+
+
+Log for 'disaster1' Clone_2 (V12.7.1.0) Fri May 26 07:56:39 2017
+
+
+Iteration log . . .
+Iteration:     1    Scaled infeas =           407.988889
+Iteration:     9    Scaled infeas =           363.744444
+
+Dual simplex solved model.
+
+
+Log for 'disaster1' Clone_2 (V12.7.1.0) Fri May 26 14:08:29 2017
+
+
+Iteration log . . .
+Iteration:     1    Scaled infeas =           407.988889
+Iteration:     9    Scaled infeas =           363.744444
+Iteration:   164    Objective     =          1124.600000
+
+Dual simplex solved model.
+
+
+Log for 'disaster1' Clone_2 (V12.7.1.0) Fri May 26 14:12:22 2017
+
+
+Iteration log . . .
+Iteration:     1    Scaled infeas =           626.997778
+Iteration:    13    Scaled infeas =           461.539903
+
+Dual simplex solved model.
+
+
+Log for 'disaster1' Clone_2 (V12.7.1.0) Fri May 26 14:34:58 2017
+
+
+Log for 'disaster1' Clone_2 (V12.7.1.0) Fri May 26 14:35:45 2017
+
+
+Log for 'disaster1' Clone_2 (V12.7.1.0) Fri May 26 14:41:16 2017
+
+
+Iteration log . . .
+Iteration:     1    Infeasibility =             4.000000
+Switched to devex.
+Iteration:     7    Objective     =           231.800000
+
+Dual simplex solved model.
+
+
+Log for 'disaster1' Clone_2 (V12.7.1.0) Fri May 26 14:42:06 2017
+
+
+Log for 'disaster1' Clone_2 (V12.7.1.0) Fri May 26 14:42:31 2017
+
+
+Iteration log . . .
+Iteration:     1    Scaled infeas =           408.088887
+
+Dual simplex solved model.
+
+
+Log for 'disaster1' Clone_2 (V12.7.1.0) Fri May 26 14:42:50 2017
+
+
+Iteration log . . .
+Iteration:     1    Infeasibility =             4.000000
+
+Dual simplex solved model.
+
+
+Log for 'disaster1' Clone_2 (V12.7.1.0) Fri May 26 17:42:29 2017
+
+
+Log for 'disaster1' Clone_2 (V12.7.1.0) Fri May 26 17:46:58 2017
+
+
+Iteration log . . .
+Iteration:     1    Scaled infeas =           408.088887
+
+Dual simplex solved model.
+
+
+Log for 'disaster1' Clone_2 (V12.7.1.0) Fri May 26 17:51:24 2017
+
+
+Iteration log . . .
+Iteration:     1    Infeasibility =             4.000000
+Switched to devex.
+Iteration:     7    Objective     =           231.800000
+
+Dual simplex solved model.
+
+
+Log for 'disaster1' Clone_2 (V12.7.1.0) Fri May 26 17:55:17 2017
+
+
+Iteration log . . .
+Iteration:     1    Scaled infeas =           407.988889
+Iteration:     9    Scaled infeas =           363.744444
+
+Dual simplex solved model.
+
+
+Log for 'disaster1' Clone_2 (V12.7.1.0) Fri May 26 17:57:41 2017
+
+
+Log for 'disaster1' Clone_2 (V12.7.1.0) Fri May 26 18:14:47 2017
+
+
+Log for 'disaster1' Clone_2 (V12.7.1.0) Fri May 26 18:27:32 2017
+
+
+Log for 'disaster1' Clone_2 (V12.7.1.0) Fri May 26 18:29:27 2017
+
+
+Log for 'disaster1' Clone_2 (V12.7.1.0) Fri May 26 19:02:51 2017
+
+
+Log for 'disaster1' Clone_2 (V12.7.1.0) Fri May 26 19:03:32 2017
+
+
+Log for 'disaster1' Clone_2 (V12.7.1.0) Fri May 26 19:04:52 2017
+
+
+Log for 'disaster1' Clone_2 (V12.7.1.0) Fri May 26 19:06:31 2017
+
+
+Log for 'disaster1' Clone_2 (V12.7.1.0) Fri May 26 19:09:48 2017
+
+
+Log for 'disaster1' Clone_2 (V12.7.1.0) Fri May 26 19:10:57 2017
+
+
+Log for 'disaster1' Clone_2 (V12.7.1.0) Fri May 26 19:11:52 2017
+
+
+Log for 'disaster1' Clone_2 (V12.7.1.0) Fri May 26 19:13:30 2017
+
+
+Log for 'disaster1' Clone_2 (V12.7.1.0) Fri May 26 19:19:06 2017
+
+
+Log for 'disaster1' Clone_2 (V12.7.1.0) Fri May 26 19:20:37 2017
+
+
+Log for 'disaster1' Clone_2 (V12.7.1.0) Fri May 26 19:33:54 2017
+
+
+Log for 'disaster1' Clone_2 (V12.7.1.0) Fri May 26 19:56:52 2017
+
+
+Log for 'disaster1' Clone_2 (V12.7.1.0) Tue May 30 10:49:42 2017
+
+
+Log for 'disaster1' Clone_2 (V12.7.1.0) Tue May 30 10:50:06 2017
+
+
+Iteration log . . .
+Iteration:     1    Scaled infeas =           412.308056
+Iteration:    27    Scaled infeas =           366.415694
+Iteration:   387    Scaled infeas =            23.132546
+Iteration:   614    Objective     =          1124.600000
+
+Dual simplex solved model.
+
+
+Log for 'disaster1' Clone_2 (V12.7.1.0) Tue May 30 10:52:13 2017
+
+
+Iteration log . . .
+Iteration:     1    Scaled infeas =           412.308056
+Iteration:    27    Scaled infeas =           366.415694
+Iteration:   387    Scaled infeas =            23.132546
+Iteration:   614    Objective     =          1124.600000
+Iteration:   930    Objective     =          1122.728000
+
+Dual simplex solved model.
+
+
+Log for 'disaster1' Clone_2 (V12.7.1.0) Tue May 30 10:53:38 2017
+
+
+Iteration log . . .
+Iteration:     1    Scaled infeas =          2140.638333
+Iteration:   151    Scaled infeas =          1894.492917
+Iteration:   989    Scaled infeas =          1199.784668
+Iteration:  1737    Scaled infeas =           817.066738
+Iteration:  2516    Scaled infeas =             0.399653
+Iteration:  3033    Objective     =          1022.360000
+Iteration:  3812    Objective     =          1022.360000
+Iteration:  3870    Objective     =          1022.360000
+Perturbation started.
+Switched to devex.
+Iteration:  4134    Objective     =          1022.360000
+Removing perturbation.
+
+Dual simplex solved model.
+
+
+Log for 'disaster1' Clone_2 (V12.7.1.0) Tue May 30 11:09:18 2017
+
+
+Iteration log . . .
+Iteration:     1    Scaled infeas =          4768.276667
+Iteration:   320    Scaled infeas =          4219.884583
+Iteration:   576    Scaled infeas =            27.462500
+Iteration:   685    Scaled infeas =            19.600000
+Iteration:  1771    Scaled infeas =             8.081351
+Iteration:  2500    Scaled infeas =             0.530907
+Iteration:  3187    Objective     =          1011.000000
+Iteration:  4005    Objective     =          1011.000000
+Iteration:  4161    Objective     =          1011.000000
+Iteration:  4748    Objective     =          1011.000000
+Perturbation started.
+Switched to devex.
+Iteration:  5788    Objective     =          1011.000000
+Iteration:  6160    Objective     =          1010.999984
+Iteration:  6572    Objective     =          1010.999954
+Removing perturbation.
+
+Dual simplex solved model.
+
+
+Log for 'disaster1' Clone_2 (V12.7.1.0) Sat Jun  3 13:58:24 2017
+
+
+Iteration log . . .
+Iteration:     1    Scaled infeas =         14549.610000
+Iteration:   372    Scaled infeas =         12918.540000
+Iteration:   681    Scaled infeas =            27.443750
+Iteration:   790    Scaled infeas =            19.426250
+Iteration:  1833    Scaled infeas =             8.409262
+Iteration:  2740    Scaled infeas =             0.463711
+Iteration:  3364    Objective     =          1956.000000
+Iteration:  4216    Objective     =          1956.000000
+Iteration:  4374    Objective     =          1956.000000
+Iteration:  5245    Objective     =          1956.000000
+Perturbation started.
+Switched to devex.
+Iteration:  5965    Objective     =          1956.000000
+Iteration:  6470    Objective     =          1955.999977
+Iteration:  7031    Objective     =          1955.999941
+Iteration:  7525    Objective     =          1817.534225
+Iteration:  8309    Objective     =          1745.136339
+Iteration:  8915    Objective     =          1654.239903
+Iteration:  9332    Objective     =          1436.036922
+Iteration:  9793    Objective     =          1435.987495
+Iteration: 10303    Objective     =          1312.781761
+Iteration: 10827    Objective     =          1229.500887
+Iteration: 11404    Objective     =          1121.946290
+Removing perturbation.
+
+Dual simplex solved model.
+
+
+Log for 'disaster1' Clone_2 (V12.7.1.0) Sat Jun  3 14:10:29 2017
+
+
+Iteration log . . .
+Iteration:     1    Scaled infeas =         14549.610000
+Iteration:   372    Scaled infeas =         12918.540000
+Iteration:   681    Scaled infeas =            27.443750
+Iteration:   790    Scaled infeas =            19.426250
+Iteration:  1833    Scaled infeas =             8.409262
+Iteration:  2740    Scaled infeas =             0.463711
+Iteration:  3364    Objective     =          2706.000000
+Iteration:  4216    Objective     =          2706.000000
+Iteration:  4374    Objective     =          2706.000000
+Iteration:  5245    Objective     =          2706.000000
+Perturbation started.
+Switched to devex.
+Iteration:  5965    Objective     =          2706.000000
+Iteration:  6470    Objective     =          2705.999977
+Iteration:  7031    Objective     =          2705.999941
+Iteration:  7525    Objective     =          2567.534225
+Iteration:  8309    Objective     =          2495.136339
+Iteration:  8915    Objective     =          2404.239903
+Iteration:  9332    Objective     =          2186.036922
+Iteration:  9793    Objective     =          2185.987495
+Iteration: 10303    Objective     =          2062.781761
+Iteration: 10827    Objective     =          1979.500887
+Removing perturbation.
+
+Dual simplex solved model.
+
+
+Log for 'disaster1' Clone_2 (V12.7.1.0) Sat Jun  3 14:33:43 2017
+
+
+Iteration log . . .
+Iteration:     1    Scaled infeas =          4768.276667
+Iteration:   320    Scaled infeas =          4219.884583
+Iteration:   576    Scaled infeas =            27.462500
+Iteration:   685    Scaled infeas =            19.600000
+Iteration:  1771    Scaled infeas =             8.081351
+Iteration:  2500    Scaled infeas =             0.530907
+Iteration:  3187    Objective     =          1011.000000
+Iteration:  4005    Objective     =          1011.000000
+Iteration:  4161    Objective     =          1011.000000
+Iteration:  4748    Objective     =          1011.000000
+Perturbation started.
+Switched to devex.
+Iteration:  5788    Objective     =          1011.000000
+Iteration:  6160    Objective     =          1010.999984
+Iteration:  6572    Objective     =          1010.999954
+Removing perturbation.
+
+Dual simplex solved model.
+
+
+Log for 'disaster1' Clone_2 (V12.7.1.0) Sat Jun  3 15:03:22 2017
+
+
+Iteration log . . .
+Iteration:     1    Scaled infeas =         10993.610000
+Iteration:   351    Scaled infeas =          9754.551250
+Iteration:   637    Scaled infeas =            27.500000
+Iteration:   750    Scaled infeas =            19.521250
+Iteration:  1853    Scaled infeas =             8.797164
+Iteration:  2472    Scaled infeas =             0.792087
+Iteration:  3265    Objective     =          1656.000000
+Iteration:  4093    Objective     =          1656.000000
+Iteration:  4250    Objective     =          1656.000000
+Iteration:  4948    Objective     =          1656.000000
+Perturbation started.
+Switched to devex.
+Iteration:  5866    Objective     =          1656.000000
+Iteration:  6259    Objective     =          1655.999981
+Iteration:  6819    Objective     =          1655.999957
+Iteration:  7202    Objective     =          1630.157090
+Iteration:  7975    Objective     =          1574.086073
+Iteration:  8363    Objective     =          1342.745369
+Iteration:  8812    Objective     =          1184.363610
+Iteration:  9397    Objective     =          1158.202585
+Iteration:  9911    Objective     =          1151.050409
+Iteration: 10526    Objective     =          1117.285124
+Removing perturbation.
+
+Dual simplex solved model.
+
+
+Log for 'disaster1' Clone_2 (V12.7.1.0) Sat Jun  3 17:52:40 2017
+
+
+Log for 'disaster1' Clone_2 (V12.7.1.0) Sat Jun  3 17:57:13 2017
+
+
+Iteration log . . .
+Iteration:     1    Scaled infeas =         11695.857500
+Iteration:   346    Scaled infeas =         10313.313750
+Iteration:   603    Scaled infeas =            25.610000
+Iteration:   705    Scaled infeas =            21.105000
+Iteration:  1775    Scaled infeas =             9.712858
+Iteration:  2741    Scaled infeas =             1.910161
+Iteration:  3569    Scaled infeas =             0.079015
+Iteration:  4234    Objective     =          1656.000000
+Iteration:  5023    Objective     =          1656.000000
+Iteration:  5166    Objective     =          1656.000000
+Iteration:  6128    Objective     =          1656.000000
+Perturbation started.
+Switched to devex.
+Iteration:  6835    Objective     =          1656.000000
+Iteration:  7292    Objective     =          1655.999976
+Iteration:  7802    Objective     =          1655.999953
+Iteration:  8157    Objective     =          1655.999931
+Iteration:  8695    Objective     =          1494.249204
+Removing perturbation.
+
+Dual simplex solved model.
+
+
+Log for 'disaster1' Clone_2 (V12.7.1.0) Sat Jun  3 18:22:56 2017
+
+
+Iteration log . . .
+Iteration:     1    Scaled infeas =         11696.878750
+Iteration:   347    Scaled infeas =         10314.308750
+Iteration:   616    Scaled infeas =            26.131250
+Iteration:   720    Scaled infeas =            21.037500
+Iteration:  1809    Scaled infeas =            10.071426
+Iteration:  2503    Scaled infeas =             3.758144
+Iteration:  3706    Scaled infeas =             0.068418
+Iteration:  4092    Objective     =          1656.000000
+Iteration:  4915    Objective     =          1656.000000
+Iteration:  5055    Objective     =          1656.000000
+Iteration:  5809    Objective     =          1656.000000
+Perturbation started.
+Switched to devex.
+Iteration:  6693    Objective     =          1656.000000
+Iteration:  7086    Objective     =          1655.999975
+Iteration:  7514    Objective     =          1655.999955
+Iteration:  8125    Objective     =          1634.705638
+Iteration:  8630    Objective     =          1600.085004
+Iteration:  9209    Objective     =          1336.547576
+Iteration:  9688    Objective     =          1108.646140
+Iteration: 10432    Objective     =          1083.418700
+Removing perturbation.
+
+Dual simplex solved model.
+

@@ -50,14 +50,14 @@ p_ij(8,:) = [8,6,3,5,7,4,2,1];
 
 ar_ij = zeros(N,N);
 %            A   B   C   D   E   F   G   H   from table 1, picture.
-ar_ij(1,:) = [20,150,230,250,410,560,390,420]; %A
-ar_ij(2,:) = [150,25,120,100,260,410,280,280]; %B
+ar_ij(1,:) = [20,150,230,250,410,500,390,390]; %A
+ar_ij(2,:) = [150,25,120,100,260,390,280,280]; %B
 ar_ij(3,:) = [230,120,25, 80,240,270,160,160]; %C
 ar_ij(4,:) = [250,100,80, 20,160,310,240,240]; %D
 ar_ij(5,:) = [410,260,240,160,25,150,260,380]; %E
-ar_ij(6,:) = [560,410,270,310,150,25,110,230]; %F
+ar_ij(6,:) = [500,390,270,310,150,25,110,230]; %F
 ar_ij(7,:) = [390,280,160,240,260,110,20,120]; %G
-ar_ij(8,:) = [420,280,160,240,380,230,120,25]; %H
+ar_ij(8,:) = [390,280,160,240,380,230,120,25]; %H
 
 
 r_ij = ceil (ar_ij/tick); %so now, r_ij has the discreetised times
@@ -89,8 +89,8 @@ global mu;
 phi_r = zeros(1,R);
 phi_r(:) = 1; %please change this if you have data about efficiency
 
-theta = 1;
-mu = 1;
+theta = 0.001;
+mu = 0.001;
 
 
 %%%%%%%%%%%%%%%%%%%%%
@@ -148,7 +148,7 @@ whatIL(whatIL==0) = N;
 
 whatKL = zeros(1,L);
 for count = 1:L
-    whatKL(count) = mod(count,K);
+    whatKL(count) = ceil(count/N);
 end
 whatKL(whatKL==0) = K;
 
@@ -168,108 +168,108 @@ global d_lrt;
 d_lrt = cell (2,L);
 d_lrt{1,1} = 1; %this means at city A, disaster 1 (bomb) happening
 d_lrt{2,1} = [T_k{1}; %time ticks (2, 3, 4, 10 hours)
-              0, 10, 0, 4; % IRU units (300 casualty per unit)
-              10, 0, 0, 5; %USAR units
+              0, 10, 0, 4; % IRU units (2 MD1 = 300 casualty per unit)
+              10, 10, 10, 15; %USAR units
               0, 0, 0 ,0]; %HVP (not needed at all)
 
 d_lrt{1,2} = 2; %city B, disaster 1 (bomb) happening
 d_lrt{2,2} = [T_k{1}; %time ticks (2, 3, 4, 10 hours)
               0, 10, 0, 4; % IRU units (300 casualty per unit)
-              0, 0, 10, 5; %USAR units
+              0, 0, 10, 15; %USAR units
               0, 0, 0 ,0]; %HVP (not needed at all)
 
 d_lrt{1,3} = 3; %city C, disaster 1 (bomb) happening
 d_lrt{2,3} = [T_k{1}; %time ticks (2, 3, 4, 10 hours)
               0, 10, 0, 4; % IRU units (300 casualty per unit)
-              0, 0, 10, 5; %USAR units
+              0, 0, 10, 15; %USAR units
               0, 0, 0 ,0]; %HVP (not needed at all)
 
 
 d_lrt{1,4} = 4; %city D, disaster 1 (bomb) happening
 d_lrt{2,4} = [T_k{1}; %time ticks (2, 3, 4, 10 hours)
               0, 10, 0, 4; % IRU units (300 casualty per unit)
-              0, 0, 10, 5; %USAR units
+              0, 0, 10, 15; %USAR units
               0, 0, 0 ,0]; %HVP (not needed at all)
 
 
 d_lrt{1,5} = 5; %city E, disaster 1 (bomb) happening
 d_lrt{2,5} = [T_k{1}; %time ticks (2, 3, 4, 10 hours)
               0, 10, 0, 4; % IRU units (300 casualty per unit)
-              0, 0, 10, 5; %USAR units
+              0, 0, 10, 15; %USAR units
               0, 0, 0 ,0]; %HVP (not needed at all)
 
 
 d_lrt{1,6} = 6; %city F, disaster 1 (bomb) happening
 d_lrt{2,6} = [T_k{1}; %time ticks (2, 3, 4, 10 hours)
               0, 10, 0, 4; % IRU units (300 casualty per unit)
-              0, 0, 10, 5; %USAR units
+              0, 0, 10, 15; %USAR units
               0, 0, 0 ,0]; %HVP (not needed at all)
 
 
 d_lrt{1,7} = 7; %city G, disaster 1 (bomb) happening
 d_lrt{2,7} = [T_k{1}; %time ticks (2, 3, 4, 10 hours)
               0, 10, 0, 4; % IRU units (300 casualty per unit)
-              0, 0, 10, 5; %USAR units
+              0, 0, 10, 15; %USAR units
               0, 0, 0 ,0]; %HVP (not needed at all)
 
 
 d_lrt{1,8} = 8; %city H, disaster 1 (bomb) happening
 d_lrt{2,8} = [T_k{1}; %time ticks (2, 3, 4, 10 hours)
               0, 10, 0, 4; % IRU units (300 casualty per unit)
-              0, 0, 10, 5; %USAR units
+              0, 0, 10, 15; %USAR units
               0, 0, 0 ,0]; %HVP (not needed at all)
 
    
 d_lrt{1,9} = 9; %city A, disaster 2 (flood) happening
 d_lrt{2,9} = [T_k{2}; %time ticks (2, 4, 10 hours)
-              0, 0, 0; % IRU units (300 casualty per unit)
-              10, 0, 5; %USAR units
-              10, 0 ,0]; %HVP (not needed at all)
+              0, 0, 0; % IRU units (not needed)
+              10, 10, 15; %USAR units
+              10, 10 ,10]; %HVP 
           
 d_lrt{1,10} = 10; %city B, disaster 2 (flood) happening
 d_lrt{2,10} = [T_k{2}; %time ticks (2, 4, 10 hours)
-              0, 0, 0; % IRU units (300 casualty per unit)
-              0,10, 5; %USAR units
-              3, 0 ,0]; %HVP (not needed at all)          
+              0, 0, 0; % IRU units (not needed)
+              0,10, 15; %USAR units
+              3, 3 ,3]; %HVP           
 
           
 d_lrt{1,11} = 11; %city C, disaster 2 (flood) happening
 d_lrt{2,11} = [T_k{2}; %time ticks (2, 4, 10 hours)
               0, 0, 0; % IRU units (300 casualty per unit)
-              0,10, 5; %USAR units
-              3, 0 ,0]; %HVP (not needed at all)   
+              0,10, 15; %USAR units
+              3, 3 ,3]; %HVP    
           
 d_lrt{1,12} = 12; %city D, disaster 2 (flood) happening
 d_lrt{2,12} = [T_k{2}; %time ticks (2, 4, 10 hours)
-              0, 0, 0; % IRU units (300 casualty per unit)
-              0,10, 5; %USAR units
-              5, 0 ,0]; %HVP (not needed at all)          
+              0, 0, 0; % IRU units (NA)
+              0,10, 15; %USAR units
+              5, 5 ,5]; %HVP         
 
           
 d_lrt{1,13} = 13; %city E, disaster 2 (flood) happening
 d_lrt{2,13} = [T_k{2}; %time ticks (2, 4, 10 hours)
-              0, 0, 0; % IRU units (300 casualty per unit)
-              0,10, 5; %USAR units
-              3, 0 ,0]; %HVP (not needed at all) 
+              0, 0, 0; % IRU units (NA)
+              0,10, 15; %USAR units
+              3, 3 ,3]; %HVP 
           
 d_lrt{1,14} = 14; %city F, disaster 2 (flood) happening
 d_lrt{2,14} = [T_k{2}; %time ticks (2, 4, 10 hours)
-              0, 0, 0; % IRU units (300 casualty per unit)
-              0,10, 5; %USAR units
-              3, 0 ,0]; %HVP (not needed at all)          
+              0, 0, 0; % IRU units (NA)
+              0,10, 15; %USAR units
+              3, 3 ,3]; %HVP          
 
           
 d_lrt{1,15} = 15; %city G, disaster 2 (flood) happening
 d_lrt{2,15} = [T_k{2}; %time ticks (2, 4, 10 hours)
-              0, 0, 0; % IRU units (300 casualty per unit)
-              0,10, 5; %USAR units
-              3, 0 ,0]; %HVP (not needed at all) 
+              0, 0, 0; % IRU units (NA)
+              0,10, 15; %USAR units
+              3, 3 ,3]; %HVP 
           
 d_lrt{1,16} = 16; %city H, disaster 2 (flood) happening
 d_lrt{2,16} = [T_k{2}; %time ticks (2, 4, 10 hours)
-              0, 0, 0; % IRU units (300 casualty per unit)
-              0,10, 5; %USAR units
-              5, 0 ,0]; %HVP (not needed at all) 
+              0, 0, 0; % IRU units (NA)
+              0,10, 15; %USAR units
+              5, 5 ,5]; %HVP
 
 
 
@@ -290,7 +290,7 @@ global S; %set of scenarios
 %for now, lets consider only 2 scenario with 
 %s1 = bomb in A, B, C. 
 %s2 = flood in B,C,D.
-S = 10;
+S = 112;
 
 
 %this here maps the l to a corresponding s value

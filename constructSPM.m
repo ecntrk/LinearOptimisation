@@ -9,10 +9,10 @@ function [f, A, lhs, rhs, lb, ub] = constructSPM()
 %Var Order: i, j, l, r, s, t
 %Decision Var Order: u, v, w, wbar, x0, x, xbar, y0, y, ybar, z
 
-inputScene();
 
 %initialising all global vars
-init();
+%inputScene(); %for debug
+%init(); %for debug
 
 global vecLen;
 global dVarRanges;
@@ -25,13 +25,13 @@ Naneq = 0;
 %vec_ = rangeVarCoeff(1, [0,0,3,3,3,3], 1);
 %a= generateIndices([2,0,3,5,2,3,4]);
 %f = sparse=(eqnF());
-f1 = eqnF();
-f = f1';
+f = eqnF();
+%f = f1';
 % %constructing equations one by one:
 
-%%
+%
 %block for the = equations
-%%
+%
 spm = eq1();
 spmat = spm;
 tt = Naeq
@@ -51,10 +51,10 @@ spm(:,1) = spm(:,1) + tt;
 spmat = [spmat;spm];
 tt = Naeq+tt
 
-spm = eq12();
-spm(:,1) = spm(:,1) + tt; 
-spmat = [spmat;spm];
-tt = Naeq+tt;
+% spm = eq12();
+% spm(:,1) = spm(:,1) + tt; 
+% spmat = [spmat;spm];
+% tt = Naeq+tt
 
 spm = eq13();
 spm(:,1) = spm(:,1) + tt; 
@@ -72,13 +72,11 @@ spmat = [spmat;spm];
 tt = Naeq+tt
 
 
-
-
-%% 
+%
 % Starting the >= equations
-%%
+%
 
-tt1 = tt; %to identify number of >= equaitons
+tt1 = tt %to identify number of >= equaitons
 
 [spm, bspm] = eq16();
 spm(:,1) = spm(:,1) + tt; 
@@ -126,22 +124,8 @@ bspm(:,1) = bspm(:,1) + tt;
 bspmat = [bspmat;bspm];
 tt = Naneq+tt
 
-
-%making the lhs from bspmat
-
-% for iter = 1:(tt-tt1)
-%     if(bspmat(iter,2)== 0)
-%         bspmat(iter,:)= [0,0,0];
-%     end
-% end
-
-%bspmat( ~any(bspmat,2), : ) = [];
-%lhsB = bspmat;
-
-
-%%
 %moving onto <=
-%%
+
 
 tt2 = tt;
 
@@ -168,29 +152,16 @@ bspm(:,1) = bspm(:,1) + tt;
 bspmat = [bspmat;bspm];
 tt = Naneq+tt
 
-%[Naneq,~] = size(bspmat);
-
-%making the final <=
 
 
-% for iter = 1:(tt-tt2)
-%     if(bspmat(iter,2)== 0)
-%         bspmat(iter,:)= [0,0,0];
-%     end
-% end
-
-%bspmat( ~any(bspmat,2), : ) = [];
-
-%rhsB = bspmat;
-
-%%
+%
 %Equation construction complete. moving to last adjustments
 
-lb = zeros(vecLen,1);
+lb = -Inf(vecLen,1);
 ub = Inf(vecLen,1);
 %here, w, wbar, x0, x, xbar all are positive integers. so putting lb = 1
 %for them
-lb(dVarRanges(2)+1 : dVarRanges(7), 1) = 1;
+lb(dVarRanges(2)+1 : dVarRanges(7), 1) = 0;
 
 
 temp = zeros(tt1,1); 
@@ -198,34 +169,6 @@ temp1 = -Inf(tt-tt1,1);
 lhs = [temp;temp1];
 rhs = [temp;bspmat(:,3)];
 
-% 
-% lhs(1:tt1,1) = 1:tt1;
-% lhs(1:tt1,2) = 1;
-% lhs(1:tt1,3) = -Inf;
-% 
-% rhs(1:tt1,1) = 1:tt1;
-% rhs(1:tt1,2) = 1;
-% rhs(1:tt1,3) = 1;
-% 
-% lhs((tt1+1):tt,1) = (tt1+1):tt;
-% lhs((tt1+1):tt,2) = 1;
-% lhs((tt1+1):tt,3) = -Inf;
-% 
-% rhs((tt1+1):tt,1) = (tt1+1):tt;
-% rhs((tt1+1):tt,2) = 1;
-% rhs((tt1+1):tt,3) = Inf;
-
-%updating portions with b values for lhs
-% [row ,~] = size(lhsB);
-% for iter = 1:row
-%      lhs(lhsB(iter,1),3) = lhsB(iter,3);
-% end
-% 
-% %updating portions with b values for rhs
-% [row ,~] = size(rhsB);
-% for iter = 1:row
-%      rhs(rhsB(iter,1),3) = rhsB(iter,3);
-% end
 
 
 
@@ -235,8 +178,7 @@ rhs = [temp;bspmat(:,3)];
 
 
 A = sparse(spmat(:,1)',spmat(:,2)',spmat(:,3)',tt,vecLen);
-%aneq = sparse(spmat(:,1)',spmat(:,2)',spmat(:,3)',Naneq+Naeq,vecLen);
-%bneq = sparse(bspmat(:,1)',bspmat(:,2)',bspmat(:,3)',Naneq+Naeq,1);
+
 
 
 
@@ -244,7 +186,7 @@ end
 
 
 
-%%
+%
 % Starting function
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 function [svec] = eq1()
@@ -694,7 +636,7 @@ end
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 function [spm, bspm] = eq16()
 %constructign equation 16
-%y_0 (il, t) - d_0 (l,t)  = 0
+%y_0 (il, t) >= d_0 (l,t) 
 
 %generate indices combinations for l,s,t
 %although l depends on s, it'll be dealt in conditionalIndices()

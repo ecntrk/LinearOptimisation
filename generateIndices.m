@@ -17,7 +17,7 @@ iRs = iR;
 iRs(iRs>0)=1;
 iRs(end) = tSt;
 %guide index for position of the nonzero index elements
-gInd = zeros(1, nnz(iR)); 
+gInd = zeros(1, nnz(iR));
 
 count = 1;
 for c=1:length(iR)
@@ -36,16 +36,18 @@ indArr = zeros(tot,length(iR));
 %display (gInd); %debug stuff
 
 %Here goes the actual logic
-interval = 1;
+%interval = 1;
+interval = tot;
 %we iterate coloumnwise
 for c = 1:length(gInd)
     %display(c);
     maxVal = iR(gInd(c));
     minVal  = iRs(gInd(c));
     %gInd(c)
-    if(c>1)
-        interval = interval * (iR(gInd(c-1)));%-iRs(gInd(c-1)))
-    end
+%    if(c<1)
+        %interval = interval * (iR(gInd(c-1)));%-iRs(gInd(c-1)))
+        interval = interval/maxVal;
+ %   end
     cc =1;
     %iterate val with 
     asd = tot/((maxVal-minVal+1)*interval);

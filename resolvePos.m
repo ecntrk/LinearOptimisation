@@ -31,19 +31,19 @@ elseif (dVar<1 || dVar > length(dVarRanges))
     return;
 end
 
-for count= varLen:-1:1
-        if(indices(count) ~= 0)
-            interval = interval./a(count);
-            pos = pos + interval*(indices(count)-1);
-        end
-end
-
-% for count= 1:varLen
+% for count= varLen:-1:1
 %         if(indices(count) ~= 0)
 %             interval = interval./a(count);
 %             pos = pos + interval*(indices(count)-1);
 %         end
 % end
+
+for count= 1:varLen
+        if(indices(count) ~= 0)
+            interval = interval./a(count);
+            pos = pos + interval*(indices(count)-1);
+        end
+end
 
 pos =  b + pos;
 
