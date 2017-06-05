@@ -11,8 +11,8 @@ function [f, A, lhs, rhs, lb, ub] = constructSPM()
 
 
 %initialising all global vars
-inputScene(); %for debug
-init(); %for debug
+%inputScene(); %for debug
+%init(); %for debug
 
 global vecLen;
 global dVarRanges;
@@ -22,11 +22,11 @@ global Naneq;
 Naeq = 0;
 Naneq = 0;
 
-%vec_ = rangeVarCoeff(1, [0,0,3,3,3,3], 1);
-%a= generateIndices([2,0,3,5,2,3,4]);
+%constructs the main equation to be minimised
 %f = sparse=(eqnF());
 f = eqnF();
-%f = f1';
+
+
 % %constructing equations one by one:
 
 %
@@ -70,7 +70,6 @@ spm = eq15();
 spm(:,1) = spm(:,1) + tt;
 spmat = [spmat;spm];
 tt = Naeq+tt
-
 
 
 %Starting the >= equations

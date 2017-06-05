@@ -55,6 +55,7 @@ maxV_(6) = t_;
 
 
 % this is needed to minimize footpront of DVar u.
+% Currently commented out for simplicity
 % calculating max set length of Tk
 % max_T_k = 0;
 % for count = 1:length(T_k)
@@ -96,7 +97,9 @@ dVarRanges(10) = dVarRanges(9)+i_*r_*s_*t_;     % for ybar
 dVarRanges(11) = dVarRanges(10)+i_*r_*s_*t_;    % for z
 
 disp(dVarRanges);
-%i, j, l, r, s, t
+
+%debug purposes
+%s, l, r, i, j, t
 % resolvePos(1, [0,0,1,2,1,2])
 % resolvePos(2, [1,0,0,1,1,1])
 % resolvePos(3, [1,0,0,1,0,0])
@@ -109,4 +112,5 @@ disp(dVarRanges);
 % resolvePos(10, [1,0,0,1,1,1])
 % resolvePos(11, [1,0,0,1,1,1])
 %Vec_ = construct();
+%resolvepos is working perfectly!
 end

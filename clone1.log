@@ -450,3 +450,50 @@ Barrier time = 1.88 sec. (1651.91 ticks)
 
 Dual simplex solved model.
 
+
+Log for 'disaster1' Clone_1 (V12.7.1.0) Sat Jun  3 20:03:33 2017
+
+Tried aggregator 0 times.
+No LP presolve or aggregator reductions.
+Presolve time = 0.11 sec. (60.77 ticks)
+Parallel mode: using up to 6 threads for barrier.
+
+***NOTE: Found 16 dense columns.
+
+Number of nonzeros in lower triangle of A*A' = 895074
+Using Approximate Minimum Degree ordering
+Total time for automatic ordering = 0.12 sec. (96.99 ticks)
+Summary statistics for Cholesky factor:
+  Threads                   = 6
+  Rows in Factor            = 43740
+  Integer space required    = 181203
+  Total non-zeros in factor = 1964324
+  Total FP ops to factor    = 262600922
+ Itn      Primal Obj        Dual Obj  Prim Inf Upper Inf  Dual Inf Inf Ratio
+   0   1.0304963e+06  -8.4415814e+07  4.94e+07  8.49e+06  6.10e+05  1.00e+00
+   1   8.5704098e+05  -5.9875903e+07  3.99e+07  6.85e+06  4.33e+05  2.60e-02
+   2   3.4421167e+05  -4.0893478e+07  1.33e+07  2.29e+06  2.96e+05  1.27e-02
+   3   2.7676279e+05  -2.1144594e+07  8.31e+06  1.43e+06  1.53e+05  1.27e-02
+   4   1.4318158e+05  -9.9108270e+06  1.79e+06  3.08e+05  7.23e+04  2.30e-02
+   5   1.0925117e+05  -4.8113081e+06  6.08e+05  1.04e+05  3.55e+04  4.40e-02
+   6   9.6819410e+04  -1.9242566e+06  2.67e+05  4.59e+04  1.46e+04  9.84e-02
+   7   9.3762795e+04  -1.1969183e+06  1.30e+05  2.23e+04  9.30e+03  1.49e-01
+   8   9.9845501e+04  -9.8313569e+05  1.03e+05  1.77e+04  7.80e+03  1.72e-01
+   9   1.0769817e+05  -8.1242358e+05  7.52e+04  1.29e+04  6.60e+03  1.97e-01
+  10   1.1207457e+05  -5.0708444e+05  3.57e+04  6.14e+03  4.43e+03  2.87e-01
+  11   1.0998925e+05  -3.1781139e+05  1.53e+04  2.64e+03  3.07e+03  4.13e-01
+  12   1.0678349e+05  -1.0632554e+05  3.41e+03  5.85e+02  1.54e+03  8.26e-01
+  13   1.0557383e+05   3.6568130e+04  1.33e+03  2.28e+02  4.96e+02  2.55e+00
+  14   1.0573933e+05   4.8364743e+04  1.21e+03  2.07e+02  4.14e+02  3.07e+00
+  15   1.0548704e+05   5.0373826e+04  2.51e+02  4.31e+01  3.99e+02  3.15e+00
+  16   1.0472172e+05   8.9823055e+04  6.76e+01  1.16e+01  1.08e+02  1.17e+01
+  17   1.0418419e+05   1.0271690e+05  1.09e+01  1.87e+00  1.03e+01  1.27e+02
+  18   1.0402303e+05   1.0336155e+05  2.29e+00  3.93e-01  5.06e+00  2.65e+02
+  19   1.0399913e+05   1.0365787e+05  1.16e+00  1.99e-01  2.61e+00  5.32e+02
+  20   1.0397791e+05   1.0379393e+05  6.64e-01  1.14e-01  1.39e+00  1.03e+03
+  21   1.0396242e+05   1.0384495e+05  4.34e-01  7.46e-02  8.82e-01  1.67e+03
+ Barrier aborted.
+Barrier time = 1.73 sec. (1651.91 ticks)
+
+Dual simplex solved model.
+

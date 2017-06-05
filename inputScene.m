@@ -282,7 +282,11 @@ global d0_lt; %l is only index
 d0_lt = [200, 130, 130, 150, 130 , 130 , 150, 130, % for k = 1
         150,  80,  80,   100, 80,  80,   100, 80];  % for k = 2
 
-          
+%Here, apparently d0_lt is cumulative, so only add the values at the final
+%tick t=20. otherwise there will be conflict btwn eqn 12, and 16.
+% explained in detail inside eqn16() code in constructSPM.
+    
+    
 %%%%%%%%%%%%%%%%%%%%%
 %%%%%%%%%% Scenarios
 %%%%%%%%%%%%%%%%%%%%%
